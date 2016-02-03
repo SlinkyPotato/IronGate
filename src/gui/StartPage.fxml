@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<!--suppress JavaFxDefaultTag, JavaFxDefaultTag, JavaFxDefaultTag, JavaFxDefaultTag, JavaFxDefaultTag, JavaFxDefaultTag -->
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/8">
+    <MenuBar prefHeight="25.0" prefWidth="600.0">
+        <!--suppress JavaFxDefaultTag -->
+        <menus>
+            <Menu mnemonicParsing="false" text="File">
+                <!--suppress JavaFxDefaultTag -->
+                <items>
+                    <MenuItem mnemonicParsing="false" text="Close"/>
+                </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Edit">
+                <!--suppress JavaFxDefaultTag -->
+                <items>
+                    <MenuItem mnemonicParsing="false" text="Delete"/>
+                </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="View">
+                <!--suppress JavaFxDefaultTag -->
+                <items>
+                    <MenuItem mnemonicParsing="false" text="About"/>
+                </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Window">
+                <!--suppress JavaFxDefaultTag -->
+                <items>
+                    <MenuItem mnemonicParsing="false" text="Action 1"/>
+                </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+                <!--suppress JavaFxDefaultTag -->
+                <items>
+                    <MenuItem mnemonicParsing="false" text="Action 1"/>
+                </items>
+            </Menu>
+        </menus>
+    </MenuBar>
+</AnchorPane>
