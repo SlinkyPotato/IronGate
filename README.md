@@ -24,11 +24,11 @@ Iron Gate is open source, feel free to [contribute]!
 
 ### Installation
 
-Any java based IDE can build Iron Gate, although [IntelliJ] is highly recommended:
+Any java based IDE can build Iron Gate, although [IntelliJ] is highly recommended.
 
 ### Plugins
 
-Iron Gate is will eventually use the following plugins:
+Iron Gate will eventually use the following plugins:
 * Dropbox
 * Google Drive
 * OneDrive
