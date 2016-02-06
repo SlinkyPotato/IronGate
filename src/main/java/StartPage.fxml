@@ -4,7 +4,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.Controller">
    <children>
        <MenuBar prefHeight="25.0" prefWidth="789.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
            <!--suppress JavaFxDefaultTag -->
@@ -12,7 +12,7 @@
                <Menu mnemonicParsing="false" text="File">
                    <!--suppress JavaFxDefaultTag -->
                    <items>
-                       <MenuItem fx:id="menuOpen" mnemonicParsing="false" text="Open" />
+                       <MenuItem fx:id="fileOpen" mnemonicParsing="false" text="Open" />
                    </items>
                </Menu>
                <Menu mnemonicParsing="false" text="Edit">
@@ -41,6 +41,6 @@
                </Menu>
            </menus>
        </MenuBar>
-      <TreeView layoutY="25.0" prefHeight="552.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="25.0" />
+      <TreeView fx:id="dirTree" layoutY="25.0" prefHeight="552.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="25.0" />
    </children>
 </AnchorPane>

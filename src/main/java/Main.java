@@ -1,4 +1,4 @@
-package gui;
+package main.java;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +10,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-//        setUserAgentStylesheet(STYLESHEET_CASPIAN);
+        setUserAgentStylesheet(STYLESHEET_CASPIAN);
        /* Button btn = new Button();
         btn.setText("This is a test");
         btn.setOnAction(new EventHandler<ActionEvent>() {

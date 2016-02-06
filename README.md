@@ -1,6 +1,6 @@
 # Iron Gate
 
-Iron Gate is the code name given to a really convenient files and foldesr organization system. This is a cross-platform application built for Windows and Mac OSX. Some really great features:
+Iron Gate is the code name given to a really convenient files and folders organization system. This is a cross-platform application built for Windows and Mac OSX. Some really great features:
   
   - Tag files and folders for quick search up
   - Save folder structures frequently used
