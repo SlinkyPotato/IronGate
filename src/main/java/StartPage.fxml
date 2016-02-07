@@ -43,7 +43,7 @@
                <children>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <top>
-                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="159.0" text="Search" BorderPane.alignment="CENTER">
+                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="159.0" text="Tool: Search" BorderPane.alignment="CENTER">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -117,7 +117,11 @@
                      <content>
                         <BorderPane prefHeight="200.0" prefWidth="200.0">
                            <center>
-                              <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                              <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                 <BorderPane.margin>
+                                    <Insets top="10.0" />
+                                 </BorderPane.margin>
+                              </ListView>
                            </center>
                            <bottom>
                               <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Remove" textAlignment="CENTER" BorderPane.alignment="CENTER">
