@@ -10,23 +10,32 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="785.0" prefWidth="990.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <MenuBar id="menubar-pane" BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem mnemonicParsing="false" text="Open..." />
+                  <MenuItem mnemonicParsing="false" text="Open Recent" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+              <MenuItem mnemonicParsing="false" text="Preferences..." />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Tools">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Search" />
+                  <MenuItem mnemonicParsing="false" text="Delete Files" />
+                  <MenuItem mnemonicParsing="false" text="Auto Manager" />
+                  <MenuItem mnemonicParsing="false" text="Templates" />
+              </items>
+            </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
+                  <MenuItem mnemonicParsing="false" text="Check for Updates" />
               <MenuItem mnemonicParsing="false" text="About" />
             </items>
           </Menu>
@@ -39,9 +48,9 @@
    <left>
       <BorderPane prefHeight="200.0" prefWidth="300.0" styleClass="pane-general-style" BorderPane.alignment="CENTER">
          <center>
-            <StackPane id="tool-inspector-pane" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <StackPane id="tool-inspector-pane" prefHeight="764.0" prefWidth="300.0" BorderPane.alignment="CENTER">
                <children>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                  <BorderPane prefHeight="731.0" prefWidth="300.0">
                      <top>
                         <Label alignment="CENTER" prefHeight="23.0" prefWidth="159.0" text="Search" BorderPane.alignment="CENTER">
                            <font>
@@ -77,7 +86,7 @@
                               </HBox>
                            </top>
                            <center>
-                              <ListView maxWidth="-Infinity" prefHeight="200.0" prefWidth="250.0" BorderPane.alignment="CENTER" />
+                              <ListView maxWidth="-Infinity" prefHeight="51.0" prefWidth="250.0" BorderPane.alignment="CENTER" />
                            </center>
                         </BorderPane>
                      </center>
@@ -85,27 +94,6 @@
                </children>
             </StackPane>
          </center>
-         <top>
-            <BorderPane prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <center>
-                  <FlowPane id="tool-selector-pane" alignment="CENTER" columnHalignment="CENTER" hgap="10.0" prefHeight="125.0" prefWidth="400.0" prefWrapLength="300.0" vgap="10.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label text="Search" underline="true" />
-                        <Label layoutX="215.0" layoutY="64.0" text="Delete Files" underline="true" />
-                        <Label layoutX="242.0" layoutY="64.0" text="Auto Manager" underline="true" />
-                        <Label layoutX="281.0" layoutY="64.0" text="Templates" underline="true" />
-                     </children>
-                  </FlowPane>
-               </center>
-               <top>
-                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="300.0" styleClass="pane-title" text="Tools" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-               </top>
-            </BorderPane>
-         </top>
       </BorderPane>
    </left>
    <right>

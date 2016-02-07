@@ -22,14 +22,14 @@ public class Main extends Application {
                 System.out.print("Bingo you did something!");
             }
         });*/
-
-        Parent root = FXMLLoader.load(getClass().getResource("StartPage.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/main/resources/StartPage.fxml"));
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         primaryStage.setTitle("Iron-gate!");
-        primaryStage.setScene(new Scene(root, screenBounds.getWidth(), screenBounds.getHeight())); // a scene is created here
+//        primaryStage.setScene(new Scene(root, screenBounds.getWidth(), screenBounds.getHeight())); // a scene is created here
+        primaryStage.setScene(new Scene(root, 990, 785));
         Scene scene = primaryStage.getScene(); // we get the scene from above
         scene.getStylesheets().clear(); // clear any styles
-        scene.getStylesheets().add("/main/resources/mainStyle.css"); // absolute path
+//        scene.getStylesheets().add("/main/resources/mainStyle.css"); // absolute path
         primaryStage.show();
     }
     public static void main(String[] args) {
