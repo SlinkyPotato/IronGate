@@ -13,7 +13,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        setUserAgentStylesheet(STYLESHEET_CASPIAN);
+//        setUserAgentStylesheet(STYLESHEET_CASPIAN);
        /* Button btn = new Button();
         btn.setText("This is a test");
         btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -24,13 +24,12 @@ public class Main extends Application {
         });*/
 
         Parent root = FXMLLoader.load(getClass().getResource("StartPage.fxml"));
-        Scene scene = primaryStage.getScene();
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-
-        //scene.getStylesheets().add("style_main.css"); //Error here...
-
         primaryStage.setTitle("Iron-gate!");
-        primaryStage.setScene(new Scene(root, screenBounds.getWidth(), screenBounds.getHeight()));
+        primaryStage.setScene(new Scene(root, screenBounds.getWidth(), screenBounds.getHeight())); // a scene is created here
+        Scene scene = primaryStage.getScene(); // we get the scene from above
+        scene.getStylesheets().clear(); // clear any styles
+        scene.getStylesheets().add("/main/resources/mainStyle.css"); // absolute path
         primaryStage.show();
     }
     public static void main(String[] args) {

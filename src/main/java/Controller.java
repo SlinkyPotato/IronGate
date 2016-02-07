@@ -19,7 +19,7 @@ public class Controller{
 
     @FXML
     private void initialize() {
-        createTree();
+//        createTree();
     }
 
     // Create the directory Tree
