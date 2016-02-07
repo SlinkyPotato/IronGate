@@ -27,7 +27,7 @@ public class Main extends Application {
         Scene scene = primaryStage.getScene();
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
-        //scene.getStylesheets().add("");
+        //scene.getStylesheets().add("style_main.css"); //Error here...
 
         primaryStage.setTitle("Iron-gate!");
         primaryStage.setScene(new Scene(root, screenBounds.getWidth(), screenBounds.getHeight()));

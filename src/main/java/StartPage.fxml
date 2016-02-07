@@ -2,6 +2,7 @@
 
 <!--suppress JavaFxDefaultTag, JavaFxDefaultTag, JavaFxDefaultTag, JavaFxDefaultTag, JavaFxDefaultTag, JavaFxDefaultTag -->
 
+<?import javafx.scene.effect.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.shape.*?>
@@ -36,21 +37,9 @@
       <TreeView id="folder-view-pane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </center>
    <left>
-      <SplitPane id="tool-pane" dividerPositions="0.2873051224944321" minWidth="-Infinity" orientation="VERTICAL" prefHeight="200.0" prefWidth="400.0" BorderPane.alignment="CENTER">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-               <children>
-                  <FlowPane id="tool-selector-pane" alignment="CENTER" hgap="10.0" prefHeight="125.0" prefWidth="400.0" vgap="10.0">
-                     <children>
-                        <Label text="Search" />
-                        <Label layoutX="189.0" layoutY="64.0" text="Create Tags" />
-                        <Label layoutX="215.0" layoutY="64.0" text="Search" />
-                        <Label layoutX="242.0" layoutY="64.0" text="Search" />
-                     </children>
-                  </FlowPane>
-               </children>
-            </AnchorPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
+      <BorderPane prefHeight="200.0" prefWidth="300.0" styleClass="pane-general-style" BorderPane.alignment="CENTER">
+         <center>
+            <StackPane id="tool-inspector-pane" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <top>
@@ -78,7 +67,7 @@
                            <top>
                               <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <TextField promptText="Add Tag..." />
+                                    <TextField promptText="Include Tag..." />
                                     <Button mnemonicParsing="false" text="Add">
                                        <HBox.margin>
                                           <Insets left="15.0" />
@@ -88,14 +77,81 @@
                               </HBox>
                            </top>
                            <center>
-                              <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                              <ListView maxWidth="-Infinity" prefHeight="200.0" prefWidth="250.0" BorderPane.alignment="CENTER" />
                            </center>
                         </BorderPane>
                      </center>
                   </BorderPane>
                </children>
             </StackPane>
-        </items>
-      </SplitPane>
+         </center>
+         <top>
+            <BorderPane prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <center>
+                  <FlowPane id="tool-selector-pane" alignment="CENTER" columnHalignment="CENTER" hgap="10.0" prefHeight="125.0" prefWidth="400.0" prefWrapLength="300.0" vgap="10.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label text="Search" underline="true" />
+                        <Label layoutX="215.0" layoutY="64.0" text="Delete Files" underline="true" />
+                        <Label layoutX="242.0" layoutY="64.0" text="Auto Manager" underline="true" />
+                        <Label layoutX="281.0" layoutY="64.0" text="Templates" underline="true" />
+                     </children>
+                  </FlowPane>
+               </center>
+               <top>
+                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="300.0" styleClass="pane-title" text="Tools" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+               </top>
+            </BorderPane>
+         </top>
+      </BorderPane>
    </left>
+   <right>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <center>
+            <Accordion maxWidth="-Infinity" prefWidth="250.0" BorderPane.alignment="CENTER">
+              <panes>
+                <TitledPane animated="false" text="Tags">
+                     <content>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <center>
+                              <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                           </center>
+                           <bottom>
+                              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Remove" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                                 <BorderPane.margin>
+                                    <Insets top="10.0" />
+                                 </BorderPane.margin>
+                              </Button>
+                           </bottom>
+                           <top>
+                              <HBox prefHeight="25.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <TextField promptText="Add Tag..." />
+                                    <Button mnemonicParsing="false" prefWidth="75.0" text="Add" />
+                                 </children>
+                              </HBox>
+                           </top>
+                        </BorderPane>
+                     </content>
+                </TitledPane>
+                <TitledPane animated="false" text="Directory Info">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </TitledPane>
+              </panes>
+            </Accordion>
+         </center>
+         <top>
+            <Label alignment="CENTER" prefHeight="25.0" prefWidth="205.0" styleClass="pane-title" text="Inspector" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+         </top>
+      </BorderPane>
+   </right>
 </BorderPane>
