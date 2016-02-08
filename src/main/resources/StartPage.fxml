@@ -10,7 +10,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.Controller">
     <top>
         <MenuBar id="menubar-pane" BorderPane.alignment="CENTER">
             <menus>
@@ -42,7 +42,7 @@
         </MenuBar>
     </top>
     <center>
-        <TreeView id="folder-view-pane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+        <TreeView id="folder-view-pane" fx:id="dirTree" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
     </center>
     <left>
         <BorderPane prefHeight="200.0" prefWidth="300.0" styleClass="pane-general-style" BorderPane.alignment="CENTER">
