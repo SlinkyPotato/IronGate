@@ -26,6 +26,7 @@ public class Controller{
 
     @FXML private void initialize() {
         createTree();
+        // FolderViewManager.java calls are done here
     }
 
     // Create the directory Tree
