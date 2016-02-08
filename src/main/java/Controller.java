@@ -19,17 +19,10 @@ public class Controller{
 
     @FXML
     private void initialize() {
-//        createTree();
+
     }
 
-    // Create the directory Tree
-    private void createTree() {
-        TreeItem<String> root = new TreeItem<String>("Root");
-        TreeItem<String> itemChild = new TreeItem<String>("Child");
-        itemChild.setExpanded(false);
-        root.getChildren().add(itemChild);
-        dirTree.setRoot(root);
-    }
+
 
 }
 
