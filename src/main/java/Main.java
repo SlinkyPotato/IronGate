@@ -31,7 +31,7 @@ public class Main extends Application {
 //        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
         primaryStage.setTitle("Iron-gate!");
-        primaryStage.setScene(new Scene(root, 990, 785));
+        primaryStage.setScene(new Scene(root, 990, 700));
 
         Scene scene = primaryStage.getScene(); // we get the scene from above
         scene.getStylesheets().clear(); // clear any styles
