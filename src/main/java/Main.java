@@ -10,6 +10,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class Main extends Application {
 
@@ -26,16 +28,19 @@ public class Main extends Application {
             }
         });*/
         Parent root = FXMLLoader.load(getClass().getResource("/main/resources/StartPage.fxml"));
-        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+//        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
         primaryStage.setTitle("Iron-gate!");
         primaryStage.setScene(new Scene(root, 990, 785));
 
         Scene scene = primaryStage.getScene(); // we get the scene from above
         scene.getStylesheets().clear(); // clear any styles
-        scene.getStylesheets().add("/main/resources/mainStyle.css"); // absolute path
+//        scene.getStylesheets().add("/main/resources/mainStyle.css"); // absolute path
 
-        try { //try to set the tree view in the FolderViewManager class
+        /**
+         * Temporally omitted, needs to be transfered to the Controller Class
+         */
+        /*try { //try to set the tree view in the FolderViewManager class
 
             FolderViewManager.treeView = (TreeView<String>) scene.lookup("#folder-view-pane");
             File homeDir = new File(System.getProperty("user.home"));
@@ -45,7 +50,7 @@ public class Main extends Application {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
 
         primaryStage.show();
     }
