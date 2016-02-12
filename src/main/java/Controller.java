@@ -27,16 +27,20 @@ public class Controller{
     @FXML private MenuItem fileTag;
     @FXML private MenuItem fileExit;
     @FXML private MenuItem editPreferences;
-    @FXML private TreeView<IronFile> dirTree;
+    @FXML private TreeView<String> dirTree;
     @FXML private ResourceBundle resources;
 
     @FXML private void initialize() {
-        createTree();
+        //createTree();
         // FolderViewManager.java calls are done here
+
+        FolderViewManager.view = dirTree;
+        File homeDir = new File(System.getProperty("user.home"));
+        FolderViewManager.setRootDirectory(homeDir);
     }
 
     // Create the directory Tree
-    private void createTree() {
+   /* private void createTree() {
         // Get the hard disk drives and 2 levels down
         IronFile[] roots = IronFile.listRoots();
         for (IronFile hdd : roots) {
@@ -54,8 +58,8 @@ public class Controller{
             public TreeCell<File> call(TreeView<File> param) {
                 return new TreeFieldImpl();
             }
-        });*/
-    }
+        });
+    }*/
     /**
      * Set the child of a given parent TreeItem
      *
