@@ -12,7 +12,6 @@ public class IronFile extends File {
     public IronFile(String pathname) {
         super(pathname);
         isRoot = (getParent() == null);
-
     }
     public IronFile(File file) {
         super(file.getPath());

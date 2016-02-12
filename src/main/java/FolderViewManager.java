@@ -21,37 +21,52 @@ import java.util.concurrent.ExecutionException;
     @author Brian Patino
  */
 public class FolderViewManager {
+    private TreeView<IronFile> view;
+    private TreeItem<IronFile> root;
+    private int NEST_COUNT = 0; //tracks number of nested calls when searching through files, TEMPORARY
 
-    public static TreeView<String> view;
-    private static TreeItem<String> root;
-    private static int NEST_COUNT = 0; //tracks number of nested calls when searching through files, TEMPORARY
+    public FolderViewManager(TreeItem<IronFile> root, TreeView<IronFile> dirTree) {
+        this.root = root;
+        this.view = dirTree;
+    }
 
-    private FolderViewManager() { }
-
-    public static void setRootDirectory(File file) {
-
-        root = new TreeItem<String>(file.getName());
+    public void setRootDirectory(IronFile file) {
+        root = new TreeItem<>(file);
         view.setRoot(root);
-
         createCellsFromRoot(file, root);
     }
 
-
-    private static void createCellsFromRoot(File rootFile, TreeItem<String> rootNode) {
-
+    private void createCellsFromRoot(File rootFile, TreeItem<IronFile> rootNode) {
         NEST_COUNT++;
-        if(NEST_COUNT > 6000) { //fixed value, TEMPORARY optimization
+        if(NEST_COUNT > 1000) { //fixed value, TEMPORARY optimization
             return;
         }
 
-        for(File f : rootFile.listFiles()) {
-            if(!f.getName().startsWith(".")) { //don't show system files that start with dot (ex: .filename .pythonfile)
-                TreeItem<String> fileNode = new TreeItem<String>(f.getName());
+        for(IronFile file : IronFile.convertFiles(rootFile.listFiles())) {
+            if(!file.getName().startsWith(".")) { //don't show system files that start with dot (ex: .filename .pythonfile)
+                TreeItem<IronFile> fileNode = new TreeItem<>(file);
                 rootNode.getChildren().add(fileNode);
-                if (f.isDirectory()) {
-                    createCellsFromRoot(f, fileNode);
+                if (file.isDirectory()) {
+                    createCellsFromRoot(file, fileNode);
                 }
             }
         }
     }
+    /**
+     * Set the child of a given parent TreeItem
+     *
+     * @param parent file of the parent node
+     * @param parentTreeItem TreeItem of the parent node
+     * */
+    /*@SuppressWarnings("ConstantConditions")
+    private void setChildOfParent(final File parent, TreeItem<IronFile> parentTreeItem) {
+        for (final IronFile file : IronFile.convertFiles(parent.listFiles())) {
+            if (file.isDirectory()) {
+                System.out.println("This is a directory");
+            } else {
+                parentTreeItem.getChildren().add(new TreeItem<>(file));
+                System.out.println(file.getName());
+            }
+        }
+    }*/
 }

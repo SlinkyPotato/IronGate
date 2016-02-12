@@ -1,24 +1,31 @@
 package main.java;
 
+import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.io.File;
 
 /**
- * Created by kristopherguzman on 2/11/16.
- */
-public class IronFileVisitor extends SimpleFileVisitor<Path> {
+ This class handles manipulation of the Folder View. This includes
+ directory searches, displaying directories, and all things directly changing
+ the Folder View.
 
-    private TreeItem<String> currentDirectory;
+ Additionally, this class extends SimpleFileVisitor which uses java 8.
+
+ @author kristopherguzman
+ @author Brian Patino
+ */
+public class IronFileVisitor extends SimpleFileVisitor<Path>{
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-
+//        System.out.printf("Visiting file %s\n", file);
         return FileVisitResult.CONTINUE;
     }
     /**
@@ -32,18 +39,7 @@ public class IronFileVisitor extends SimpleFileVisitor<Path> {
     }
     @Override
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-        System.out.printf("About to visit directory %s\n", dir);
-
-        currentDirectory = new TreeItem<String>(dir.getFileName().toString());
+//        System.out.printf("About to visit directory %s\n", dir);
         return FileVisitResult.CONTINUE;
     }
-
-    @Override
-    public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
-        System.out.printf("About to visit directory %s\n", dir);
-
-
-        return FileVisitResult.CONTINUE;
-    }
-
 }
