@@ -20,8 +20,6 @@ import java.util.EnumSet;
 import java.util.ResourceBundle;
 
 public class Controller{
-    private TreeItem<IronFile> root = new TreeItem<>();
-    private final Image hddIcon = new Image("/main/resources/icons/hdd.png");
     @FXML private MenuItem fileOpen;
     @FXML private MenuItem fileNew;
     @FXML private MenuItem fileTag;
@@ -31,9 +29,10 @@ public class Controller{
     @FXML private ResourceBundle resources;
 
     @FXML private void initialize() {
-        //createTree();
-        FolderViewManager manager = new FolderViewManager(root, dirTree);
-        IronFile homeDir = new IronFile(System.getProperty("user.home"));
+        FolderViewManager manager = new FolderViewManager(dirTree); // 2 statements in 1 line is best
+//        IronFile[] hardDrives = IronFile.listRoots(); // an array of hard drives
+//        manager.setRootDirectory(hardDrives);
+        IronFile homeDir = new IronFile(System.getProperty("user.home")); // use this for specific directory
         manager.setRootDirectory(homeDir);
     }
 }

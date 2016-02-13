@@ -22,10 +22,13 @@ import java.nio.file.attribute.BasicFileAttributes;
  @author Brian Patino
  */
 public class IronFileVisitor extends SimpleFileVisitor<Path>{
-
+    private TreeItem<IronFile> root;
     @Override
-    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-//        System.out.printf("Visiting file %s\n", file);
+    public FileVisitResult visitFile(Path pathFile, BasicFileAttributes attrs) throws IOException {
+        IronFile current = new IronFile(pathFile.toFile());
+//        System.out.println(current.getAbsolutePath());
+//        root.getChildren().add(new TreeItem<>(new IronFile(current.getAbsolutePath())));
+        System.out.printf("Visiting file %s\n", pathFile);
         return FileVisitResult.CONTINUE;
     }
     /**
@@ -39,7 +42,22 @@ public class IronFileVisitor extends SimpleFileVisitor<Path>{
     }
     @Override
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-//        System.out.printf("About to visit directory %s\n", dir);
-        return FileVisitResult.CONTINUE;
+        IronFile currentFile = new IronFile(dir.toAbsolutePath().toString());
+        if (currentFile.getName().startsWith(".")) {
+            System.out.printf("Skipped directory: %s\n", dir.getFileName());
+            return FileVisitResult.SKIP_SUBTREE;
+        } else {
+            System.out.printf("About to visit directory: %s\n", dir.getFileName());
+            root.getChildren().add(new TreeItem<>(currentFile));
+            return FileVisitResult.CONTINUE;
+        }
+    }
+
+    public TreeItem<IronFile> getRoot() {
+        return root;
+    }
+
+    public void setRoot(TreeItem<IronFile> root) {
+        this.root = root;
     }
 }
