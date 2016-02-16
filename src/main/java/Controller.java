@@ -30,10 +30,10 @@ public class Controller{
 
     @FXML private void initialize() {
         FolderViewManager manager = new FolderViewManager(dirTree); // 2 statements in 1 line is best
-//        IronFile[] hardDrives = IronFile.listRoots(); // an array of hard drives
-//        manager.setRootDirectory(hardDrives);
-        IronFile homeDir = new IronFile(System.getProperty("user.home")); // use this for specific directory
-        manager.setRootDirectory(homeDir);
+        IronFile[] hardDrives = IronFile.listRoots(); // an array of hard drives
+        manager.setRootDirectory(hardDrives);
+//        IronFile homeDir = new IronFile(System.getProperty("user.home")); // use this for specific directory
+//        manager.setRootDirectory(homeDir);
     }
 }
 
