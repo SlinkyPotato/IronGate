@@ -2,3 +2,6 @@
 .idea/
 *.iml
 out/
+
+# nope not having it
+/src/main/webapp/dropbox.json

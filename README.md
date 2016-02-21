@@ -1,6 +1,8 @@
 # Iron Gate
+[![build-passing](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
+[![version](https://img.shields.io/badge/version-0.2-red.svg)]()
 
-Iron Gate is the code name given to a really convenient files and folders organization system. This is a cross-platform application built for Windows and Mac OSX. Some really great features:
+Iron Gate is the code name given to a really convenient files and folders organization system. This is a cross-platform application built for Windows and Mac OSX. A few things Iron Gate can do:
   
   - Tag files and folders for quick search up
   - Save folder structures frequently used
@@ -8,30 +10,30 @@ Iron Gate is the code name given to a really convenient files and folders organi
   - Search, upload, and download other user directory templates
   - Easily remove unused files and folders
   - ... more to come
-  
 
-### Version
-0.2
+### Cloud Support
 
-### Tech
-
-The following is used to develop Iron Gate:
-
-* [JavaFX] - great GUI library
-* [JavaFX Scene Builder] - faster way to build!
-
-Iron Gate is open source, feel free to [contribute]!
+Iron Gate supports the following cloud services
+- Dropbox
+- Google Drive
+- OneDrive
 
 ### Installation
 
 Any java based IDE can build Iron Gate, although [IntelliJ] is highly recommended.
 
-### Plugins
+### Libraries and Other Technology
 
-Iron Gate will eventually use the following plugins:
-* Dropbox
-* Google Drive
-* OneDrive
+The following is used to develop Iron Gate:
+
+- [JavaFX] - great GUI library
+- [JavaFX Scene Builder] - faster way to build!
+- [JUnit] -  a simple framework to write repeatable tests
+- [Dropbox SDK] - a Java library to access Dropbox's HTTP-based Core API v2
+- [Google Drive API] - integration with google drive
+- [OneDrive API] - integration with one drive
+
+Iron Gate is open source, feel free to [contribute]!
 
 ### Todos
  - ~~file browser controller~~
@@ -46,3 +48,7 @@ Iron Gate will eventually use the following plugins:
    [JavaFX Scene Builder]: <http://www.oracle.com/technetwork/java/javase/downloads/javafxscenebuilder-info-2157684.html>
    [IntelliJ]: <https://www.jetbrains.com/idea/>
    [contribute]: <https://github.uconn.edu/brp14005/IronGate>
+   [Dropbox SDK]: https://github.com/dropbox/dropbox-sdk-java
+   [JUnit]: http://junit.org/
+   [Google Drive API]: https://developers.google.com/drive/v3/web/enable-sdk
+   [OneDrive API]: https://dev.onedrive.com/
