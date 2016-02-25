@@ -7,15 +7,20 @@ import java.io.File;
  * This class extends the java File class and returns the filename for toString()
  */
 public class IronFile extends File {
+
     private boolean isRoot = true;
+    public IronFileFilter filter;
 
     public IronFile(String pathname) {
         super(pathname);
         isRoot = (getParent() == null);
+        filter = new IronFileFilter();
     }
     public IronFile(File file) {
         super(file.getPath());
         isRoot = (getParent() == null);
+        filter = new IronFileFilter();
+
     }
 
     @Override

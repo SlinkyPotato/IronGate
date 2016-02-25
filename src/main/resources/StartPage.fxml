@@ -22,7 +22,7 @@
                 <Menu mnemonicParsing="false" text="Tools">
                     <items>
                         <MenuItem mnemonicParsing="false" text="Search" />
-                        <MenuItem mnemonicParsing="false" text="Delete Files" />
+                        <MenuItem id="tagFilesButton" fx:id="toolsTagFiles" mnemonicParsing="false" text="Tag Files" />
                         <MenuItem mnemonicParsing="false" text="Auto Manager" />
                         <MenuItem mnemonicParsing="false" text="Templates" />
                     </items>

@@ -21,7 +21,7 @@ public class FileTreeItem extends TreeItem<IronFile> {
 
     @Override
     public ObservableList<TreeItem<IronFile>> getChildren() {
-        if (isFirstTimeChildren) {
+        if (isFirstTimeChildren) { //if children of node have not been created, then do so
             isFirstTimeChildren = false;
             super.getChildren().setAll(buildChildren(this));
         }
@@ -39,12 +39,18 @@ public class FileTreeItem extends TreeItem<IronFile> {
     }
     private ObservableList<FileTreeItem> buildChildren(TreeItem<IronFile> ironTreeItem) {
         IronFile f = ironTreeItem.getValue();
+
+        System.out.println("file's parent: " + f.getParent());
+
         if (f != null && f.isDirectory()) {
             IronFile[] files = f.listFiles();
             if (files != null) {
                 ObservableList<FileTreeItem> children = FXCollections.observableArrayList();
+
                 for (IronFile childFile : files) {
-                    children.add(new FileTreeItem(childFile));
+                    if(childFile.filter.accept(childFile, childFile.getName())) {
+                        children.add(new FileTreeItem(childFile));
+                    }
                 }
                 return children;
             }
