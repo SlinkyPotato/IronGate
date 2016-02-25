@@ -1,4 +1,4 @@
-package main.java;
+package directory;
 
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
@@ -15,12 +15,12 @@ import javafx.scene.image.ImageView;
     @author Brian Patino patinobrian@gmail.com
  */
 public class FolderViewManager {
-    private final Image hddIcon = new Image("/main/resources/icons/hdd.png");
-//    private IronFileVisitor ironVisitor; // might be used later
+    private final Image hddIcon = new Image("/icons/hdd.png");
+//    private directory.IronFileVisitor ironVisitor; // might be used later
     private TreeView<IronFile> view;
 
     public FolderViewManager(TreeView<IronFile> dirTree) {
-        /*ironVisitor = new IronFileVisitor(); // save this for later
+        /*ironVisitor = new directory.IronFileVisitor(); // save this for later
         ironVisitor.setRoot(new TreeItem<>());*/ // save this for later
         view = dirTree;
     }
