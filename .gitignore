@@ -9,7 +9,6 @@ out/
 .gradletasknamecache
 .gradle/
 build/
-
 # dropbox credentials
 dropbox.json
 
