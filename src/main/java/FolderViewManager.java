@@ -80,6 +80,16 @@ public class FolderViewManager {
 
     }
 
+    public void deleteFileAttrForSelected() {
+
+        for(TreeItem<IronFile> item : selectedFiles) {
+
+            deleteFileAttr(item.getValue(), "test_attr_key");
+
+        }
+
+    }
+
     public void setFileAttr(IronFile file, String key, String value) {
 
         if(OSDetection.OSType ==  OSDetection.OS.WINDOWS) {
@@ -155,13 +165,14 @@ public class FolderViewManager {
 
     }
 
-    public String removeFileAttr(IronFile file, String key) {
+    public void deleteFileAttr(IronFile file, String key) {
 
         if(OSDetection.OSType ==  OSDetection.OS.WINDOWS) {
 
             try {
 
-                return (String) Files.getAttribute(file.toPath(), key);
+                UserDefinedFileAttributeView view = Files.getFileAttributeView(file.toPath(), UserDefinedFileAttributeView.class);
+                view.delete(key);
 
             } catch(IOException e) { e.printStackTrace(); }
 
@@ -169,24 +180,17 @@ public class FolderViewManager {
 
             System.out.println("file path: " + file.getAbsolutePath());
 
-            String option = "";
 
-            if(file.isDirectory()) {
-                //option = "-r";
-            }
-
-
-            String cmd = "xattr -p " + option + " " + key + " " + file.getAbsolutePath(); //then append the attr command
+            String cmd = "xattr -d " + key + " " + file.getAbsolutePath(); //then append the attr command
 
             try {
 
                 String output = command.run(cmd);
 
+
             } catch(IOException e) { e.printStackTrace(); }
 
         }
-
-        return null;
 
     }
 

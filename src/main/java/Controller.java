@@ -34,6 +34,7 @@ public class Controller{
     @FXML private MenuItem editPreferences;
     @FXML private TreeView<IronFile> dirTree;
     @FXML private MenuItem toolsTagFiles;
+    @FXML private MenuItem toolsDeleteTags;
     @FXML private ResourceBundle resources;
 
     @FXML private void initialize() {
@@ -54,20 +55,26 @@ public class Controller{
 
         });
 
-        /**
-            Testing tagging. Be careful with this, tag removal is not implemented yet.
-         */
+
         toolsTagFiles.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
 
-
-                //manager.setFileAttrForSelected();
-                manager.getFileAttrForSelected();
+                manager.setFileAttrForSelected();
 
             }
 
+        });
+
+        toolsDeleteTags.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+
+                manager.deleteFileAttrForSelected();
+
+            }
 
         });
 
