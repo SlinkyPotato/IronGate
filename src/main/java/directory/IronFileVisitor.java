@@ -1,10 +1,7 @@
-package main.java;
+package directory;
 
-import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
@@ -27,7 +24,7 @@ public class IronFileVisitor extends SimpleFileVisitor<Path>{
     public FileVisitResult visitFile(Path pathFile, BasicFileAttributes attrs) throws IOException {
         IronFile current = new IronFile(pathFile.toFile());
 //        System.out.println(current.getAbsolutePath());
-//        root.getChildren().add(new TreeItem<>(new IronFile(current.getAbsolutePath())));
+//        root.getChildren().add(new TreeItem<>(new directory.IronFile(current.getAbsolutePath())));
         System.out.printf("Visiting file %s\n", pathFile);
         return FileVisitResult.CONTINUE;
     }
