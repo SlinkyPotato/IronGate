@@ -10,6 +10,7 @@ import directory.FolderViewManager;
 import directory.IronFile;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -61,12 +62,12 @@ public class Controller{
             }
         });
 
-        DropboxController dbManager = new DropboxController();
+       /* DropboxController dbManager = new DropboxController();
         try {
             dbManager.test();
         } catch (DbxException e) {
             e.printStackTrace();
-        }
+        }*/
 //        directory.IronFile homeDir = new directory.IronFile(System.getProperty("user.home")); // use this for specific directory
 //        manager.setRootDirectory(homeDir);
     }

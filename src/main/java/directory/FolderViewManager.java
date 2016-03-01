@@ -5,6 +5,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import utils.CmdExecutor;
+import utils.OSDetection;
 
 import java.io.BufferedReader;
 import java.io.IOException;
