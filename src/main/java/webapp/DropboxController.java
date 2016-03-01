@@ -25,5 +25,6 @@ public class DropboxController {
 
     public void test() throws DbxException{
         FullAccount account = client.users.getCurrentAccount();
+        System.out.println(account);
     }
 }

@@ -1,6 +1,7 @@
 package directory;
 
 import javafx.collections.ObservableList;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
@@ -38,10 +39,10 @@ public class FolderViewManager {
     public FolderViewManager(TreeView<IronFile> dirTree) {
         /*ironVisitor = new directory.IronFileVisitor(); // save this for later
         ironVisitor.setRoot(new TreeItem<>());*/ // save this for later
-
-        OSDetection.getOS();
+//        OSDetection.getOS();
         view = dirTree;
-        command = new CmdExecutor();
+        view.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // enable multi-select
+//        command = new CmdExecutor();
     }
     /**
      * Sets the root directory of the file browser to the specified folder.

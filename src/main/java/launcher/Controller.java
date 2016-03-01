@@ -39,7 +39,19 @@ public class Controller{
         final FolderViewManager manager = new FolderViewManager(dirTree); // 2 statements in 1 line is best
         IronFile[] hardDrives = IronFile.listRoots(); // an array of hard drives
         manager.setRootDirectory(hardDrives);
+//        setEvents(manager);
 
+//        DropboxController dbManager = new DropboxController();
+        /*try {
+            dbManager.test();
+        } catch (DbxException e) {
+            e.printStackTrace();
+        }*/
+//        directory.IronFile homeDir = new directory.IronFile(System.getProperty("user.home")); // use this for specific directory
+//        manager.setRootDirectory(homeDir);
+    }
+
+    private void setEvents(FolderViewManager manager) {
         dirTree.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent args) {
@@ -61,15 +73,6 @@ public class Controller{
                 manager.deleteFileAttrForSelected();
             }
         });
-
-       /* DropboxController dbManager = new DropboxController();
-        try {
-            dbManager.test();
-        } catch (DbxException e) {
-            e.printStackTrace();
-        }*/
-//        directory.IronFile homeDir = new directory.IronFile(System.getProperty("user.home")); // use this for specific directory
-//        manager.setRootDirectory(homeDir);
     }
 }
 

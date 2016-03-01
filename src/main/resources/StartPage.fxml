@@ -104,27 +104,6 @@
                     </children>
                 </StackPane>
             </center>
-            <top>
-                <BorderPane prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                    <center>
-                        <FlowPane id="tool-selector-pane" alignment="CENTER" columnHalignment="CENTER" hgap="10.0" prefHeight="125.0" prefWidth="400.0" prefWrapLength="300.0" vgap="10.0" BorderPane.alignment="CENTER">
-                            <children>
-                                <Label text="Search" underline="true" />
-                                <Label layoutX="215.0" layoutY="64.0" text="Delete Files" underline="true" />
-                                <Label layoutX="242.0" layoutY="64.0" text="Auto Manager" underline="true" />
-                                <Label layoutX="281.0" layoutY="64.0" text="Templates" underline="true" />
-                            </children>
-                        </FlowPane>
-                    </center>
-                    <top>
-                        <Label alignment="CENTER" prefHeight="25.0" prefWidth="300.0" styleClass="pane-title" text="Tools" BorderPane.alignment="CENTER">
-                            <font>
-                                <Font name="System Bold" size="14.0" />
-                            </font>
-                        </Label>
-                    </top>
-                </BorderPane>
-            </top>
         </BorderPane>
     </left>
     <right>
