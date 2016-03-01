@@ -20,7 +20,9 @@ Iron Gate supports the following cloud services
 
 ### Installation
 
-Any java based IDE can build Iron Gate, although [IntelliJ] is highly recommended.
+Any java based IDE can build Iron Gate, although [IntelliJ] is highly recommended. This project uses 
+[gradle] as the build tool to gather all dependencies. If using IntelliJ, 
+please import the gradle module when asked. 
 
 ### Libraries and Other Technology
 
@@ -52,3 +54,4 @@ Iron Gate is open source, feel free to [contribute]!
    [JUnit]: http://junit.org/
    [Google Drive API]: https://developers.google.com/drive/v3/web/enable-sdk
    [OneDrive API]: https://dev.onedrive.com/
+   [gradle]: http://gradle.org/
