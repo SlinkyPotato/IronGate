@@ -2,6 +2,7 @@
 package main.java;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * This class extends the java File class and returns the filename for toString()
@@ -39,6 +40,14 @@ public class IronFile extends File {
         IronFile[] ironFiles = new IronFile[files.length];
         for (int i = 0; i < files.length; i++) {
             ironFiles[i] = new IronFile(files[i]);
+        }
+        return ironFiles;
+    }
+
+    public static IronFile[] convertFiles(List<File> files) {
+        IronFile[] ironFiles = new IronFile[files.size()];
+        for (int i = 0; i < files.size(); i++) {
+            ironFiles[i] = new IronFile(files.get(i));
         }
         return ironFiles;
     }
