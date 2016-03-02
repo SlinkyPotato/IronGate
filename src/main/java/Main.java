@@ -25,7 +25,7 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 990, 700));
         Scene scene = primaryStage.getScene(); // we get the scene from above
         scene.getStylesheets().clear(); // clear any styles
-
+        scene.getStylesheets().add("/main/resources/mainStyle.css");
         Controller controller = loader.getController();
 
         controller.initializeSceneEvents();
