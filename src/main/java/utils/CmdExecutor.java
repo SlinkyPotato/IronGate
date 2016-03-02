@@ -1,4 +1,4 @@
-package main.java;
+package utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,10 +12,7 @@ public class CmdExecutor {
     public CmdExecutor() { }
 
     public String run(String cmd) throws IOException {
-
         System.out.println("executing command: " + cmd);
-
-
         String[] args = new String[] {"sh", "-c", "cd / && " + cmd};
         Process process = Runtime.getRuntime().exec(args);
         BufferedReader outputReader = new BufferedReader(new InputStreamReader(process.getInputStream())); //efficiently reads chars
@@ -26,23 +23,17 @@ public class CmdExecutor {
 
         System.out.println("Below is command output: \n ");
         while(line != null) {
-
             System.out.println("cmd output: " + line);
             line = outputReader.readLine();
-
         }
 
         while(error != null) {
-
             System.out.println("error output: " + error);
             error = errorReader.readLine();
 
         }
-
         outputReader.close();
         errorReader.close();
         return null;
-
     }
-
 }

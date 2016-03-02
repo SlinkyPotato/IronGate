@@ -1,5 +1,6 @@
+package directory;
 
-package main.java;
+import utils.IronFileFilter;
 
 import java.io.File;
 import java.util.List;
@@ -8,9 +9,9 @@ import java.util.List;
  * This class extends the java File class and returns the filename for toString()
  */
 public class IronFile extends File {
-
     private boolean isRoot = true;
     public IronFileFilter filter;
+    private String tag;
 
     public IronFile(String pathname) {
         super(pathname);
@@ -67,5 +68,12 @@ public class IronFile extends File {
         } else {
             return this.getName();
         }
+    }
+
+    public String getTag() {
+        return tag;
+    }
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }

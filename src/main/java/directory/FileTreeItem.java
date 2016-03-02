@@ -1,4 +1,4 @@
-package main.java;
+package directory;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,9 +39,6 @@ public class FileTreeItem extends TreeItem<IronFile> {
     }
     private ObservableList<FileTreeItem> buildChildren(TreeItem<IronFile> ironTreeItem) {
         IronFile f = ironTreeItem.getValue();
-
-        System.out.println("file's parent: " + f.getParent());
-
         if (f != null && f.isDirectory()) {
             IronFile[] files = f.listFiles();
             if (files != null) {
