@@ -1,11 +1,14 @@
 package directory;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import sun.reflect.generics.tree.Tree;
 import utils.CmdExecutor;
 import utils.OSDetection;
 
@@ -35,6 +38,7 @@ public class FolderViewManager {
     private TreeView<IronFile> view;
     private CmdExecutor command;
     private List<TreeItem<IronFile>> selectedFiles;
+    private ObservableList<TreeItem<IronFile>> taggedItems = FXCollections.observableArrayList();
 
     public FolderViewManager(TreeView<IronFile> dirTree) {
         /*ironVisitor = new directory.IronFileVisitor(); // save this for later
@@ -150,5 +154,30 @@ public class FolderViewManager {
                 String output = command.run(cmd);
             } catch(IOException e) { e.printStackTrace(); }
         }
+    }
+
+    public void setTags(ObservableList<TreeItem<IronFile>> selectedItems, String tag) {
+        for (TreeItem<IronFile> selectedItem : selectedItems) {
+            selectedItem.getValue().setTag(tag);
+            taggedItems.add(selectedItem); // add tagged item to list
+//            System.out.println(selectedItem.getValue().getTag());
+        }
+    }
+
+    public void deleteAllTags(ObservableList<TreeItem<IronFile>> selectedItems) {
+        for (TreeItem<IronFile> selectedItem : selectedItems) {
+            selectedItem.getValue().setTag(null); // removes all tags for all selected files
+        }
+    }
+
+    public ObservableList<TreeItem<IronFile>> getTagedItems(String searchTag) {
+        ObservableList<TreeItem<IronFile>> listTagFiles = FXCollections.observableArrayList();
+        for (TreeItem<IronFile> taggedItem : taggedItems) {
+            IronFile currentFile = taggedItem.getValue();
+            if (currentFile.getTag().equals(searchTag)) {
+                listTagFiles.add(taggedItem);
+            }
+        }
+        return listTagFiles;
     }
 }

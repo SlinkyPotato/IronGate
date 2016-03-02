@@ -86,8 +86,8 @@
                                     <top>
                                         <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                             <children>
-                                                <TextField promptText="Include Tag..." />
-                                                <Button mnemonicParsing="false" text="Add">
+                                                <TextField fx:id="txtTagSearch" promptText="Include Tag..." />
+                                                <Button fx:id="btnSearchTag" mnemonicParsing="false" text="Search">
                                                     <HBox.margin>
                                                         <Insets left="15.0" />
                                                     </HBox.margin>
@@ -96,7 +96,7 @@
                                         </HBox>
                                     </top>
                                     <center>
-                                        <ListView maxWidth="-Infinity" prefHeight="200.0" prefWidth="250.0" BorderPane.alignment="CENTER" />
+                                        <ListView fx:id="viewTags" maxWidth="-Infinity" prefHeight="200.0" prefWidth="250.0" BorderPane.alignment="CENTER" />
                                     </center>
                                 </BorderPane>
                             </center>
@@ -127,7 +127,7 @@
                                     <top>
                                         <HBox prefHeight="25.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                             <children>
-                                                <TextField fx:id="txtTag" promptText="Add Tag..." />
+                                                <TextField fx:id="txtAddTag" promptText="Add Tag..." />
                                                 <Button fx:id="btnAddTag" mnemonicParsing="false" prefWidth="75.0" text="Add" />
                                             </children>
                                         </HBox>

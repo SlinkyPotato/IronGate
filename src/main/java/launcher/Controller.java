@@ -19,6 +19,7 @@ import com.dropbox.core.*;
 import com.dropbox.core.v2.*;
 import webapp.DropboxController;
 
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class Controller{
@@ -33,7 +34,10 @@ public class Controller{
     @FXML private MenuItem toolsDeleteTags;
     @FXML private ResourceBundle resources;
     @FXML private Button btnAddTag;
-    @FXML private TextField txtTag;
+    @FXML private TextField txtAddTag;
+    @FXML private TextField txtTagSearch;
+    @FXML private Button btnSearchTag;
+    @FXML private ListView<TreeItem<IronFile>> viewTags;
 
     @FXML private void initialize() {
         final FolderViewManager manager = new FolderViewManager(dirTree); // 2 statements in 1 line is best
@@ -51,18 +55,21 @@ public class Controller{
             }
         });*/
 
-        toolsTagFiles.setOnAction((event) -> { // new java 8 set mouse event
+        btnAddTag.setOnAction((event) -> { // new java 8 set mouse event
             ObservableList<TreeItem<IronFile>> selectedItems = dirTree.getSelectionModel().getSelectedItems(); // get list of selected files
-            manager.setSelectedFiles(selectedItems);
-
+//            manager.setSelectedFiles(selectedItems);
+            manager.setTags(selectedItems, txtAddTag.getText());
         });
-
-        /*toolsDeleteTags.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                manager.deleteFileAttrForSelected();
-            }
-        });*/
+        btnSearchTag.setOnAction(event -> {
+            ObservableList<TreeItem<IronFile>> taggedItems = manager.getTagedItems(txtTagSearch.getText());
+            viewTags.setItems(taggedItems);
+//            manager.displayTagedFiles(txtTagSearch.getText());
+        });
+        toolsDeleteTags.setOnAction(event -> {
+            ObservableList<TreeItem<IronFile>> selectedItems = dirTree.getSelectionModel().getSelectedItems(); // get list of selected files
+            manager.deleteAllTags(selectedItems);
+//            manager.deleteFileAttrForSelected();
+        });
     }
 }
 
