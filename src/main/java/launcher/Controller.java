@@ -2,6 +2,7 @@ package launcher;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -21,6 +22,7 @@ import webapp.DropboxController;
 
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class Controller{
     @FXML private MenuItem fileOpen;
@@ -37,39 +39,38 @@ public class Controller{
     @FXML private TextField txtAddTag;
     @FXML private TextField txtTagSearch;
     @FXML private Button btnSearchTag;
-    @FXML private ListView<TreeItem<IronFile>> viewTags;
+    @FXML private ListView<IronFile> viewTags;
+    private FolderViewManager manager;
 
     @FXML private void initialize() {
-        final FolderViewManager manager = new FolderViewManager(dirTree); // 2 statements in 1 line is best
+        manager = new FolderViewManager(dirTree); // 2 statements in 1 line is best
         IronFile[] hardDrives = IronFile.listRoots(); // an array of hard drives
         manager.setRootDirectory(hardDrives);
-        setEvents(manager);
     }
-
-    private void setEvents(FolderViewManager manager) {
-        /*dirTree.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent args) {
-                ObservableList<TreeItem<IronFile>> selectedItems = dirTree.getSelectionModel().getSelectedItems();
-                manager.setSelectedFiles(selectedItems);
-            }
-        });*/
-
-        btnAddTag.setOnAction((event) -> { // new java 8 set mouse event
-            ObservableList<TreeItem<IronFile>> selectedItems = dirTree.getSelectionModel().getSelectedItems(); // get list of selected files
-//            manager.setSelectedFiles(selectedItems);
-            manager.setTags(selectedItems, txtAddTag.getText());
-        });
-        btnSearchTag.setOnAction(event -> {
-            ObservableList<TreeItem<IronFile>> taggedItems = manager.getTagedItems(txtTagSearch.getText());
-            viewTags.setItems(taggedItems);
-//            manager.displayTagedFiles(txtTagSearch.getText());
-        });
-        toolsDeleteTags.setOnAction(event -> {
-            ObservableList<TreeItem<IronFile>> selectedItems = dirTree.getSelectionModel().getSelectedItems(); // get list of selected files
-            manager.deleteAllTags(selectedItems);
-//            manager.deleteFileAttrForSelected();
-        });
+    /**
+     * Action event triggered when user clicks. This method will add tag directly to IronFile
+     * Method name must match StartPage.fxml assigned `on Action`
+     * */
+    @FXML private void eventAddTag() {
+        ObservableList<TreeItem<IronFile>> treeIronFileList = dirTree.getSelectionModel().getSelectedItems();
+        ObservableList<IronFile> selectedIronFiles = FXCollections.observableArrayList();
+        /** The following line converts ObservableList<TreeItem<IronFile> into ObservableList<IronFile> which is needed to display just the names.**/
+        selectedIronFiles.addAll(treeIronFileList.stream().map(TreeItem::getValue).collect(Collectors.toList()));
+        manager.setTags(selectedIronFiles, txtAddTag.getText());
+    }
+    /**
+     * On Click event that will search and display files based on entered tag
+     * */
+    @FXML private void eventSearchTag() {
+        ObservableList<IronFile> taggedItems = manager.getTaggedItems(txtTagSearch.getText());
+        viewTags.setItems(taggedItems);
+    }
+    /**
+    * Action on click event that will delete all tag information from selected files.
+    * */
+    @FXML private void eventDeleteTags() {
+        ObservableList<TreeItem<IronFile>> selectedItems = dirTree.getSelectionModel().getSelectedItems(); // get list of selected files
+        manager.deleteAllTags(selectedItems);
     }
 }
 

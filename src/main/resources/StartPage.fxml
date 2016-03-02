@@ -87,7 +87,7 @@
                                         <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                             <children>
                                                 <TextField fx:id="txtTagSearch" promptText="Include Tag..." />
-                                                <Button fx:id="btnSearchTag" mnemonicParsing="false" text="Search">
+                                                <Button fx:id="btnSearchTag" mnemonicParsing="false" onAction="#eventSearchTag" text="Search">
                                                     <HBox.margin>
                                                         <Insets left="15.0" />
                                                     </HBox.margin>
@@ -128,7 +128,7 @@
                                         <HBox prefHeight="25.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                             <children>
                                                 <TextField fx:id="txtAddTag" promptText="Add Tag..." />
-                                                <Button fx:id="btnAddTag" mnemonicParsing="false" prefWidth="75.0" text="Add" />
+                                                <Button fx:id="btnAddTag" mnemonicParsing="false" onAction="#eventAddTag" prefWidth="75.0" text="Add" />
                                             </children>
                                         </HBox>
                                     </top>
