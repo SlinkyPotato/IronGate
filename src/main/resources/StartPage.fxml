@@ -127,8 +127,8 @@
                                     <top>
                                         <HBox prefHeight="25.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                             <children>
-                                                <TextField promptText="Add Tag..." />
-                                                <Button mnemonicParsing="false" prefWidth="75.0" text="Add" />
+                                                <TextField fx:id="txtTag" promptText="Add Tag..." />
+                                                <Button fx:id="btnAddTag" mnemonicParsing="false" prefWidth="75.0" text="Add" />
                                             </children>
                                         </HBox>
                                     </top>

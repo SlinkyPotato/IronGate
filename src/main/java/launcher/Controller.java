@@ -9,9 +9,7 @@ import javafx.event.EventHandler;
 import directory.FolderViewManager;
 import directory.IronFile;
 import javafx.fxml.FXML;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -34,45 +32,37 @@ public class Controller{
     @FXML private MenuItem toolsTagFiles;
     @FXML private MenuItem toolsDeleteTags;
     @FXML private ResourceBundle resources;
+    @FXML private Button btnAddTag;
+    @FXML private TextField txtTag;
 
     @FXML private void initialize() {
         final FolderViewManager manager = new FolderViewManager(dirTree); // 2 statements in 1 line is best
         IronFile[] hardDrives = IronFile.listRoots(); // an array of hard drives
         manager.setRootDirectory(hardDrives);
-//        setEvents(manager);
-
-//        DropboxController dbManager = new DropboxController();
-        /*try {
-            dbManager.test();
-        } catch (DbxException e) {
-            e.printStackTrace();
-        }*/
-//        directory.IronFile homeDir = new directory.IronFile(System.getProperty("user.home")); // use this for specific directory
-//        manager.setRootDirectory(homeDir);
+        setEvents(manager);
     }
 
     private void setEvents(FolderViewManager manager) {
-        dirTree.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        /*dirTree.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent args) {
                 ObservableList<TreeItem<IronFile>> selectedItems = dirTree.getSelectionModel().getSelectedItems();
                 manager.setSelectedFiles(selectedItems);
             }
+        });*/
+
+        toolsTagFiles.setOnAction((event) -> { // new java 8 set mouse event
+            ObservableList<TreeItem<IronFile>> selectedItems = dirTree.getSelectionModel().getSelectedItems(); // get list of selected files
+            manager.setSelectedFiles(selectedItems);
+
         });
 
-        toolsTagFiles.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                manager.setFileAttrForSelected();
-            }
-        });
-
-        toolsDeleteTags.setOnAction(new EventHandler<ActionEvent>() {
+        /*toolsDeleteTags.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 manager.deleteFileAttrForSelected();
             }
-        });
+        });*/
     }
 }
 
