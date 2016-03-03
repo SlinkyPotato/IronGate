@@ -52,7 +52,7 @@ public class Controller{
         manager = new FolderViewManager(dirTree); // 2 statements in 1 line is best
         IronFile[] hardDrives = IronFile.listRoots(); // an array of hard drives
         menubar.setUseSystemMenuBar(true); //allows use of native menu bars, luckily an easy 1 liner
-        manager.setRootDirectory(hardDrives);
+       // manager.setRootDirectory(hardDrives); Ideally only show tree view of files the user drags in
     }
     /**
      * Action event triggered when user clicks. This method will add tag directly to IronFile
