@@ -17,7 +17,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        setUserAgentStylesheet(STYLESHEET_CASPIAN);
+//        setUserAgentStylesheet(STYLESHEET_CASPIAN);
         Parent root = FXMLLoader.load(getClass().getResource("/StartPage.fxml"));
         primaryStage.setTitle("Iron-gate!");
         primaryStage.setScene(new Scene(root, 990, 700));

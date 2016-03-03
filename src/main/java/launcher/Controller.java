@@ -10,10 +10,14 @@ import javafx.event.EventHandler;
 import directory.FolderViewManager;
 import directory.IronFile;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import sun.misc.Resource;
 import sun.reflect.generics.tree.Tree;
 import com.dropbox.core.*;
@@ -41,10 +45,13 @@ public class Controller{
     @FXML private Button btnSearchTag;
     @FXML private ListView<IronFile> viewTags;
     private FolderViewManager manager;
+    @FXML private MenuBar menubar;
+    @FXML private Label dragHereLabel;
 
     @FXML private void initialize() {
         manager = new FolderViewManager(dirTree); // 2 statements in 1 line is best
         IronFile[] hardDrives = IronFile.listRoots(); // an array of hard drives
+        menubar.setUseSystemMenuBar(true); //allows use of native menu bars, luckily an easy 1 liner
         manager.setRootDirectory(hardDrives);
     }
     /**
@@ -71,6 +78,36 @@ public class Controller{
     @FXML private void eventDeleteTags() {
         ObservableList<TreeItem<IronFile>> selectedItems = dirTree.getSelectionModel().getSelectedItems(); // get list of selected files
         manager.deleteAllTags(selectedItems);
+    }
+    public void initializeSceneEvents() {
+        Scene scene = dirTree.getScene();
+        scene.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent args) {
+                Dragboard db = args.getDragboard();
+                //System.out.println("dragging over");
+                if(db.hasFiles()) {
+                    args.acceptTransferModes(TransferMode.COPY);
+                } else { args.consume(); }
+            }
+        });
+        scene.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent args) {
+                Dragboard db = args.getDragboard();
+                args.acceptTransferModes(TransferMode.COPY);
+                boolean success = false;
+                if(db.hasFiles()) {
+                    System.out.println("dropped file(s)");
+                    IronFile[] roots = IronFile.convertFiles(db.getFiles());
+                    manager.setRootDirectory(roots);
+                    success = true;
+                    dragHereLabel.setText("");
+                    dragHereLabel.setMaxWidth(0);
+                }
+                args.setDropCompleted(success);
+            }
+        });
     }
 }
 
