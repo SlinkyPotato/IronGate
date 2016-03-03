@@ -53,6 +53,28 @@ public class Controller{
         IronFile[] hardDrives = IronFile.listRoots(); // an array of hard drives
         menubar.setUseSystemMenuBar(true); //allows use of native menu bars, luckily an easy 1 liner
         manager.setRootDirectory(hardDrives);
+
+        /**
+         * Tell the manager that new files have been selected
+        dirTree.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent args) {
+                ObservableList<TreeItem<IronFile>> selectedItems = dirTree.getSelectionModel().getSelectedItems();
+                manager.setSelectedFiles(selectedItems);
+            }
+        });
+        toolsTagFiles.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                manager.setFileAttrForSelected();
+            }
+        });
+        toolsDeleteTags.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                manager.deleteFileAttrForSelected();
+            }
+        });*/
     }
     /**
      * Action event triggered when user clicks. This method will add tag directly to IronFile
