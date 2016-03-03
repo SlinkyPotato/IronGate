@@ -81,32 +81,26 @@ public class Controller{
     }
     public void initializeSceneEvents() {
         Scene scene = dirTree.getScene();
-        scene.setOnDragOver(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent args) {
-                Dragboard db = args.getDragboard();
-                //System.out.println("dragging over");
-                if(db.hasFiles()) {
-                    args.acceptTransferModes(TransferMode.COPY);
-                } else { args.consume(); }
-            }
-        });
-        scene.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent args) {
-                Dragboard db = args.getDragboard();
+        scene.setOnDragOver(args -> {
+            Dragboard db = args.getDragboard();
+            //System.out.println("dragging over");
+            if(db.hasFiles()) {
                 args.acceptTransferModes(TransferMode.COPY);
-                boolean success = false;
-                if(db.hasFiles()) {
-                    System.out.println("dropped file(s)");
-                    IronFile[] roots = IronFile.convertFiles(db.getFiles());
-                    manager.setRootDirectory(roots);
-                    success = true;
-                    dragHereLabel.setText("");
-                    dragHereLabel.setMaxWidth(0);
-                }
-                args.setDropCompleted(success);
+            } else { args.consume(); }
+        });
+        scene.setOnDragDropped(args -> {
+            Dragboard db = args.getDragboard();
+            args.acceptTransferModes(TransferMode.COPY);
+            boolean success = false;
+            if(db.hasFiles()) {
+                System.out.println("dropped file(s)");
+                IronFile[] roots = IronFile.convertFiles(db.getFiles());
+                manager.setRootDirectory(roots);
+                success = true;
+                dragHereLabel.setText("");
+                dragHereLabel.setMaxWidth(0);
             }
+            args.setDropCompleted(success);
         });
     }
 }
