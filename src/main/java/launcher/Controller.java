@@ -1,30 +1,16 @@
 package launcher;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import directory.FolderViewManager;
 import directory.IronFile;
+import javafx.beans.value.ObservableValueBase;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import sun.misc.Resource;
-import sun.reflect.generics.tree.Tree;
-import com.dropbox.core.*;
-import com.dropbox.core.v2.*;
-import webapp.DropboxController;
 
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -71,7 +57,6 @@ public class Controller{
             args.acceptTransferModes(TransferMode.COPY);
             boolean success = false;
             if(db.hasFiles()) {
-                System.out.println("dropped file(s)");
                 IronFile[] roots = IronFile.convertFiles(db.getFiles());
                 manager.setRootDirectory(roots);
                 success = true;
@@ -88,15 +73,21 @@ public class Controller{
     @FXML private void eventAddTag() {
         ObservableList<TreeItem<IronFile>> treeIronFileList = dirTree.getSelectionModel().getSelectedItems();
         ObservableList<IronFile> selectedIronFiles = FXCollections.observableArrayList();
-        /** The following line converts ObservableList<TreeItem<IronFile> into ObservableList<IronFile> which is needed to display just the names.**/
+        /* The following line converts ObservableList<TreeItem<IronFile> into ObservableList<IronFile> which is needed to display just the names.*/
         selectedIronFiles.addAll(treeIronFileList.stream().map(TreeItem::getValue).collect(Collectors.toList()));
         manager.setTags(selectedIronFiles, txtAddTag.getText());
         ObservableList<String> tagsList = FXCollections.observableArrayList(txtAddTag.getText());
         tagsList.addAll(viewExistTags.getItems());
         viewExistTags.setItems(tagsList);
     }
-    @FXML private void eventSearchRemoveTag() {
-
+    @FXML private void eventRemoveTag() {
+        ObservableList<String> allTags = viewExistTags.getItems();
+        ObservableList<String> selectedTagsList = viewExistTags.getSelectionModel().getSelectedItems();
+        ObservableList<String> cleanTagList = FXCollections.observableArrayList();
+        manager.deleteTags(selectedTagsList);
+        /* Create list that does not contain removed tags */
+        cleanTagList.addAll(allTags.stream().filter(tag -> !selectedTagsList.contains(tag)).collect(Collectors.toList())); // checkout java 8 .stream() and .collect()
+        viewExistTags.setItems(cleanTagList);
     }
     /**
      * On Click event that will search and display files based on entered tag
@@ -105,15 +96,8 @@ public class Controller{
         ObservableList<IronFile> taggedItems = manager.getTaggedItems(txtSearchTag.getText());
         viewTags.setItems(taggedItems);
     }
-    /**
-    * Action on click event that will delete all tag information from selected files.
-    * */
-    @FXML private void eventDeleteTags() {
-        ObservableList<TreeItem<IronFile>> selectedItems = dirTree.getSelectionModel().getSelectedItems(); // get list of selected files
-        manager.deleteAllTags(selectedItems);
-    }
 
-    @FXML private void eventRemoveTag() {
+    @FXML private void eventSearchRemoveTag() {
 //        ObservableList<TreeItem<IronFile>> treeIronFile
     }
 }

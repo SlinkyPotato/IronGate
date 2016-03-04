@@ -73,9 +73,11 @@ public class FolderViewManager {
         }
     }
 
-    public void deleteAllTags(ObservableList<TreeItem<IronFile>> selectedItems) {
-        for (TreeItem<IronFile> selectedItem : selectedItems) {
-            selectedItem.getValue().setTag(null); // removes all tags for all selected files
+    public void deleteTags(ObservableList<String> listTags) {
+        for (IronFile taggedFile : taggedItems) {
+            if (listTags.contains(taggedFile.getTag())) {
+                taggedFile.setTag("");
+            }
         }
     }
 
