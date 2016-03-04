@@ -91,8 +91,8 @@
                            <top>
                               <HBox prefHeight="33.0" prefWidth="178.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <TextField prefHeight="27.0" prefWidth="133.0" promptText="Include Tags..." />
-                                    <Button mnemonicParsing="false" text="Add" />
+                                    <TextField fx:id="txtSearchTag" prefHeight="27.0" prefWidth="133.0" promptText="Include Tags..." />
+                                    <Button fx:id="btnSearchTag" mnemonicParsing="false" onAction="#eventSearchTag" text="Add" />
                                  </children>
                                  <BorderPane.margin>
                                     <Insets top="5.0" />
@@ -100,7 +100,7 @@
                               </HBox>
                            </top>
                            <center>
-                              <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                              <ListView fx:id="viewTags" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
                            </center>
                            <bottom>
                               <Button mnemonicParsing="false" text="Remove Tag" BorderPane.alignment="CENTER">
@@ -285,7 +285,7 @@
                                  <children>
                                     <HBox prefHeight="100.0" prefWidth="200.0">
                                        <children>
-                                          <TextField prefHeight="27.0" prefWidth="190.0" promptText="Tag Name...">
+                                          <TextField fx:id="txtAddTag" prefHeight="27.0" prefWidth="190.0" promptText="Tag Name...">
                                              <HBox.margin>
                                                 <Insets left="5.0" />
                                              </HBox.margin>
@@ -306,7 +306,7 @@
                            <bottom>
                               <HBox alignment="CENTER" prefHeight="36.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="70.0" text="Add Tag" />
+                                    <Button fx:id="btnAddTag" mnemonicParsing="false" onAction="#eventAddTag" prefHeight="27.0" prefWidth="70.0" text="Add Tag" />
                                  </children>
                                  <BorderPane.margin>
                                     <Insets bottom="5.0" />

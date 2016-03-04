@@ -41,7 +41,7 @@ public class Controller{
     @FXML private ResourceBundle resources;
     @FXML private Button btnAddTag;
     @FXML private TextField txtAddTag;
-    @FXML private TextField txtTagSearch;
+    @FXML private TextField txtSearchTag;
     @FXML private Button btnSearchTag;
     @FXML private ListView<IronFile> viewTags;
     private FolderViewManager manager;
@@ -52,7 +52,8 @@ public class Controller{
         manager = new FolderViewManager(dirTree); // 2 statements in 1 line is best
         IronFile[] hardDrives = IronFile.listRoots(); // an array of hard drives
         menubar.setUseSystemMenuBar(true); //allows use of native menu bars, luckily an easy 1 liner
-       // manager.setRootDirectory(hardDrives); Ideally only show tree view of files the user drags in
+//        manager.setRootDirectory(hardDrives); //Ideally only show tree view of files the user drags in
+//        initializeSceneEvents(); // initialize Drag and Drop feature
     }
     /**
      * Action event triggered when user clicks. This method will add tag directly to IronFile
@@ -69,7 +70,7 @@ public class Controller{
      * On Click event that will search and display files based on entered tag
      * */
     @FXML private void eventSearchTag() {
-        ObservableList<IronFile> taggedItems = manager.getTaggedItems(txtTagSearch.getText());
+        ObservableList<IronFile> taggedItems = manager.getTaggedItems(txtSearchTag.getText());
         viewTags.setItems(taggedItems);
     }
     /**
@@ -103,5 +104,9 @@ public class Controller{
             args.setDropCompleted(success);
         });
     }
+
+/*    public void setScene(Scene scene) {
+        this.scene = scene;
+    }*/
 }
 

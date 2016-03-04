@@ -18,17 +18,16 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 //        setUserAgentStylesheet(STYLESHEET_CASPIAN);
-
         FXMLLoader loader = new FXMLLoader();
         Parent root = loader.load(getClass().getResource("/StartPage.fxml").openStream());
+        Controller controller = loader.getController();
         primaryStage.setTitle("Iron-gate!");
-        primaryStage.setScene(new Scene(root, 990, 700));
-        Scene scene = primaryStage.getScene(); // we get the scene from above
+        Scene scene = new Scene(root, 990, 700);
+        primaryStage.setScene(scene);
+        controller.initializeSceneEvents(); // called after primary stage has been set
         scene.getStylesheets().clear(); // clear any styles
 //        scene.getStylesheets().add("/main/resources/mainStyle.css"); // absolute path
-        primaryStage.show();
-        Controller controller = loader.getController();
-        controller.initializeSceneEvents();
+        primaryStage.show(); // show the initialized stage
 
     }
     public static void main(String[] args) {
