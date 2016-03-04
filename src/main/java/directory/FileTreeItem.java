@@ -45,9 +45,9 @@ public class FileTreeItem extends TreeItem<IronFile> {
                 ObservableList<FileTreeItem> children = FXCollections.observableArrayList();
 
                 for (IronFile childFile : files) {
-                    if(childFile.filter.accept(childFile, childFile.getName())) {
+//                    if(childFile.filter.accept(childFile, childFile.getName())) { // saved for later
                         children.add(new FileTreeItem(childFile));
-                    }
+//                    }
                 }
                 return children;
             }

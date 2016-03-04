@@ -30,7 +30,7 @@ public class IronFile extends File {
     public IronFile(String pathname) {
         super(pathname);
         isRoot = (getParent() == null);
-//        filter = new IronFileFilter();
+        filter = new IronFileFilter();
     }
     /**
      * Construct an IronFile that extends File. This is an overloaded method
@@ -39,7 +39,7 @@ public class IronFile extends File {
     public IronFile(File file) {
         super(file.getPath());
         isRoot = (getParent() == null);
-//        filter = new IronFileFilter();
+        filter = new IronFileFilter();
         fileAttributeView =  Files.getFileAttributeView(this.toPath(), UserDefinedFileAttributeView.class);
     }
 

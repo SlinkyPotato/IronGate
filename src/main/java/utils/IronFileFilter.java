@@ -19,13 +19,8 @@ public class IronFileFilter implements FilenameFilter {
             isSymbolic = Files.isSymbolicLink(file.toPath());
             isRegularFile = Files.isRegularFile(file.toPath());
         } catch(Exception e) {
-
+            System.out.println(e);
         }
-
-        if(hidden || isSymbolic || (!isRegularFile && !file.isDirectory())) {
-            //System.out.println(name + " is hidden or a symbolic link, or just not a regular file");
-            return false;
-        }
-        return true;
+        return !(hidden || isSymbolic || (!isRegularFile && !file.isDirectory()));
     }
 }
