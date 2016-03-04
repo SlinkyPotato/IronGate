@@ -3,6 +3,14 @@ package directory;
 import utils.IronFileFilter;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.UserDefinedFileAttributeView;
 import java.util.List;
 
 /**
@@ -12,17 +20,27 @@ public class IronFile extends File {
     private boolean isRoot = true;
     public IronFileFilter filter;
     private String tag;
+    final private String ATTR_TYPE = "tags";
+    private UserDefinedFileAttributeView fileAttributeView;
 
+    /**
+     * Construct an IronFile that extends File
+     * @param pathname the path where the file is located
+     * */
     public IronFile(String pathname) {
         super(pathname);
         isRoot = (getParent() == null);
-        filter = new IronFileFilter();
+//        filter = new IronFileFilter();
     }
+    /**
+     * Construct an IronFile that extends File. This is an overloaded method
+     * @param file file that can be passed instead of path (string)
+     * */
     public IronFile(File file) {
         super(file.getPath());
         isRoot = (getParent() == null);
-        filter = new IronFileFilter();
-
+//        filter = new IronFileFilter();
+        fileAttributeView =  Files.getFileAttributeView(this.toPath(), UserDefinedFileAttributeView.class);
     }
 
     @Override
@@ -63,17 +81,26 @@ public class IronFile extends File {
 
     @Override
     public String toString() {
-        if (isRoot) {
-            return this.getAbsolutePath();
-        } else {
-            return this.getName();
-        }
+        return (isRoot) ? this.getAbsolutePath() : this.getName();
     }
 
     public String getTag() {
+        try {
+            ByteBuffer buf = ByteBuffer.allocate(fileAttributeView.size(ATTR_TYPE));
+            fileAttributeView.read(ATTR_TYPE, buf);
+            buf.flip();
+            tag = Charset.defaultCharset().decode(buf).toString();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
         return tag;
     }
     public void setTag(String tag) {
         this.tag = tag;
+        try {
+            fileAttributeView.write(ATTR_TYPE, Charset.defaultCharset().encode(tag)); // Set file tag attributes
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

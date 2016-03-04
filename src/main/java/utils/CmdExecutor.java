@@ -8,9 +8,6 @@ import java.io.InputStreamReader;
  * Created by kristopherguzman on 2/19/16.
  */
 public class CmdExecutor {
-
-    public CmdExecutor() { }
-
     public String run(String cmd) throws IOException {
         System.out.println("executing command: " + cmd);
         String[] args = new String[] {"sh", "-c", "cd / && " + cmd};
@@ -30,7 +27,6 @@ public class CmdExecutor {
         while(error != null) {
             System.out.println("error output: " + error);
             error = errorReader.readLine();
-
         }
         outputReader.close();
         errorReader.close();

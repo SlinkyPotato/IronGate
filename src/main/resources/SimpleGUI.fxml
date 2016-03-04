@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="launcher.Controller">
+   <top>
+      <MenuBar id="menubar-pane" fx:id="menubar" BorderPane.alignment="CENTER">
+         <menus>
+            <Menu mnemonicParsing="false" text="File">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Import Files" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Edit">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Delete" />
+                  <MenuItem mnemonicParsing="false" text="Undo" />
+                  <MenuItem mnemonicParsing="false" text="Redo" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Tools">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Search" />
+                  <MenuItem id="tagFilesButton" fx:id="toolsTagFiles" mnemonicParsing="false" text="Auto Tag" />
+                  <MenuItem id="tagFilesButton" fx:id="toolsTagFiles1" mnemonicParsing="false" text="Auto Organize" />
+                  <MenuItem id="deleteTagsButton" fx:id="toolsDeleteTags" mnemonicParsing="false" text="Delete Files" />
+                  <MenuItem mnemonicParsing="false" text="Templates" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Check for Updates..." />
+                  <MenuItem mnemonicParsing="false" text="About" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <BorderPane BorderPane.alignment="CENTER">
+         <top>
+            <Label alignment="CENTER" prefHeight="35.0" prefWidth="246.0" styleClass="viewHeader" text="File View" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+         </top>
+         <center>
+            <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TreeView id="folder-view-pane" fx:id="dirTree" prefHeight="200.0" prefWidth="200.0" />
+                  <Label id="dragHereLabel" fx:id="dragHereLabel" alignment="CENTER" prefHeight="68.0" prefWidth="160.0" text="Drag files here" textAlignment="JUSTIFY">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </StackPane>
+         </center>
+      </BorderPane>
+   </center>
+   <left>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <center>
+            <Accordion BorderPane.alignment="CENTER">
+               <panes>
+                  <TitledPane animated="false" text="Search">
+                     <content>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <top>
+                              <HBox prefHeight="33.0" prefWidth="178.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <TextField fx:id="txtSearchTag" onAction="#eventSearchTag" prefHeight="27.0" prefWidth="133.0" promptText="Include Tags..." />
+                                    <Button fx:id="btnSearchTag" mnemonicParsing="false" onAction="#eventSearchTag" text="Add">
+                                       <HBox.margin>
+                                          <Insets left="5.0" />
+                                       </HBox.margin></Button>
+                                 </children>
+                                 <BorderPane.margin>
+                                    <Insets top="5.0" />
+                                 </BorderPane.margin>
+                              </HBox>
+                           </top>
+                           <center>
+                              <ListView fx:id="viewTags" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                           </center>
+                           <bottom>
+                              <Button fx:id="btnSearchRemoveTag" mnemonicParsing="false" onAction="#eventSearchRemoveTag" text="Remove Tag" BorderPane.alignment="CENTER">
+                                 <BorderPane.margin>
+                                    <Insets top="5.0" />
+                                 </BorderPane.margin>
+                              </Button>
+                           </bottom>
+                        </BorderPane>
+                     </content>
+                  </TitledPane>
+                  <TitledPane animated="false" text="Auto Tools">
+                     <content>
+                        <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                           <items>
+                              <VBox alignment="CENTER">
+                                 <children>
+                                    <BorderPane prefHeight="129.0" prefWidth="178.0">
+                                       <center>
+                                          <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="125.0" prefWidth="150.0" BorderPane.alignment="CENTER">
+                                             <children>
+                                                <CheckBox alignment="CENTER" mnemonicParsing="false" prefHeight="26.0" prefWidth="99.0" text="Organize All" textAlignment="CENTER">
+                                                   <VBox.margin>
+                                                      <Insets bottom="5.0" />
+                                                   </VBox.margin>
+                                                </CheckBox>
+                                                <CheckBox mnemonicParsing="false" prefHeight="18.0" prefWidth="147.0" text="Stash Unused Files" />
+                                             </children>
+                                             <BorderPane.margin>
+                                                <Insets top="5.0" />
+                                             </BorderPane.margin>
+                                          </VBox>
+                                       </center>
+                                       <bottom>
+                                          <Button mnemonicParsing="false" text="Organize" BorderPane.alignment="CENTER">
+                                             <BorderPane.margin>
+                                                <Insets bottom="10.0" top="25.0" />
+                                             </BorderPane.margin>
+                                          </Button>
+                                       </bottom>
+                                       <top>
+                                          <Label alignment="CENTER" prefHeight="24.0" prefWidth="177.0" text="Auto Organize" textAlignment="CENTER" textFill="#6f6d6d" wrapText="true" BorderPane.alignment="CENTER">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                             <BorderPane.margin>
+                                                <Insets bottom="20.0" />
+                                             </BorderPane.margin>
+                                          </Label>
+                                       </top>
+                                    </BorderPane>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                 <children>
+                                    <BorderPane prefHeight="129.0" prefWidth="178.0">
+                                       <bottom>
+                                          <Button mnemonicParsing="false" text="Auto Tag" BorderPane.alignment="CENTER">
+                                             <BorderPane.margin>
+                                                <Insets bottom="10.0" top="25.0" />
+                                             </BorderPane.margin>
+                                          </Button>
+                                       </bottom>
+                                       <center>
+                                          <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="49.0" prefWidth="150.0" BorderPane.alignment="CENTER">
+                                             <children>
+                                                <CheckBox alignment="CENTER" mnemonicParsing="false" prefHeight="26.0" prefWidth="75.0" text="Tag All" textAlignment="CENTER" />
+                                                <HBox prefHeight="28.0" prefWidth="150.0">
+                                                   <children>
+                                                      <CheckBox alignment="CENTER" mnemonicParsing="false" prefHeight="26.0" prefWidth="116.0" text="Ignore Parent" textAlignment="CENTER" />
+                                                      <Label fx:id="ignoreParentHelp" alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="14.0" text="?" textAlignment="RIGHT" textFill="#6f6d6d">
+                                                         <HBox.margin>
+                                                            <Insets left="25.0" />
+                                                         </HBox.margin>
+                                                      </Label>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                             <BorderPane.margin>
+                                                <Insets top="5.0" />
+                                             </BorderPane.margin>
+                                          </VBox>
+                                       </center>
+                                       <top>
+                                          <Label alignment="CENTER" prefHeight="27.0" prefWidth="177.0" text="Auto Tag" textAlignment="CENTER" textFill="#6f6d6d" wrapText="true" BorderPane.alignment="CENTER">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                             <BorderPane.margin>
+                                                <Insets bottom="20.0" />
+                                             </BorderPane.margin>
+                                          </Label>
+                                       </top>
+                                    </BorderPane>
+                                 </children>
+                              </VBox>
+                           </items>
+                        </SplitPane>
+                     </content>
+                  </TitledPane>
+                  <TitledPane animated="false" text="Delete Files">
+                     <content>
+                        <VBox>
+                           <children>
+                              <BorderPane prefHeight="300.0" prefWidth="178.0">
+                                 <top>
+                                    <HBox alignment="CENTER" prefHeight="33.0" prefWidth="178.0" BorderPane.alignment="CENTER">
+                                       <BorderPane.margin>
+                                          <Insets />
+                                       </BorderPane.margin>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <children>
+                                          <TextField prefHeight="27.0" prefWidth="172.0" promptText="Search Tags...">
+                                             <HBox.margin>
+                                                <Insets bottom="10.0" top="5.0" />
+                                             </HBox.margin>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                 </top>
+                                 <center>
+                                    <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                                 </center>
+                                 <bottom>
+                                    <Button mnemonicParsing="false" text="Delete Files" BorderPane.alignment="CENTER">
+                                       <BorderPane.margin>
+                                          <Insets top="10.0" />
+                                       </BorderPane.margin>
+                                    </Button>
+                                 </bottom>
+                              </BorderPane>
+                           </children>
+                        </VBox>
+                     </content>
+                  </TitledPane>
+                  <TitledPane animated="false" text="Templates">
+                     <content>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                  </TitledPane>
+               </panes>
+            </Accordion>
+         </center>
+         <top>
+            <Label alignment="CENTER" prefHeight="33.0" prefWidth="209.0" styleClass="viewHeader" text="Tools" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+         </top>
+      </BorderPane>
+   </left>
+   <right>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <top>
+            <Label alignment="CENTER" prefHeight="35.0" prefWidth="201.0" styleClass="viewHeader" text="Tag Inspector" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold Italic" size="13.0" />
+               </font>
+            </Label>
+         </top>
+         <center>
+            <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <center>
+                  <ListView fx:id="viewExistTags" prefHeight="286.0" prefWidth="190.0" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </BorderPane.margin>
+                  </ListView>
+               </center>
+               <padding>
+                  <Insets top="5.0" />
+               </padding>
+               <top>
+                  <VBox prefHeight="55.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <TextField fx:id="txtAddTag" prefHeight="27.0" prefWidth="190.0" promptText="Tag Name...">
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </TextField>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="199.0" text="View Existing Tags" textAlignment="CENTER">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                  </VBox>
+               </top>
+               <bottom>
+                  <HBox alignment="CENTER" prefHeight="36.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets bottom="5.0" />
+                     </BorderPane.margin>
+                     <children>
+                        <Button fx:id="btnAddTag" mnemonicParsing="false" onAction="#eventAddTag" prefHeight="27.0" prefWidth="70.0" text="Add Tag">
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btnRemoveTag" mnemonicParsing="false" onAction="#eventRemoveTag" prefHeight="27.0" prefWidth="84.0" text="Remove Tag" />
+                     </children>
+                  </HBox>
+               </bottom>
+            </BorderPane>
+         </center>
+      </BorderPane>
+   </right>
+</BorderPane>
