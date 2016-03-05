@@ -1,6 +1,6 @@
 # Iron Gate
 [![build-passing](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
-[![version](https://img.shields.io/badge/version-0.2-red.svg)]()
+[![version](https://img.shields.io/badge/version-0.3-red.svg)]()
 
 Iron Gate is the code name given to a really convenient files and folders organization system. This is a cross-platform application built for Windows and Mac OSX. A few things Iron Gate can do:
   
@@ -39,7 +39,7 @@ Iron Gate is open source, feel free to [contribute]!
 
 ### Todos
  - ~~file browser controller~~
- - tag feature
+ - ~~tag feature~~
  - design gui
  - cloud service suppoort
  - everything else
