@@ -68,7 +68,7 @@ public class Controller{
     }
     /**
      * Action event triggered when user clicks. This method will add tag directly to IronFile
-     * Method name must match StartPage.fxml assigned `on Action`
+     * Method name must match SimpleGUI.fxml assigned `on Action`
      * */
     @FXML private void eventAddTag() {
         ObservableList<TreeItem<IronFile>> treeIronFileList = dirTree.getSelectionModel().getSelectedItems();
