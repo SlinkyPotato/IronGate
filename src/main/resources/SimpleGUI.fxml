@@ -91,7 +91,10 @@
                                     <Button fx:id="btnSearchTag" mnemonicParsing="false" onAction="#eventSearchTag" text="Add">
                                        <HBox.margin>
                                           <Insets left="5.0" />
-                                       </HBox.margin></Button>
+                                       </HBox.margin>
+                                       <font>
+                                          <Font name="Droid Sans" size="12.0" />
+                                       </font></Button>
                                  </children>
                                  <BorderPane.margin>
                                     <Insets top="5.0" />
@@ -102,10 +105,13 @@
                               <ListView fx:id="viewTags" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
                            </center>
                            <bottom>
-                              <Button fx:id="btnSearchRemoveTag" mnemonicParsing="false" onAction="#eventSearchRemoveTag" text="Remove Tag" BorderPane.alignment="CENTER">
+                              <Button fx:id="btnSearchRemoveTag" mnemonicParsing="false" onAction="#eventSearchRemoveTag" text="Remove" BorderPane.alignment="CENTER">
                                  <BorderPane.margin>
                                     <Insets top="5.0" />
                                  </BorderPane.margin>
+                                 <font>
+                                    <Font name="Droid Sans" size="12.0" />
+                                 </font>
                               </Button>
                            </bottom>
                         </BorderPane>
@@ -304,12 +310,18 @@
                         <Insets bottom="5.0" />
                      </BorderPane.margin>
                      <children>
-                        <Button fx:id="btnAddTag" mnemonicParsing="false" onAction="#eventAddTag" prefHeight="27.0" prefWidth="70.0" text="Add Tag">
+                        <Button fx:id="btnAddTag" mnemonicParsing="false" onAction="#eventAddTag" prefHeight="27.0" prefWidth="70.0" text="Add">
                            <HBox.margin>
                               <Insets right="5.0" />
                            </HBox.margin>
+                           <font>
+                              <Font name="Droid Sans" size="12.0" />
+                           </font>
                         </Button>
-                        <Button fx:id="btnRemoveTag" mnemonicParsing="false" onAction="#eventRemoveTag" prefHeight="27.0" prefWidth="84.0" text="Remove Tag" />
+                        <Button fx:id="btnRemoveTag" mnemonicParsing="false" onAction="#eventRemoveTag" prefHeight="27.0" prefWidth="84.0" text="Remove">
+                           <font>
+                              <Font name="Droid Sans" size="12.0" />
+                           </font></Button>
                      </children>
                   </HBox>
                </bottom>
