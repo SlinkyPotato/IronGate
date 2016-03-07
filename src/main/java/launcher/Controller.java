@@ -27,12 +27,12 @@ public class Controller{
     @FXML private TreeView<IronFile> dirTree;
     @FXML private TextField txtAddTag;
     @FXML private TextField txtSearchTag;
-    private FolderViewManager manager;
     @FXML private MenuBar menubar;
     @FXML private Label dragHereLabel;
     @FXML private ListView<IronFile> viewTags;
     @FXML private ListView<String> viewExistTags;
-
+    private FolderViewManager manager;
+    private FolderViewManager templateEditor;
 
     @FXML private void initialize() {
         manager = new FolderViewManager(dirTree); // 2 statements in 1 line is best
@@ -43,15 +43,7 @@ public class Controller{
     /**
      * Initialize the drag and Drop event and other scene events
     * */
-    public void initializeSceneEvents() {
-        Scene scene = dirTree.getScene();
-        scene.setOnDragOver(args -> {
-            Dragboard db = args.getDragboard();
-            //System.out.println("dragging over");
-            if(db.hasFiles()) {
-                args.acceptTransferModes(TransferMode.COPY);
-            } else { args.consume(); }
-        });
+    public void initializeSceneEvents(Scene scene) {
         scene.setOnDragDropped(args -> {
             Dragboard db = args.getDragboard();
             args.acceptTransferModes(TransferMode.COPY);

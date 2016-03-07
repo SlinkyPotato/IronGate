@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
@@ -10,6 +15,8 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.TreeView?>
@@ -19,7 +26,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="launcher.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="launcher.Controller">
    <top>
       <MenuBar id="menubar-pane" fx:id="menubar" BorderPane.alignment="CENTER">
          <menus>
@@ -53,29 +60,6 @@
          </menus>
       </MenuBar>
    </top>
-   <center>
-      <BorderPane BorderPane.alignment="CENTER">
-         <top>
-            <Label alignment="CENTER" prefHeight="35.0" prefWidth="246.0" styleClass="viewHeader" text="File View" BorderPane.alignment="CENTER">
-               <font>
-                  <Font name="System Bold" size="13.0" />
-               </font>
-            </Label>
-         </top>
-         <center>
-            <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <TreeView id="folder-view-pane" fx:id="dirTree" prefHeight="200.0" prefWidth="200.0" />
-                  <Label id="dragHereLabel" fx:id="dragHereLabel" alignment="CENTER" prefHeight="68.0" prefWidth="160.0" text="Drag files here" textAlignment="JUSTIFY">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </StackPane>
-         </center>
-      </BorderPane>
-   </center>
    <left>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <center>
@@ -317,4 +301,38 @@
          </center>
       </BorderPane>
    </right>
+   <center>
+      <TabPane BorderPane.alignment="CENTER">
+         <tabs>
+            <Tab closable="false" text="File View">
+               <content>
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <TreeView id="folder-view-pane" fx:id="dirTree" prefHeight="200.0" prefWidth="200.0" />
+                        <Label id="dragHereLabel" fx:id="dragHereLabel" alignment="CENTER" prefHeight="68.0" prefWidth="160.0" text="Drag files here" textAlignment="JUSTIFY">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </StackPane>
+               </content>
+            </Tab>
+            <Tab text="Template Editor">
+               <content>
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <TreeView id="folder-view-pane" fx:id="templateView" prefHeight="200.0" prefWidth="200.0" />
+                        <Label id="dragHereLabel" fx:id="templateLabel" alignment="CENTER" prefHeight="68.0" prefWidth="160.0" text="Create reusable folder structures" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </StackPane>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </center>
 </BorderPane>
