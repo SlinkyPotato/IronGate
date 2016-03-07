@@ -15,8 +15,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 
  Additionally, this class extends SimpleFileVisitor which uses java 8.
 
- @author kristopherguzman
  @author Brian Patino
+ @author kristopherguzman
  */
 public class IronFileVisitor extends SimpleFileVisitor<Path>{
     private TreeItem<IronFile> root;

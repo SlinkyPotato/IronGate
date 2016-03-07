@@ -57,8 +57,9 @@ public class Controller{
             args.acceptTransferModes(TransferMode.COPY);
             boolean success = false;
             if(db.hasFiles()) {
-                IronFile[] roots = IronFile.convertFiles(db.getFiles());
+                IronFile[] roots = IronFile.convertFiles(db.getFiles()); // multi-folder drag and drop
                 manager.setRootDirectory(roots);
+                manager.checkTags(roots);
                 success = true;
                 dragHereLabel.setText("");
                 dragHereLabel.setMaxWidth(0);

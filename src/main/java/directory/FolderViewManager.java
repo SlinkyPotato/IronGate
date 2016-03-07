@@ -2,25 +2,11 @@ package directory;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import sun.reflect.generics.tree.Tree;
-import utils.CmdExecutor;
-import utils.OSDetection;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.attribute.UserDefinedFileAttributeView;
-import java.util.ArrayList;
-import java.util.List;
+import utils.OsUtils;
 
 /**
     This class handles manipulation of the Folder View. This includes
@@ -67,18 +53,32 @@ public class FolderViewManager {
     }
 
     public void setTags(ObservableList<IronFile> selectedItems, String tag) {
-        for (IronFile selectedIronFile : selectedItems) {
-            selectedIronFile.setTag(tag);
-            taggedItems.add(selectedIronFile); // add tagged item to list
+        if (OsUtils.isWindows() || OsUtils.isUnix()) {
+            for (IronFile selectedIronFile : selectedItems) {
+                selectedIronFile.setTag(tag);
+                taggedItems.add(selectedIronFile); // add tagged item to list
+            }
+        } else{
+            // Mac logic goes here
         }
     }
 
     public void deleteTags(ObservableList<String> listTags) {
-        for (IronFile taggedFile : taggedItems) {
-            if (listTags.contains(taggedFile.getTag())) {
-                taggedFile.setTag("");
+        if (OsUtils.isWindows() || OsUtils.isUnix()) {
+            for (IronFile taggedFile : taggedItems) {
+                if (listTags.contains(taggedFile.getTag())) {
+                    taggedFile.setTag("");
+                }
             }
+        } else {
+            // Mac logic goes here
         }
+    }
+    /**
+     * Check tags of files that are dropped or shown in the ListView
+     * */
+    public void checkTags(IronFile[] roots) {
+        // check tag data here
     }
 
     /**
