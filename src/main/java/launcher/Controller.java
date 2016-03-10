@@ -1,16 +1,18 @@
 package launcher;
 
-import directory.FolderViewManager;
-import directory.IronFile;
-import javafx.beans.value.ObservableValueBase;
+import directory.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -25,30 +27,55 @@ public class Controller{
     @FXML private MenuItem toolsTagFiles;
     @FXML private ResourceBundle resources;
     @FXML private TreeView<IronFile> dirTree;
+    @FXML private TreeView<String> editorView;
+    @FXML private ListView<IronFile> templateListView;
     @FXML private TextField txtAddTag;
     @FXML private TextField txtSearchTag;
+    @FXML private TextField txtNewFolderName;
+    @FXML private TextField txtRenameFolder;
     @FXML private MenuBar menubar;
     @FXML private Label dragHereLabel;
     @FXML private ListView<IronFile> viewTags;
     @FXML private ListView<String> viewExistTags;
     private FolderViewManager manager;
-    private FolderViewManager templateEditor;
+    private EditorViewManager templateEditor;
 
     @FXML private void initialize() {
-        manager = new FolderViewManager(dirTree); // 2 statements in 1 line is best
-//        IronFile[] hardDrives = IronFile.listRoots(); // an array of hard drives
+        dirTree.setCellFactory(FileViewTreeCell::new); //use custom tree cell for drag and drop
+        editorView.setCellFactory(EditorTreeCell::new);
         menubar.setUseSystemMenuBar(true); //allows use of native menu bars, luckily an easy 1 liner
-//        manager.setRootDirectory(hardDrives); //Ideally only show tree view of files the user drags in
+        templateEditor = new EditorViewManager(editorView);
+        manager = new FolderViewManager(dirTree); // 2 statements in 1 line is best
+
+
+        //sets the text of the renameFolder field to the name of the selected folder
+        editorView.setOnMouseClicked(args -> {
+            ObservableList<TreeItem<String>> selected = templateEditor.getSelected();
+            if(selected.size() == 1 && selected.get(0).getValue() != null) { //fill in folder name if only one is selected
+                txtRenameFolder.setText(selected.get(0).getValue());
+            }
+
+        });
+
     }
     /**
      * Initialize the drag and Drop event and other scene events
     * */
     public void initializeSceneEvents(Scene scene) {
+
+        scene.setOnDragOver(args -> {
+           args.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+            args.consume();
+        });
+
         scene.setOnDragDropped(args -> {
+
             Dragboard db = args.getDragboard();
-            args.acceptTransferModes(TransferMode.COPY);
+            args.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+            System.out.println("scene drop");
             boolean success = false;
             if(db.hasFiles()) {
+
                 IronFile[] roots = IronFile.convertFiles(db.getFiles());
                 manager.setRootDirectory(roots);
                 success = true;
@@ -92,5 +119,32 @@ public class Controller{
     @FXML private void eventSearchRemoveTag() {
 //        ObservableList<TreeItem<IronFile>> treeIronFile
     }
+
+    /**
+     * Events for creating templates
+     * */
+
+    @FXML private void onAddFolderClick(MouseEvent event) {
+        TreeItem<String> folderItem = new TreeItem<>(txtNewFolderName.getText());
+        List<TreeItem<String>> list = new ArrayList<>();
+        list.add(folderItem);
+        templateEditor.addItemsToSelected(list);
+    }
+
+    @FXML private void onDeleteFolderClick(MouseEvent event) {
+        templateEditor.deleteSelectedItems();
+    }
+
+    @FXML private void onSetFolderNameClick(MouseEvent event) { //ironically this is giving problems
+        List<TreeItem<String>> selected = templateEditor.getSelected();
+        if(!txtRenameFolder.getText().equals("")) {
+            for(TreeItem<String> item : selected) {
+                System.out.println("renamed folder to " + txtRenameFolder.getText());
+                item.setValue(txtRenameFolder.getText());
+
+            }
+        }
+    }
+
 }
 

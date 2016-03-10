@@ -2,12 +2,13 @@ package utils;
 
 import java.io.FilenameFilter;
 import java.io.File;
+import java.io.Serializable;
 import java.nio.file.Files;
 
 /**
  * Created by kristopherguzman on 2/19/16.
  */
-public class IronFileFilter implements FilenameFilter {
+public class IronFileFilter implements FilenameFilter, Serializable {
 
     public boolean accept(File file, String name) {
         boolean hidden = false;
