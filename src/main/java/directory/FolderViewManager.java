@@ -3,16 +3,17 @@ package directory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import utils.OsUtils;
-
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.attribute.UserDefinedFileAttributeView;
+import java.util.List;
 
 /**
     This class handles manipulation of the Folder View. This includes
@@ -28,6 +29,7 @@ public class FolderViewManager {
     private final Image hddIcon = new Image("/icons/hdd.png");
     private TreeView<IronFile> view;
     private ObservableList<IronFile> taggedItems = FXCollections.observableArrayList();
+    public static List<TreeItem<IronFile>> draggedItems; //use this to store items being dragged, because ClipBoard is a pain in the ass
 
     /**
      * Folder View Manager constructor, initializes the view for the file browser
@@ -44,6 +46,8 @@ public class FolderViewManager {
         FileTreeItem rootItem = new FileTreeItem(file);
         view.setRoot(rootItem);
     }
+
+    public boolean hasRoot() { return (view.getRoot() != null); }
     /**
      * Overloaded method that sets a collection of folders/files as file browser view.
      * @param hardDrives a collection of hard drives to being from root
@@ -56,6 +60,21 @@ public class FolderViewManager {
             view.getRoot().getChildren().add(diskTreeItem);
         }
         view.setShowRoot(false); // hide the blank file
+    }
+
+    public ObservableList<TreeItem<IronFile>> getSelected() { return view.getSelectionModel().getSelectedItems(); }
+
+    public void deleteSelectedItems() {
+
+        ObservableList<TreeItem<IronFile>> selectedItems = view.getSelectionModel().getSelectedItems();
+        ObservableList<TreeItem<IronFile>> children = view.getRoot().getChildren();
+
+        for(TreeItem<IronFile> item : selectedItems) {
+            if(item != null && !item.getValue().getName().equals("Template Root")) {
+                children.remove(item);
+            }
+        }
+
     }
 
     public void setTags(ObservableList<IronFile> selectedItems, String tag) {

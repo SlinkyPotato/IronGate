@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
@@ -19,7 +24,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="launcher.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="launcher.Controller">
    <top>
       <MenuBar id="menubar-pane" fx:id="menubar" BorderPane.alignment="CENTER">
          <menus>
@@ -54,27 +59,38 @@
       </MenuBar>
    </top>
    <center>
-      <BorderPane BorderPane.alignment="CENTER">
-         <top>
-            <Label alignment="CENTER" prefHeight="35.0" prefWidth="246.0" styleClass="viewHeader" text="File View" BorderPane.alignment="CENTER">
-               <font>
-                  <Font name="System Bold" size="13.0" />
-               </font>
-            </Label>
-         </top>
-         <center>
-            <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <TreeView id="folder-view-pane" fx:id="dirTree" prefHeight="200.0" prefWidth="200.0" />
-                  <Label id="dragHereLabel" fx:id="dragHereLabel" alignment="CENTER" prefHeight="68.0" prefWidth="160.0" text="Drag files here" textAlignment="JUSTIFY">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </StackPane>
-         </center>
-      </BorderPane>
+      <TabPane>
+         <tabs>
+            <Tab text="File View">
+               <content>
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <TreeView id="folder-view-pane" fx:id="dirTree" prefHeight="200.0" prefWidth="200.0" />
+                        <Label id="dragHereLabel" fx:id="dragHereLabel" alignment="CENTER" prefHeight="68.0" prefWidth="160.0" text="Drag files here" textAlignment="JUSTIFY">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </StackPane>
+               </content>
+            </Tab>
+            <Tab text="Template Editor">
+               <content>
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <TreeView id="folder-view-pane" fx:id="editorView" prefHeight="200.0" prefWidth="200.0" />
+                        <Label id="dragHereLabel" fx:id="dragHereLabel1" alignment="CENTER" prefHeight="68.0" prefWidth="156.0" text="Create reusable folder structures" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </StackPane>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
    </center>
    <left>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -87,8 +103,8 @@
                            <top>
                               <HBox prefHeight="33.0" prefWidth="178.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <TextField fx:id="txtSearchTag" onAction="#eventSearchTag" prefHeight="27.0" prefWidth="133.0" promptText="Include Tags..." />
-                                    <Button fx:id="btnSearchTag" mnemonicParsing="false" onAction="#eventSearchTag" text="Add">
+                                    <TextField fx:id="txtSearchTag" onAction="#eventSearchTag" prefHeight="27.0" prefWidth="123.0" promptText="Include Tags..." />
+                                    <Button fx:id="btnSearchTag" mnemonicParsing="false" onAction="#eventSearchTag" prefHeight="27.0" prefWidth="52.0" text="Add">
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
@@ -245,7 +261,63 @@
                   </TitledPane>
                   <TitledPane animated="false" text="Templates">
                      <content>
-                        <BorderPane prefHeight="200.0" prefWidth="200.0" />
+                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Label layoutX="43.0" layoutY="67.0" text="New Folder" textFill="#6f6d6d">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" top="25.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <HBox>
+                                 <children>
+                                    <TextField fx:id="txtNewFolderName" promptText="Folder Name..." />
+                                    <Button mnemonicParsing="false" onMouseClicked="#onAddFolderClick" prefHeight="27.0" prefWidth="113.0" text="Create" />
+                                 </children>
+                              </HBox>
+                              <Separator layoutX="20.0" layoutY="242.0" prefWidth="200.0">
+                                 <VBox.margin>
+                                    <Insets top="25.0" />
+                                 </VBox.margin>
+                              </Separator>
+                              <Label text="Selected Folder" textFill="#6f6d6d">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" top="25.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <HBox>
+                                 <children>
+                                    <TextField fx:id="txtRenameFolder" promptText="Folder Name..." />
+                                    <Button mnemonicParsing="false" onMouseClicked="#onSetFolderNameClick" prefHeight="27.0" prefWidth="77.0" text="Set" />
+                                 </children>
+                              </HBox>
+                              <Button layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onMouseClicked="#onDeleteFolderClick" text="Delete Folder">
+                                 <VBox.margin>
+                                    <Insets top="15.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Separator prefWidth="200.0">
+                                 <VBox.margin>
+                                    <Insets top="25.0" />
+                                 </VBox.margin>
+                              </Separator>
+                              <Label text="Drag a template into a folder" textFill="#6f6d6d" wrapText="true">
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <ListView fx:id="templateListView" prefHeight="200.0" prefWidth="200.0">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </ListView>
+                           </children>
+                        </VBox>
                      </content>
                   </TitledPane>
                </panes>
