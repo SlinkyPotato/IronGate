@@ -1,26 +1,13 @@
 package directory;
 
-import apple.laf.JRSUIUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import sun.reflect.generics.tree.Tree;
-import utils.CmdExecutor;
-import utils.OSDetection;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.attribute.UserDefinedFileAttributeView;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
