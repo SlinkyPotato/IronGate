@@ -24,7 +24,7 @@ public class Main extends Application {
         primaryStage.setTitle("Iron-gate!");
         Scene scene = new Scene(root, 990, 700);
         primaryStage.setScene(scene);
-        System.out.println(scene);
+//        System.out.println(scene);
         controller.initializeSceneEvents(scene); // called after primary stage has been set
         scene.getStylesheets().clear(); // clear any styles
 //        scene.getStylesheets().add("/main/resources/mainStyle.css"); // absolute path

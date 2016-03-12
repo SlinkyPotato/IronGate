@@ -31,4 +31,13 @@ public final class OsUtils {
     public static boolean isMac() {
         return getOsName().contains("mac");
     }
+
+    public static boolean isCompatible() {
+        if (isWindows() || isUnix()) {
+            return true;
+        } else {
+            System.out.println("macs..");
+            return false;
+        }
+    }
 }

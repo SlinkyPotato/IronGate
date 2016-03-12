@@ -46,14 +46,12 @@ public class Controller{
         templateEditor = new EditorViewManager(editorView);
         manager = new FolderViewManager(dirTree); // 2 statements in 1 line is best
 
-
         //sets the text of the renameFolder field to the name of the selected folder
         editorView.setOnMouseClicked(args -> {
             ObservableList<TreeItem<String>> selected = templateEditor.getSelected();
             if(selected.size() == 1 && selected.get(0).getValue() != null) { //fill in folder name if only one is selected
                 txtRenameFolder.setText(selected.get(0).getValue());
             }
-
         });
 
     }
@@ -61,14 +59,12 @@ public class Controller{
      * Initialize the drag and Drop event and other scene events
     * */
     public void initializeSceneEvents(Scene scene) {
-
         scene.setOnDragOver(args -> {
            args.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-            args.consume();
+           args.consume();
         });
 
         scene.setOnDragDropped(args -> {
-
             Dragboard db = args.getDragboard();
             args.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             System.out.println("scene drop");

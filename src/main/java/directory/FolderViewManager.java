@@ -65,10 +65,8 @@ public class FolderViewManager {
     public ObservableList<TreeItem<IronFile>> getSelected() { return view.getSelectionModel().getSelectedItems(); }
 
     public void deleteSelectedItems() {
-
         ObservableList<TreeItem<IronFile>> selectedItems = view.getSelectionModel().getSelectedItems();
         ObservableList<TreeItem<IronFile>> children = view.getRoot().getChildren();
-
         for(TreeItem<IronFile> item : selectedItems) {
             if(item != null && !item.getValue().getName().equals("Template Root")) {
                 children.remove(item);
@@ -78,34 +76,34 @@ public class FolderViewManager {
     }
 
     public void setTags(ObservableList<IronFile> selectedItems, String tag) {
-        if (OsUtils.isWindows() || OsUtils.isUnix()) {
+        if (OsUtils.isCompatible()) { // check for compatibility
             for (IronFile selectedIronFile : selectedItems) {
                 selectedIronFile.setTag(tag);
                 taggedItems.add(selectedIronFile); // add tagged item to list
             }
-        } else{
-            // Mac logic goes here
         }
     }
 
     public void deleteTags(ObservableList<String> listTags) {
-        if (OsUtils.isWindows() || OsUtils.isUnix()) {
+        if (OsUtils.isCompatible()) { // check for compatibility
             for (IronFile taggedFile : taggedItems) {
                 if (listTags.contains(taggedFile.getTag())) {
                     taggedFile.setTag("");
                 }
             }
-        } else {
-            // Mac logic goes here
         }
     }
     /**
      * Check tags of files that are dropped or shown in the ListView
+     *
+     * @param roots root folders/hdd
      * */
     public void checkTags(IronFile[] roots) {
-        for (IronFile file : roots) {
-            if (!file.getTag().isEmpty()) {
-                taggedItems.add(file);
+        if (OsUtils.isCompatible()) { // check for compatibility
+            for (IronFile file : roots) {
+                if (!file.getTag().isEmpty()) {
+                    taggedItems.add(file);
+                }
             }
         }
     }

@@ -29,6 +29,7 @@ public class IronFile extends File implements Serializable {
         super(pathname);
         isRoot = (getParent() == null);
         filter = new IronFileFilter();
+        fileAttributeView =  Files.getFileAttributeView(this.toPath(), UserDefinedFileAttributeView.class);
     }
     /**
      * Construct an IronFile that extends File. This is an overloaded method
@@ -84,22 +85,43 @@ public class IronFile extends File implements Serializable {
 
     public String getTag() {
         try {
-            ByteBuffer buf = ByteBuffer.allocate(fileAttributeView.size(ATTR_TYPE));
-            fileAttributeView.read(ATTR_TYPE, buf);
-            buf.flip();
-            tag = Charset.defaultCharset().decode(buf).toString();
+            tag = getFileAttribute();
         } catch(IOException e) {
-            e.printStackTrace();
+            setTag(""); // set empty tag if none exist
         }
         return tag;
     }
+
     public void setTag(String tag) {
         System.out.println(tag);
         this.tag = tag;
         try {
-            fileAttributeView.write(ATTR_TYPE, Charset.defaultCharset().encode(tag)); // Set file tag attributes
+            setFileAttribute(tag);
         } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                setFileAttribute(tag, "user." + ATTR_TYPE);
+            } catch (IOException insideError) {
+                System.out.println("File System does not support extended attributes");
+//                insideError.printStackTrace();
+            }
         }
+    }
+
+    private void setFileAttribute(String tag) throws IOException {
+        ByteBuffer tagByteBuffer = Charset.defaultCharset().encode(tag);
+        fileAttributeView.write(ATTR_TYPE, tagByteBuffer); // Set file tag attributes
+    }
+
+    private void setFileAttribute(String tag, String attributeType) throws IOException{
+        ByteBuffer tagByteBuffer = Charset.defaultCharset().encode(tag);
+        fileAttributeView.write(attributeType, tagByteBuffer); // Set file tag attributes
+    }
+
+    private String getFileAttribute() throws IOException {
+        int capacity = fileAttributeView.size(ATTR_TYPE);
+        ByteBuffer buf = ByteBuffer.allocate(capacity);
+        fileAttributeView.read(ATTR_TYPE, buf);
+        buf.flip();
+        return Charset.defaultCharset().decode(buf).toString();
     }
 }
