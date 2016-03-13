@@ -28,7 +28,7 @@ import java.util.List;
 public class FolderViewManager {
     private final Image hddIcon = new Image("/icons/hdd.png");
     private TreeView<IronFile> view;
-    private ObservableList<IronFile> taggedItems = FXCollections.observableArrayList();
+    public static ObservableList<IronFile> taggedItems = FXCollections.observableArrayList();
     public static List<TreeItem<IronFile>> draggedItems; //use this to store items being dragged, because ClipBoard is a pain in the ass
 
     /**
@@ -101,8 +101,12 @@ public class FolderViewManager {
     public void checkTags(IronFile[] roots) {
         if (OsUtils.isCompatible()) { // check for compatibility
             for (IronFile file : roots) {
-                if (!file.getTag().isEmpty()) {
-                    taggedItems.add(file);
+                // Visit each file in root
+                IronFileVisitor tagVisit = new IronFileVisitor();
+                try {
+                    Files.walkFileTree(file.toPath(), tagVisit);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
