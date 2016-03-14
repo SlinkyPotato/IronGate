@@ -1,5 +1,5 @@
 # Iron Gate
-[![build-passing](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
+[![build-passing](https://travis-ci.org/amaredues/IronGate.svg?branch=master)]()
 [![version](https://img.shields.io/badge/version-0.3-red.svg)]()
 
 Iron Gate is the code name given to a really convenient files and folders organization system. This is a cross-platform application built for Windows and Mac OSX. A few things Iron Gate can do:
