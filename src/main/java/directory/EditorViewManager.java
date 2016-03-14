@@ -1,16 +1,12 @@
 package directory;
 
-import org.json.*;
 import javafx.collections.ObservableList;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
-import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -63,8 +59,7 @@ public class EditorViewManager {
     public void saveToJSON() {
         //convert tree items to json representation
         try {
-            Path path = Paths.get(getClass().getClassLoader().getResource("templates.json").getPath());
-            System.out.println(path);
+            Path path = Paths.get(getClass().getClassLoader().getResource("userData/user_templates.json").getPath());
             FileWriter fileWriter = new FileWriter(path.toFile());
 
             //create json entry
