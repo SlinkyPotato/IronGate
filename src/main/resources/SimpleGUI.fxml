@@ -305,7 +305,7 @@
                                     <Insets top="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <ListView fx:id="templateListView" prefHeight="20.0" prefWidth="180.0">
+                              <ListView fx:id="templateListView">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>

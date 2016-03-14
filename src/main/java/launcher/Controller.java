@@ -39,7 +39,7 @@ public class Controller{
     @FXML private Label dragHereLabel;
     @FXML private ListView<IronFile> viewTags;
     @FXML private ListView<String> viewExistTags;
-    @FXML private ListView<IronFile> templateListView;
+    @FXML private ListView<String> templateListView;
     @FXML private Button saveTemplateButton;
     private FolderViewManager manager;
     private EditorViewManager templateEditor;
@@ -76,6 +76,8 @@ public class Controller{
             }
 
         });
+
+        templateEditor.loadTemplatesToList(templateListView);
 
     }
     /**
@@ -173,9 +175,7 @@ public class Controller{
 
     @FXML private void onTemplateSave(MouseEvent event) {
         if(!templateEditor.isEmpty()) {
-
             templateEditor.saveToJSON();
-
         }
     }
 

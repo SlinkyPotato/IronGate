@@ -1,15 +1,15 @@
 package directory;
 
 import javafx.collections.ObservableList;
+import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import org.json.JSONObject;
 
-import java.io.FileWriter;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by kristopherguzman on 3/10/16.
@@ -17,6 +17,8 @@ import java.util.List;
 public class EditorViewManager {
     public static List<TreeItem<String>> draggedItems; //use this to store items being dragged, because Clipboard is a pain in the ass
     private TreeView<String> view;
+    private JSONObject json;
+    private String jsonPath;
     /**
      * Folder View Manager constructor, initializes the view for the file browser
      * */
@@ -59,22 +61,40 @@ public class EditorViewManager {
     public void saveToJSON() {
         //convert tree items to json representation
         try {
-            Path path = Paths.get(getClass().getClassLoader().getResource("userData/user_templates.json").getPath());
-            FileWriter fileWriter = new FileWriter(path.toFile());
-
             //create json entry
-            JSONObject json = new JSONObject(path);
-            System.out.println(json.toString());
-            json = (JSONObject) json.get("templates"); //get root of json file
             TreeItem<String> rootItem = view.getRoot();
             JSONObject subFolders = new JSONObject();
             json.put(rootItem.getValue(), subFolders);
             traverseTree(rootItem, subFolders);
 
-            json.write(fileWriter);
-
+            FileWriter writer = new FileWriter(jsonPath);
+            json.write(writer);
+            writer.close();
 
         } catch(Exception e) { e.printStackTrace(); }
+    }
+
+    //this must be called BEFORE saving templates
+    public void loadTemplatesToList(ListView<String> listView) {
+        try {
+            jsonPath =getClass().getClassLoader().getResource("userData/user_templates.json").getPath();
+            BufferedReader reader = new BufferedReader(new FileReader(jsonPath));
+            String jsonString = "";
+            String line = "";
+            while((line = reader.readLine()) != null) {
+                jsonString += line + "\n";
+            }
+            reader.close();
+            json = new JSONObject(jsonString);
+            System.out.println("****************json string***************** \n" + json.toString());
+
+            Set<String> keys = json.keySet();
+            for(String key : keys) {
+                System.out.println(key);
+                listView.getItems().add(key);
+            }
+
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     private void traverseTree(TreeItem<String> item, JSONObject json) {

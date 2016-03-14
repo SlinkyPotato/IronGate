@@ -6,13 +6,13 @@
 
       "rootFolder" : {
 
-        "subFolder1" : null,
+        "subFolder1" : "",
 
-        "subFolder2" : null,
+        "subFolder2" : "",
 
         "subFolder3" : {
 
-          "sub_subFolder3" : null
+          "sub_subFolder3" : ""
 
         }
 
