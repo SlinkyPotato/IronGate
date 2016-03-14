@@ -1,19 +1,26 @@
 package directory;
 
+import org.json.*;
 import javafx.collections.ObservableList;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
  * Created by kristopherguzman on 3/10/16.
  */
 public class EditorViewManager {
-    public static List<TreeItem<String>> draggedItems; //use this to store items being dragged, because ClipBoard is a pain in the ass
+    public static List<TreeItem<String>> draggedItems; //use this to store items being dragged, because Clipboard is a pain in the ass
     private TreeView<String> view;
-
     /**
      * Folder View Manager constructor, initializes the view for the file browser
      * */
@@ -29,6 +36,7 @@ public class EditorViewManager {
     //adds tree items to selected cells
     public void addItemsToSelected(List<TreeItem<String>> newItems) {
         ObservableList<TreeItem<String>> selectedItems = view.getSelectionModel().getSelectedItems();
+
         if(selectedItems.size() == 0) {
             view.getRoot().getChildren().addAll(newItems);
         }
@@ -39,15 +47,50 @@ public class EditorViewManager {
     }
 
     public ObservableList<TreeItem<String>> getSelected() { return view.getSelectionModel().getSelectedItems(); }
+    public boolean isEmpty() { return view.getRoot().getChildren().size() == 0; }
 
     public void deleteSelectedItems() {
-
         ObservableList<TreeItem<String>> selectedItems = view.getSelectionModel().getSelectedItems();
         ObservableList<TreeItem<String>> children = view.getRoot().getChildren();
+
         for(TreeItem<String> item : selectedItems) {
             if((item != null) && !item.getValue().equals("Template Root")) {
                 children.remove(item);
             }
         }
     }
+
+    public void saveToJSON() {
+        //convert tree items to json representation
+        try {
+            Path path = Paths.get(getClass().getClassLoader().getResource("templates.json").getPath());
+            System.out.println(path);
+            FileWriter fileWriter = new FileWriter(path.toFile());
+
+            //create json entry
+            JSONObject json = new JSONObject(path);
+            System.out.println(json.toString());
+            json = (JSONObject) json.get("templates"); //get root of json file
+            TreeItem<String> rootItem = view.getRoot();
+            JSONObject subFolders = new JSONObject();
+            json.put(rootItem.getValue(), subFolders);
+            traverseTree(rootItem, subFolders);
+
+            json.write(fileWriter);
+
+
+        } catch(Exception e) { e.printStackTrace(); }
+    }
+
+    private void traverseTree(TreeItem<String> item, JSONObject json) {
+        for(TreeItem<String> child : item.getChildren()) {
+            if(!child.isLeaf()) {
+                JSONObject nestedFolder = new JSONObject();
+                json.put(child.getValue(), nestedFolder);
+                traverseTree(child, nestedFolder);
+
+            } else { json.put(child.getValue(), "leaf"); }
+        }
+    }
+
 }

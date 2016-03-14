@@ -59,7 +59,7 @@
       </MenuBar>
    </top>
    <center>
-      <TabPane>
+      <TabPane fx:id="tabView">
          <tabs>
             <Tab text="File View">
                <content>
@@ -80,7 +80,7 @@
                   <StackPane prefHeight="150.0" prefWidth="200.0">
                      <children>
                         <TreeView id="folder-view-pane" fx:id="editorView" prefHeight="200.0" prefWidth="200.0" />
-                        <Label id="dragHereLabel" fx:id="dragHereLabel1" alignment="CENTER" prefHeight="68.0" prefWidth="156.0" text="Create reusable folder structures" textAlignment="CENTER" wrapText="true">
+                        <Label id="dragHereLabel" alignment="CENTER" prefHeight="68.0" prefWidth="156.0" text="Create reusable folder structures" textAlignment="CENTER" wrapText="true">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -305,11 +305,16 @@
                                     <Insets top="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <ListView fx:id="templateListView" prefHeight="200.0" prefWidth="200.0">
+                              <ListView fx:id="templateListView" prefHeight="20.0" prefWidth="180.0">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </ListView>
+                              <Button fx:id="saveTemplateButton" mnemonicParsing="false" onMouseClicked="#onTemplateSave" text="Save Template">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </Button>
                            </children>
                         </VBox>
                      </content>

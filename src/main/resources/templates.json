@@ -1,0 +1,25 @@
+{
+
+  "templates" : {
+
+    "testTemplate1" : {
+
+      "rootFolder" : {
+
+        "subFolder1" : null,
+
+        "subFolder2" : null,
+
+        "subFolder3" : {
+
+          "sub_subFolder3" : null
+
+        }
+
+      }
+
+    }
+
+  }
+
+}

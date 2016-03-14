@@ -3,6 +3,8 @@ package launcher;
 import directory.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -28,7 +30,7 @@ public class Controller{
     @FXML private ResourceBundle resources;
     @FXML private TreeView<IronFile> dirTree;
     @FXML private TreeView<String> editorView;
-    @FXML private ListView<IronFile> templateListView;
+    @FXML private TabPane tabView;
     @FXML private TextField txtAddTag;
     @FXML private TextField txtSearchTag;
     @FXML private TextField txtNewFolderName;
@@ -37,6 +39,8 @@ public class Controller{
     @FXML private Label dragHereLabel;
     @FXML private ListView<IronFile> viewTags;
     @FXML private ListView<String> viewExistTags;
+    @FXML private ListView<IronFile> templateListView;
+    @FXML private Button saveTemplateButton;
     private FolderViewManager manager;
     private EditorViewManager templateEditor;
 
@@ -53,6 +57,22 @@ public class Controller{
             ObservableList<TreeItem<String>> selected = templateEditor.getSelected();
             if(selected.size() == 1 && selected.get(0).getValue() != null) { //fill in folder name if only one is selected
                 txtRenameFolder.setText(selected.get(0).getValue());
+            }
+
+        });
+
+        //when Editor is closed, remove "save template" button, no need for it to be visible
+        saveTemplateButton.setVisible(false);
+        saveTemplateButton.setManaged(false);
+        tabView.getSelectionModel().selectedItemProperty().addListener((ov, oldTab, newTab) -> {
+
+            int index = tabView.getSelectionModel().getSelectedIndex();
+            if(index == 0) {
+                saveTemplateButton.setVisible(false);
+                saveTemplateButton.setManaged(false);
+            } else {
+                saveTemplateButton.setVisible(true);
+                saveTemplateButton.setManaged(true);
             }
 
         });
@@ -125,10 +145,15 @@ public class Controller{
      * */
 
     @FXML private void onAddFolderClick(MouseEvent event) {
-        TreeItem<String> folderItem = new TreeItem<>(txtNewFolderName.getText());
-        List<TreeItem<String>> list = new ArrayList<>();
-        list.add(folderItem);
-        templateEditor.addItemsToSelected(list);
+
+        if(!txtNewFolderName.getText().equals("")) {
+
+            TreeItem<String> folderItem = new TreeItem<>(txtNewFolderName.getText());
+            List<TreeItem<String>> list = new ArrayList<>();
+            list.add(folderItem);
+            templateEditor.addItemsToSelected(list);
+
+        }
     }
 
     @FXML private void onDeleteFolderClick(MouseEvent event) {
@@ -143,6 +168,14 @@ public class Controller{
                 item.setValue(txtRenameFolder.getText());
 
             }
+        }
+    }
+
+    @FXML private void onTemplateSave(MouseEvent event) {
+        if(!templateEditor.isEmpty()) {
+
+            templateEditor.saveToJSON();
+
         }
     }
 
