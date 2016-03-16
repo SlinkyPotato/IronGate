@@ -18,7 +18,6 @@ public class FileViewTreeCell extends TreeCell<IronFile> {
 
 
 
-
     }
 
     @Override

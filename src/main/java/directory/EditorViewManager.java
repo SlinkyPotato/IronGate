@@ -8,7 +8,9 @@ import javafx.scene.control.TreeView;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -17,16 +19,19 @@ import java.util.Set;
 public class EditorViewManager {
     public static List<TreeItem<String>> draggedItems; //use this to store items being dragged, because Clipboard is a pain in the ass
     private TreeView<String> view;
-    private JSONObject json;
+    private ListView<String> listView;
+    public static JSONObject json;
     private String jsonPath;
     /**
      * Folder View Manager constructor, initializes the view for the file browser
      * */
-    public EditorViewManager(TreeView<String> tree) {
+    public EditorViewManager(TreeView<String> tree, ListView<String> lv) {
         view = tree;
+        listView = lv;
         view.setRoot(new TreeItem<>("My Template"));
         view.getRoot().setExpanded(true);
         view.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // enable multi-select
+        loadTemplatesToList();
     }
 
     public boolean hasRoot() { return (view.getRoot() != null); }
@@ -71,11 +76,26 @@ public class EditorViewManager {
             json.write(writer);
             writer.close();
 
+            if(existsInList(rootItem.getValue())) {//add template to list if it is a new one
+                System.out.println("adding new template to list");
+                listView.getItems().add(rootItem.getValue());
+            }
+
         } catch(Exception e) { e.printStackTrace(); }
     }
 
+    private boolean existsInList(String templateName) {
+        ObservableList<String> listItems = listView.getItems();
+        for(String i : listItems) {
+            if(i.equals(view.getRoot().getValue())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     //this must be called BEFORE saving templates
-    public void loadTemplatesToList(ListView<String> listView) {
+    private void loadTemplatesToList() {
         try {
             jsonPath =getClass().getClassLoader().getResource("userData/user_templates.json").getPath();
             BufferedReader reader = new BufferedReader(new FileReader(jsonPath));
@@ -104,7 +124,7 @@ public class EditorViewManager {
                 json.put(child.getValue(), nestedFolder);
                 traverseTree(child, nestedFolder);
 
-            } else { json.put(child.getValue(), "leaf"); }
+            } else { json.put(child.getValue(), JSONObject.NULL); }
         }
     }
 
