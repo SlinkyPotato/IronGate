@@ -45,7 +45,7 @@ public class Controller{
     private EditorViewManager templateEditor;
 
     @FXML private void initialize() {
-        dirTree.setCellFactory(FileViewTreeCell::new); //use custom tree cell for drag and drop
+        //dirTree.setCellFactory(FileViewTreeCell::new); //use custom tree cell for drag and drop
         editorView.setCellFactory(EditorTreeCell::new);
         templateListView.setCellFactory(TemplateListCell::new);
         menubar.setUseSystemMenuBar(true); //allows use of native menu bars, luckily an easy 1 liner

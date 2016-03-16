@@ -16,8 +16,28 @@ public class FileViewTreeCell extends TreeCell<IronFile> {
 
     public FileViewTreeCell(TreeView<IronFile> treeView) {
 
+        setOnDragEntered(args -> {
+            if(args.getGestureSource().getClass().getName().equals("String")) {
+                setStyle("-fx-background-color: aqua;");
+            }
+            args.consume();
+        });
 
+        setOnDragExited(args -> {
+            setStyle("");
+            args.consume();
+        });
 
+        setOnDragOver(args -> {
+            if(args.getGestureSource().getClass().getName().equals("String")) {
+                args.acceptTransferModes(TransferMode.COPY);
+            }
+            args.consume();
+        });
+
+        setOnDragDropped(args -> {
+
+        });
     }
 
     @Override

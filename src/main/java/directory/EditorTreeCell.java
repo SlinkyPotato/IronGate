@@ -87,7 +87,8 @@ public class EditorTreeCell extends TreeCell<String> { //only need the name of t
                 JSONObject template = (JSONObject) EditorViewManager.json.get(selectedTemplate);
 
                 //build tree item from template in json object
-                generateTemplateItems(template, getTreeItem());
+                TreeItem<String> targ = (getTreeItem() == null) ? treeView.getRoot() : getTreeItem();
+                generateTemplateItems(template, targ);
             }
 
             args.setDropCompleted(true);
