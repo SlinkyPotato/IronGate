@@ -58,6 +58,7 @@ public class IronFileVisitor extends SimpleFileVisitor<Path>{
         IronFile current = new IronFile(pathFile.toFile());
         if (!current.getTag().isEmpty()) {
             FolderViewManager.taggedItems.add(current);
+            FolderViewManager.availableTags.add(current.getTag());
         }
     }
 

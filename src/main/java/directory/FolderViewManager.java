@@ -25,6 +25,7 @@ public class FolderViewManager {
     private TreeView<IronFile> view;
     public static ObservableList<IronFile> taggedItems = FXCollections.observableArrayList();
     public static List<TreeItem<IronFile>> draggedItems; //use this to store items being dragged, because ClipBoard is a pain in the ass
+    public static ObservableList<String> availableTags = FXCollections.observableArrayList();
 
     /**
      * Folder View Manager constructor, initializes the view for the file browser
@@ -79,10 +80,10 @@ public class FolderViewManager {
         }
     }
 
-    public void deleteTags(ObservableList<IronFile> listTags) {
+    public void deleteTags(ObservableList<String> listTags) {
         if (OsUtils.isCompatible()) { // check for compatibility
             for (IronFile taggedFile : taggedItems) {
-                if (listTags.contains(new IronFile(taggedFile.getTag()))) {
+                if (listTags.contains(taggedFile.getTag())) {
                     taggedFile.setTag("");
                 }
             }
