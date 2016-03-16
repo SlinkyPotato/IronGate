@@ -8,11 +8,9 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import utils.OsUtils;
+
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.attribute.UserDefinedFileAttributeView;
 import java.util.List;
 
 /**
@@ -21,9 +19,6 @@ import java.util.List;
     the Folder View.
 
     Additionally, this class extends SimpleFileVisitor which uses java 8.
-
-    @author Kristopher Guzman kristopherguz@gmail.com
-    @author Brian Patino patinobrian@gmail.com
  */
 public class FolderViewManager {
     private final Image hddIcon = new Image("/icons/hdd.png");
@@ -84,10 +79,10 @@ public class FolderViewManager {
         }
     }
 
-    public void deleteTags(ObservableList<String> listTags) {
+    public void deleteTags(ObservableList<IronFile> listTags) {
         if (OsUtils.isCompatible()) { // check for compatibility
             for (IronFile taggedFile : taggedItems) {
-                if (listTags.contains(taggedFile.getTag())) {
+                if (listTags.contains(new IronFile(taggedFile.getTag()))) {
                     taggedFile.setTag("");
                 }
             }

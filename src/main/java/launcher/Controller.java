@@ -35,7 +35,7 @@ public class Controller{
     @FXML private MenuBar menubar;
     @FXML private Label dragHereLabel;
     @FXML private ListView<IronFile> viewTags;
-    @FXML private ListView<String> viewExistTags;
+    @FXML private ListView<IronFile> viewExistTags;
     private FolderViewManager manager;
     private EditorViewManager templateEditor;
 
@@ -53,7 +53,6 @@ public class Controller{
                 txtRenameFolder.setText(selected.get(0).getValue());
             }
         });
-
     }
     /**
      * Initialize the drag and Drop event and other scene events
@@ -73,6 +72,7 @@ public class Controller{
                 IronFile[] roots = IronFile.convertFiles(db.getFiles()); // multi-folder drag and drop
                 manager.setRootDirectory(roots);
                 manager.checkTags(roots);
+                viewExistTags.setItems(FolderViewManager.taggedItems);
                 success = true;
                 dragHereLabel.setText("");
                 dragHereLabel.setMaxWidth(0);
@@ -80,6 +80,11 @@ public class Controller{
             args.setDropCompleted(success);
         });
     }
+
+    private void inilializeTagsView() {
+
+    }
+
     /**
      * Action event triggered when user clicks. This method will add tag directly to IronFile
      * Method name must match SimpleGUI.fxml assigned `on Action`
@@ -90,14 +95,14 @@ public class Controller{
         /* The following line converts ObservableList<TreeItem<IronFile> into ObservableList<IronFile> which is needed to display just the names.*/
         selectedIronFiles.addAll(treeIronFileList.stream().map(TreeItem::getValue).collect(Collectors.toList()));
         manager.setTags(selectedIronFiles, txtAddTag.getText());
-        ObservableList<String> tagsList = FXCollections.observableArrayList(txtAddTag.getText());
+        ObservableList<IronFile> tagsList = FXCollections.observableArrayList(new IronFile(txtAddTag.getText()));
         tagsList.addAll(viewExistTags.getItems());
         viewExistTags.setItems(tagsList);
     }
     @FXML private void eventRemoveTag() {
-        ObservableList<String> allTags = viewExistTags.getItems();
-        ObservableList<String> selectedTagsList = viewExistTags.getSelectionModel().getSelectedItems();
-        ObservableList<String> cleanTagList = FXCollections.observableArrayList();
+        ObservableList<IronFile> allTags = viewExistTags.getItems();
+        ObservableList<IronFile> selectedTagsList = viewExistTags.getSelectionModel().getSelectedItems();
+        ObservableList<IronFile> cleanTagList = FXCollections.observableArrayList();
         manager.deleteTags(selectedTagsList);
         /* Create list that does not contain removed tags */
         cleanTagList.addAll(allTags.stream().filter(tag -> !selectedTagsList.contains(tag)).collect(Collectors.toList())); // checkout java 8 .stream() and .collect()
