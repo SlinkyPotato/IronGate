@@ -61,6 +61,7 @@ public class FolderViewManager {
      * @param hardDrives a collection of hard drives to being from root
      * */
     public void setRootDirectory(IronFile[] hardDrives) {
+        System.out.println("setting roots");
         view.setRoot(new FileTreeItem(new IronFile(""))); // needs a blank file as root
         for (IronFile hdd : hardDrives) {
             FileTreeItem diskTreeItem = new FileTreeItem(hdd);

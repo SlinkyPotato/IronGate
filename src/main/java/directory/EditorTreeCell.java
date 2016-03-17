@@ -84,7 +84,7 @@ public class EditorTreeCell extends TreeCell<String> { //only need the name of t
             } else if(db.hasContent(TemplateListCell.dataFormat)){ //string list item is in content so we are dragging a list item
                 String selectedTemplate = (String) db.getContent(TemplateListCell.dataFormat);
                 System.out.println("drag template with key: " + selectedTemplate);
-                JSONObject template = (JSONObject) EditorViewManager.json.get(selectedTemplate);
+                JSONObject template = EditorViewManager.json.getJSONObject(selectedTemplate);
 
                 //build tree item from template in json object
                 TreeItem<String> targ = (getTreeItem() == null) ? treeView.getRoot() : getTreeItem();
