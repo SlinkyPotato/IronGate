@@ -11,12 +11,10 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 /**
- * Created by kristopherguzman on 3/6/16.
+ * @author kristopherguzman
  */
 public class EditorTreeCell extends TreeCell<String> { //only need the name of the folder, not an entire File object
 
@@ -26,8 +24,7 @@ public class EditorTreeCell extends TreeCell<String> { //only need the name of t
 
         //drop folder into new parent
         setOnDragDetected(args -> {
-
-            if(getTreeItem() != null && !getTreeItem().getValue().equals(treeView.getRoot().getValue())) {
+            if (getTreeItem() != null && !getTreeItem().getValue().equals(treeView.getRoot().getValue())) {
                 //sends drag event to all nodes under cursor
                 ClipboardContent content = new ClipboardContent();
                 Dragboard db = treeView.startDragAndDrop(TransferMode.MOVE);
@@ -43,8 +40,8 @@ public class EditorTreeCell extends TreeCell<String> { //only need the name of t
 
         setOnDragEntered(args -> {
 
-            if(getTreeItem() != null && args.getGestureSource() != this)
-                setStyle( "-fx-background-color: aqua;" );
+            if (getTreeItem() != null && args.getGestureSource() != this)
+                setStyle("-fx-background-color: aqua;");
             args.consume();
 
         });
@@ -56,7 +53,7 @@ public class EditorTreeCell extends TreeCell<String> { //only need the name of t
 
         setOnDragOver(args -> {
 
-            if(args.getGestureSource() != this) {
+            if (args.getGestureSource() != this) {
                 args.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             }
             args.consume();
@@ -65,7 +62,7 @@ public class EditorTreeCell extends TreeCell<String> { //only need the name of t
 
         setOnDragDropped(args -> {
             Dragboard db = args.getDragboard();
-            if(db.hasContent(dataFormat)) { //if content exists, then we are dragging a list item, not tree item
+            if (db.hasContent(dataFormat)) { //if content exists, then we are dragging a list item, not tree item
                 TreeItem<String> folder = getTreeItem();
                 ObservableList<TreeItem<String>> children = treeView.getRoot().getChildren();
                 for (TreeItem<String> f : EditorViewManager.draggedItems) {
@@ -81,13 +78,14 @@ public class EditorTreeCell extends TreeCell<String> { //only need the name of t
                 }
                 EditorViewManager.draggedItems = null;
 
-            } else if(db.hasContent(TemplateListCell.dataFormat)){ //string list item is in content so we are dragging a list item
+            } else if (db.hasContent(TemplateListCell.dataFormat)) { //string list item is in content so we are dragging a list item
                 String selectedTemplate = (String) db.getContent(TemplateListCell.dataFormat);
                 System.out.println("drag template with key: " + selectedTemplate);
                 JSONObject template = EditorViewManager.json.getJSONObject(selectedTemplate);
 
                 //build tree item from template in json object
-                generateTemplateItems(template, getTreeItem());
+                TreeItem<String> targ = (getTreeItem() == null) ? treeView.getRoot() : getTreeItem();
+                generateTemplateItems(template, targ);
             }
 
             args.setDropCompleted(true);
@@ -96,7 +94,7 @@ public class EditorTreeCell extends TreeCell<String> { //only need the name of t
 
         setOnDragDone(args -> {
             System.out.println("Transfer Mode: " + args.getTransferMode());
-            if(args.getTransferMode() == TransferMode.MOVE) {
+            if (args.getTransferMode() == TransferMode.MOVE) {
                 System.out.println("remove source; " + getTreeItem().getValue());
                 treeView.getRoot().getChildren().remove(getTreeItem()); //remove source
 
@@ -107,10 +105,10 @@ public class EditorTreeCell extends TreeCell<String> { //only need the name of t
 
     private void generateTemplateItems(JSONObject json, TreeItem<String> target) {
         Set<String> keys = json.keySet();
-        for(String key : keys) {
+        for (String key : keys) {
             TreeItem<String> folder = new TreeItem<>(key);
             target.getChildren().add(folder);
-            if(!json.get(key).equals(JSONObject.NULL)) {
+            if (!json.get(key).equals(JSONObject.NULL)) {
                 JSONObject subFolders = (JSONObject) json.get(key);
                 generateTemplateItems(subFolders, folder);
             }
@@ -119,12 +117,11 @@ public class EditorTreeCell extends TreeCell<String> { //only need the name of t
 
     @Override
     protected void updateItem(String item, boolean empty) {
-
-        if(item != null && item.equals(getItem())) return;
+        if (item != null && item.equals(getItem())) return;
 
         super.updateItem(item, empty);
 
-        if(item != null && item.equals("")) {
+        if (item != null && item.equals("")) {
             super.setText("");
 
         } else {

@@ -1,8 +1,6 @@
 package utils;
 
-
 /**
- *
  * This is a static utility class to detect the OS.
  * Class has been updated to make only one call for the lifetime
  * of the application.

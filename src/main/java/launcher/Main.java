@@ -2,21 +2,14 @@ package launcher;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TreeView;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-
-import java.io.File;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
 //        setUserAgentStylesheet(STYLESHEET_CASPIAN);
         FXMLLoader loader = new FXMLLoader();
         Parent root = loader.load(getClass().getResource("/SimpleGUI.fxml").openStream());
@@ -30,6 +23,7 @@ public class Main extends Application {
 //        scene.getStylesheets().add("/main/resources/mainStyle.css"); // absolute path
         primaryStage.show(); // show the initialized stage
     }
+
     public static void main(String[] args) {
         launch(args);
     }

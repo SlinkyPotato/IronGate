@@ -1,12 +1,12 @@
 package utils;
 
-import java.io.FilenameFilter;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.Serializable;
 import java.nio.file.Files;
 
 /**
- * Created by kristopherguzman on 2/19/16.
+ * @author kristopherguzman
  */
 public class IronFileFilter implements FilenameFilter, Serializable {
 
@@ -19,7 +19,7 @@ public class IronFileFilter implements FilenameFilter, Serializable {
             hidden = Files.isHidden(file.toPath());
             isSymbolic = Files.isSymbolicLink(file.toPath());
             isRegularFile = Files.isRegularFile(file.toPath());
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
         return !(hidden || isSymbolic || (!isRegularFile && !file.isDirectory()));

@@ -25,7 +25,7 @@ public class FileTreeItem extends TreeItem<IronFile> implements Serializable {
 
     public static List<FileTreeItem> convertFromTreeItem(List<TreeItem<IronFile>> li) {
         ArrayList<FileTreeItem> newList = new ArrayList<>();
-        for(TreeItem<IronFile> item : li) {
+        for (TreeItem<IronFile> item : li) {
             FileTreeItem i = new FileTreeItem(item.getValue());
             System.out.println("converted item value: " + i.getValue());
             newList.add(i);
@@ -62,7 +62,7 @@ public class FileTreeItem extends TreeItem<IronFile> implements Serializable {
 
                 for (IronFile childFile : files) {
 //                    if(childFile.filter.accept(childFile, childFile.getName())) { // saved for later
-                        children.add(new FileTreeItem(childFile));
+                    children.add(new FileTreeItem(childFile));
 //                    }
                 }
                 return children;

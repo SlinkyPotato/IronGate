@@ -14,11 +14,12 @@ import java.nio.file.Files;
 import java.util.List;
 
 /**
-    This class handles manipulation of the Folder View. This includes
-    directory searches, displaying directories, and all things directly changing
-    the Folder View.
-
-    Additionally, this class extends SimpleFileVisitor which uses java 8.
+ * This class handles manipulation of the Folder View. This includes
+ * directory searches, displaying directories, and all things directly changing
+ * the Folder View.
+ * <p>
+ * Additionally, this class extends SimpleFileVisitor which uses java 8.
+ * </p>
  */
 public class FolderViewManager {
     private final Image hddIcon = new Image("/icons/hdd.png");
@@ -29,13 +30,15 @@ public class FolderViewManager {
 
     /**
      * Folder View Manager constructor, initializes the view for the file browser
-     * */
+     */
     public FolderViewManager(TreeView<IronFile> dirTree) {
         view = dirTree;
         view.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // enable multi-select
     }
+
     /**
      * Sets the root directory of the file browser to the specified folder.
+     *
      * @param file root folder/file to start browser view
      **/
     public void setRootDirectory(IronFile file) {
@@ -43,11 +46,15 @@ public class FolderViewManager {
         view.setRoot(rootItem);
     }
 
-    public boolean hasRoot() { return (view.getRoot() != null); }
+    public boolean hasRoot() {
+        return (view.getRoot() != null);
+    }
+
     /**
      * Overloaded method that sets a collection of folders/files as file browser view.
+     *
      * @param hardDrives a collection of hard drives to being from root
-     * */
+     */
     public void setRootDirectory(IronFile[] hardDrives) {
         System.out.println("setting roots");
         view.setRoot(new FileTreeItem(new IronFile(""))); // needs a blank file as root
@@ -59,13 +66,15 @@ public class FolderViewManager {
         view.setShowRoot(false); // hide the blank file
     }
 
-    public ObservableList<TreeItem<IronFile>> getSelected() { return view.getSelectionModel().getSelectedItems(); }
+    public ObservableList<TreeItem<IronFile>> getSelected() {
+        return view.getSelectionModel().getSelectedItems();
+    }
 
     public void deleteSelectedItems() {
         ObservableList<TreeItem<IronFile>> selectedItems = view.getSelectionModel().getSelectedItems();
         ObservableList<TreeItem<IronFile>> children = view.getRoot().getChildren();
-        for(TreeItem<IronFile> item : selectedItems) {
-            if(item != null && !item.getValue().getName().equals("Template Root")) {
+        for (TreeItem<IronFile> item : selectedItems) {
+            if (item != null && !item.getValue().getName().equals("Template Root")) {
                 children.remove(item);
             }
         }
@@ -90,11 +99,12 @@ public class FolderViewManager {
             }
         }
     }
+
     /**
      * Check tags of files that are dropped or shown in the ListView
      *
      * @param roots root folders/hdd
-     * */
+     */
     public void checkTags(IronFile[] roots) {
         if (OsUtils.isCompatible()) { // check for compatibility
             for (IronFile file : roots) {
@@ -111,7 +121,7 @@ public class FolderViewManager {
 
     /**
      * Retrieves an Observable list of TreeItem<IronFile> of tagged items.
-     * */
+     */
     public ObservableList<IronFile> getTaggedItems(String searchTag) {
         ObservableList<IronFile> listTagFiles = FXCollections.observableArrayList();
         for (IronFile taggedIronFile : taggedItems) {
