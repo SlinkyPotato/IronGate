@@ -30,6 +30,7 @@ public class Dropbox {
 
     private void readSetCredentials() {
         try {
+            // JSON Retrieval Example
             URL url = getClass().getResource("/services/dropbox.json");
             FileReader readCred = new FileReader(url.getPath());
             JSONObject dropCred = new JSONObject(url.getPath());

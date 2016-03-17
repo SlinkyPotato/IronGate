@@ -12,7 +12,6 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -52,14 +51,12 @@ public class Controller{
         templateEditor = new EditorViewManager(editorView, templateListView);
         manager = new FolderViewManager(dirTree); // 2 statements in 1 line is best
 
-
         //sets the text of the renameFolder field to the name of the selected folder
         editorView.setOnMouseClicked(args -> {
             ObservableList<TreeItem<String>> selected = templateEditor.getSelected();
             if(selected.size() == 1 && selected.get(0).getValue() != null) { //fill in folder name if only one is selected
                 txtRenameFolder.setText(selected.get(0).getValue());
             }
-
         });
 
         //when Editor is closed, remove "save template" button, no need for it to be visible
@@ -82,10 +79,9 @@ public class Controller{
      * Initialize the drag and Drop event and other scene events
     * */
     public void initializeSceneEvents(Scene scene) {
-
         scene.setOnDragOver(args -> {
            args.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-            args.consume();
+           args.consume();
         });
 
         scene.setOnDragDropped(args -> {
@@ -93,9 +89,10 @@ public class Controller{
             args.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             boolean success = false;
             if(db.hasFiles()) {
-
-                IronFile[] roots = IronFile.convertFiles(db.getFiles());
+                IronFile[] roots = IronFile.convertFiles(db.getFiles()); // multi-folder drag and drop
                 manager.setRootDirectory(roots);
+                manager.checkTags(roots);
+                viewExistTags.setItems(FolderViewManager.availableTags);
                 success = true;
                 dragHereLabel.setText("");
                 dragHereLabel.setMaxWidth(0);
@@ -103,9 +100,10 @@ public class Controller{
             args.setDropCompleted(success);
         });
     }
+
     /**
      * Action event triggered when user clicks. This method will add tag directly to IronFile
-     * Method name must match StartPage.fxml assigned `on Action`
+     * Method name must match SimpleGUI.fxml assigned `on Action`
      * */
     @FXML private void eventAddTag() {
         ObservableList<TreeItem<IronFile>> treeIronFileList = dirTree.getSelectionModel().getSelectedItems();

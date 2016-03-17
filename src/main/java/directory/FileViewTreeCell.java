@@ -13,7 +13,7 @@ import org.json.JSONObject;
 import java.util.Set;
 
 /**
- * Created by kristopherguzman on 3/10/16.
+ * @author kristopherguzman
  */
 public class FileViewTreeCell extends TreeCell<IronFile> {
 

@@ -9,22 +9,19 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
 /**
- This class handles manipulation of the Folder View. This includes
- directory searches, displaying directories, and all things directly changing
- the Folder View.
+ This class handles the searching algorithm for tags in files.
 
  Additionally, this class extends SimpleFileVisitor which uses java 8.
 
- @author kristopherguzman
  @author Brian Patino
+ @author kristopherguzman
  */
 public class IronFileVisitor extends SimpleFileVisitor<Path>{
     private TreeItem<IronFile> root;
+
     @Override
     public FileVisitResult visitFile(Path pathFile, BasicFileAttributes attrs) throws IOException {
-        IronFile current = new IronFile(pathFile.toFile());
-//        System.out.println(current.getAbsolutePath());
-//        root.getChildren().add(new TreeItem<>(new directory.IronFile(current.getAbsolutePath())));
+        addExistTag(pathFile);
         System.out.printf("Visiting file %s\n", pathFile);
         return FileVisitResult.CONTINUE;
     }
@@ -32,21 +29,36 @@ public class IronFileVisitor extends SimpleFileVisitor<Path>{
      * {@inheritDoc}
      * This method must be overridden so that walking the tree can continue.
      * */
+
     @Override
     public FileVisitResult visitFileFailed(Path file, IOException e) throws IOException {
         System.err.printf("Visiting failed for %s\n", file);
         return FileVisitResult.SKIP_SUBTREE;
     }
+
     @Override
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
         IronFile currentFile = new IronFile(dir.toAbsolutePath().toString());
-        if (currentFile.getName().startsWith(".")) {
+        if (currentFile.getName().startsWith(".")) { // Skip hidden folders
             System.out.printf("Skipped directory: %s\n", dir.getFileName());
             return FileVisitResult.SKIP_SUBTREE;
         } else {
             System.out.printf("About to visit directory: %s\n", dir.getFileName());
-            root.getChildren().add(new TreeItem<>(currentFile));
             return FileVisitResult.CONTINUE;
+        }
+    }
+
+    @Override
+    public FileVisitResult postVisitDirectory(Path pathFile, IOException e) throws IOException {
+        addExistTag(pathFile);
+        return FileVisitResult.CONTINUE;
+    }
+
+    private void addExistTag(Path pathFile) {
+        IronFile current = new IronFile(pathFile.toFile());
+        if (!current.getTag().isEmpty()) {
+            FolderViewManager.taggedItems.add(current);
+            FolderViewManager.availableTags.add(current.getTag());
         }
     }
 
