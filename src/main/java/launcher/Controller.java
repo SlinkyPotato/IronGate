@@ -40,7 +40,7 @@ public class Controller{
     private EditorViewManager templateEditor;
 
     @FXML private void initialize() {
-        //dirTree.setCellFactory(FileViewTreeCell::new); //use custom tree cell for drag and drop
+        dirTree.setCellFactory(FileViewTreeCell::new); //use custom tree cell for drag and drop
         editorView.setCellFactory(EditorTreeCell::new);
         menubar.setUseSystemMenuBar(true); //allows use of native menu bars, luckily an easy 1 liner
         templateEditor = new EditorViewManager(editorView);
@@ -66,7 +66,6 @@ public class Controller{
         scene.setOnDragDropped(args -> {
             Dragboard db = args.getDragboard();
             args.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-            System.out.println("scene drop");
             boolean success = false;
             if(db.hasFiles()) {
                 IronFile[] roots = IronFile.convertFiles(db.getFiles()); // multi-folder drag and drop
