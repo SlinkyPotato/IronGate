@@ -2,7 +2,6 @@ package webapp;
 
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.FileReader;
 import java.net.URL;
 
@@ -18,10 +17,12 @@ public class Dropbox {
     public Dropbox() {
         readSetCredentials();
     }
+
     public Dropbox(String key, String secret) {
         this.key = key;
         this.secret = secret;
     }
+
     public Dropbox(String key, String secret, String token) {
         this.key = key;
         this.secret = secret;
@@ -45,18 +46,23 @@ public class Dropbox {
     public String getKey() {
         return key;
     }
+
     public String getSecret() {
         return secret;
     }
+
     public String getToken() {
         return token;
     }
+
     public void setKey(String key) {
         this.key = key;
     }
+
     public void setSecret(String secret) {
         this.secret = secret;
     }
+
     public void setToken(String token) {
         this.token = token;
     }

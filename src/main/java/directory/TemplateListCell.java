@@ -8,7 +8,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 
 /**
- * Created by kristopherguzman on 3/15/16.
+ * @author kristopherguzman
  */
 public class TemplateListCell extends ListCell<String> {
 
@@ -32,11 +32,11 @@ public class TemplateListCell extends ListCell<String> {
     @Override
     protected void updateItem(String item, boolean empty) {
 
-        if(item != null && item.equals(getItem())) return;
+        if (item != null && item.equals(getItem())) return;
 
         super.updateItem(item, empty);
 
-        if(item != null && item.equals("")) {
+        if (item != null && item.equals("")) {
             super.setText("");
 
         } else {

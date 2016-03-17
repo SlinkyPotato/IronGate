@@ -23,23 +23,26 @@ public class IronFile extends File implements Serializable {
 
     /**
      * Construct an IronFile that extends File
+     *
      * @param pathname the path where the file is located
-     * */
+     */
     public IronFile(String pathname) {
         super(pathname);
         isRoot = (getParent() == null);
         filter = new IronFileFilter();
-        fileAttributeView =  Files.getFileAttributeView(this.toPath(), UserDefinedFileAttributeView.class);
+        fileAttributeView = Files.getFileAttributeView(this.toPath(), UserDefinedFileAttributeView.class);
     }
+
     /**
      * Construct an IronFile that extends File. This is an overloaded method
+     *
      * @param file file that can be passed instead of path (string)
-     * */
+     */
     public IronFile(File file) {
         super(file.getPath());
         isRoot = (getParent() == null);
         filter = new IronFileFilter();
-        fileAttributeView =  Files.getFileAttributeView(this.toPath(), UserDefinedFileAttributeView.class);
+        fileAttributeView = Files.getFileAttributeView(this.toPath(), UserDefinedFileAttributeView.class);
     }
 
     @Override
@@ -49,7 +52,7 @@ public class IronFile extends File implements Serializable {
 
     /**
      * Return the available hard drive disks.
-     * */
+     */
     public static IronFile[] listRoots() {
         return convertFiles(File.listRoots());
     }
@@ -86,7 +89,7 @@ public class IronFile extends File implements Serializable {
     public String getTag() {
         try {
             tag = getFileAttribute();
-        } catch(IOException e) {
+        } catch (IOException e) {
             setTag(""); // set empty tag if none exist
         }
         return tag;
@@ -112,7 +115,7 @@ public class IronFile extends File implements Serializable {
         fileAttributeView.write(ATTR_TYPE, tagByteBuffer); // Set file tag attributes
     }
 
-    private void setFileAttribute(String tag, String attributeType) throws IOException{
+    private void setFileAttribute(String tag, String attributeType) throws IOException {
         ByteBuffer tagByteBuffer = Charset.defaultCharset().encode(tag);
         fileAttributeView.write(attributeType, tagByteBuffer); // Set file tag attributes
     }

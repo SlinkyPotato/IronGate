@@ -9,14 +9,14 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
 /**
- This class handles the searching algorithm for tags in files.
-
- Additionally, this class extends SimpleFileVisitor which uses java 8.
-
- @author Brian Patino
- @author kristopherguzman
+ * This class handles the searching algorithm for tags in files.
+ * <p>
+ * Additionally, this class extends SimpleFileVisitor which uses java 8.
+ *
+ * @author Brian Patino
+ * @author kristopherguzman
  */
-public class IronFileVisitor extends SimpleFileVisitor<Path>{
+public class IronFileVisitor extends SimpleFileVisitor<Path> {
     private TreeItem<IronFile> root;
 
     @Override
@@ -25,10 +25,11 @@ public class IronFileVisitor extends SimpleFileVisitor<Path>{
         System.out.printf("Visiting file %s\n", pathFile);
         return FileVisitResult.CONTINUE;
     }
+
     /**
      * {@inheritDoc}
      * This method must be overridden so that walking the tree can continue.
-     * */
+     */
 
     @Override
     public FileVisitResult visitFileFailed(Path file, IOException e) throws IOException {

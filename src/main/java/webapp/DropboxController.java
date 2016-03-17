@@ -23,7 +23,7 @@ public class DropboxController {
         client = new DbxClientV2(config, dropbox.getToken());
     }
 
-    public void test() throws DbxException{
+    public void test() throws DbxException {
         FullAccount account = client.users.getCurrentAccount();
         System.out.println(account);
     }
