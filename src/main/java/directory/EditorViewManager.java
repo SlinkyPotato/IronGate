@@ -111,7 +111,7 @@ public class EditorViewManager {
             jsonPath = getClass().getClassLoader().getResource("userData/user_templates.json").getPath();
             BufferedReader reader = new BufferedReader(new FileReader(jsonPath));
             String jsonString = "";
-            String line = "";
+            String line;
             while ((line = reader.readLine()) != null) {
                 jsonString += line + "\n";
             }

@@ -18,9 +18,19 @@ public class FileTreeItem extends TreeItem<IronFile> implements Serializable {
     private boolean isLeaf;
     private boolean isFirstTimeChildren = true;
     private boolean isFirstTimeLeaf = true;
+    private ObservableList<String> searchCriteria;
 
     public FileTreeItem(IronFile rootFile) {
         super(rootFile);
+    }
+    public FileTreeItem(IronFile rootFile, ObservableList<String> tags) {
+        super(rootFile);
+        if(tags == null) {
+            searchCriteria = FXCollections.emptyObservableList();
+        } else {
+            searchCriteria = tags;
+        }
+
     }
 
     public static List<FileTreeItem> convertFromTreeItem(List<TreeItem<IronFile>> li) {
@@ -59,11 +69,16 @@ public class FileTreeItem extends TreeItem<IronFile> implements Serializable {
             IronFile[] files = f.listFiles();
             if (files != null) {
                 ObservableList<FileTreeItem> children = FXCollections.observableArrayList();
-
                 for (IronFile childFile : files) {
-//                    if(childFile.filter.accept(childFile, childFile.getName())) { // saved for later
-                    children.add(new FileTreeItem(childFile));
-//                    }
+                    if(!searchCriteria.isEmpty()) {
+                        for(String tag : searchCriteria) {
+                            if(childFile.getTags().contains(tag)) {
+                                children.add(new FileTreeItem(childFile));
+                            }
+                        }
+                    } else {
+                        children.add(new FileTreeItem(childFile));
+                    }
                 }
                 return children;
             }

@@ -24,9 +24,10 @@ import java.util.List;
 public class FolderViewManager {
     private final Image hddIcon = new Image("/icons/hdd.png");
     private TreeView<IronFile> view;
-    public static ObservableList<IronFile> taggedItems = FXCollections.observableArrayList();
+    private IronFile[] roots;
+    //public static ObservableList<IronFile> taggedItems = FXCollections.observableArrayList();
     public static List<TreeItem<IronFile>> draggedItems; //use this to store items being dragged, because ClipBoard is a pain in the ass
-    public static ObservableList<String> availableTags = FXCollections.observableArrayList();
+    //public static ObservableList<String> availableTags = FXCollections.observableArrayList();
 
     /**
      * Folder View Manager constructor, initializes the view for the file browser
@@ -53,13 +54,14 @@ public class FolderViewManager {
     /**
      * Overloaded method that sets a collection of folders/files as file browser view.
      *
-     * @param hardDrives a collection of hard drives to being from root
+     * @param roots a collection of root folders to being from root
      */
-    public void setRootDirectory(IronFile[] hardDrives) {
+    public void setRootDirectory(IronFile[] roots, ObservableList<String> tags) {
         System.out.println("setting roots");
+        this.roots = roots;
         view.setRoot(new FileTreeItem(new IronFile(""))); // needs a blank file as root
-        for (IronFile hdd : hardDrives) {
-            FileTreeItem diskTreeItem = new FileTreeItem(hdd);
+        for (IronFile hdd : roots) {
+            FileTreeItem diskTreeItem = new FileTreeItem(hdd, tags);
             diskTreeItem.setGraphic(new ImageView(hddIcon));
             view.getRoot().getChildren().add(diskTreeItem);
         }
@@ -70,32 +72,38 @@ public class FolderViewManager {
         return view.getSelectionModel().getSelectedItems();
     }
 
-    public void deleteSelectedItems() {
-        ObservableList<TreeItem<IronFile>> selectedItems = view.getSelectionModel().getSelectedItems();
-        ObservableList<TreeItem<IronFile>> children = view.getRoot().getChildren();
-        for (TreeItem<IronFile> item : selectedItems) {
-            if (item != null && !item.getValue().getName().equals("Template Root")) {
-                children.remove(item);
-            }
+    public void setTags(ObservableList<TreeItem<IronFile>> selectedItems, String tag) {
+        for (TreeItem<IronFile> selectedItem : selectedItems) {
+            selectedItem.getValue().setTag(tag);
         }
-
     }
 
-    public void setTags(ObservableList<IronFile> selectedItems, String tag) {
-        if (OsUtils.isCompatible()) { // check for compatibility
-            for (IronFile selectedIronFile : selectedItems) {
-                selectedIronFile.setTag(tag);
-                taggedItems.add(selectedIronFile); // add tagged item to list
+    public void deleteTags(ObservableList<TreeItem<IronFile>> selectedItems, ObservableList<String> listTags) {
+        for(String tag : listTags) {
+            for(TreeItem<IronFile> selectedItem : selectedItems) {
+                selectedItem.getValue().removeTag(tag);
             }
         }
     }
 
-    public void deleteTags(ObservableList<String> listTags) {
-        if (OsUtils.isCompatible()) { // check for compatibility
-            for (IronFile taggedFile : taggedItems) {
-                if (listTags.contains(taggedFile.getTag())) {
-                    taggedFile.setTag("");
+    public void filterTreeView(ObservableList<String> tags) {
+        ObservableList<TreeItem<IronFile>> roots = view.getRoot().getChildren();
+        IronFile[] fileRoots = new IronFile[view.getRoot().getChildren().size()];
+        for(int i = 0; i < fileRoots.length; i++) { //convert to standard array
+            fileRoots[i] = roots.get(i).getValue();
+        }
+        setRootDirectory(fileRoots, tags);
+    }
+
+    private void walkTreeView(TreeItem<IronFile> root, ObservableList<String> tags) {
+        for(TreeItem<IronFile> child : root.getChildren()) {
+            for(String tag : tags) {
+                if(!child.getValue().getTags().contains(tag)) { //if file does NOT contain a search tag
+                    root.getChildren().remove(child);
                 }
+            }
+            if(!child.isLeaf()) {
+                walkTreeView(child, tags);
             }
         }
     }
@@ -105,108 +113,31 @@ public class FolderViewManager {
      *
      * @param roots root folders/hdd
      */
-    public void checkTags(IronFile[] roots) {
-        if (OsUtils.isCompatible()) { // check for compatibility
-            for (IronFile file : roots) {
-                // Visit each file in root
-                IronFileVisitor tagVisit = new IronFileVisitor();
-                try {
-                    Files.walkFileTree(file.toPath(), tagVisit);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+//    public void checkTags(IronFile[] roots) {
+//       // if (OsUtils.isCompatible()) { // check for compatibility
+//            for (IronFile file : roots) {
+//                // Visit each file in root
+//                IronFileVisitor tagVisit = new IronFileVisitor();
+//                try {
+//                    Files.walkFileTree(file.toPath(), tagVisit);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//       // }
+//    }
 
     /**
      * Retrieves an Observable list of TreeItem<IronFile> of tagged items.
      */
-    public ObservableList<IronFile> getTaggedItems(String searchTag) {
-        ObservableList<IronFile> listTagFiles = FXCollections.observableArrayList();
-        for (IronFile taggedIronFile : taggedItems) {
-            if (taggedIronFile.getTag().equals(searchTag)) {
-                listTagFiles.add(taggedIronFile);
-            }
-        }
-        return listTagFiles;
-    }
+//    public ObservableList<IronFile> getTaggedItems(String searchTag) {
+//        ObservableList<IronFile> listTagFiles = FXCollections.observableArrayList();
+//        for (IronFile taggedIronFile : taggedItems) {
+//            if (taggedIronFile.getTags().contains(searchTag)) {
+//                listTagFiles.add(taggedIronFile);
+//            }
+//        }
+//        return listTagFiles;
+//    }
 
-    /**
-     * Mac Specific code
-     *
-     * */
-
-    /*public void setFileAttrForSelected() {
-        for(TreeItem<IronFile> item : selectedFiles) {
-            setFileAttr(item.getValue(), "test_attr_key", "test_attr_value");
-        }
-    }
-    public void getFileAttrForSelected() {
-        for(TreeItem<IronFile> item : selectedFiles) {
-            getFileAttr(item.getValue(), "test_attr_key");
-        }
-    }
-    public void setFileAttr(IronFile file, String key, String value) {
-        if(OSDetection.OSType ==  OSDetection.OS.WINDOWS) {
-            try {
-                UserDefinedFileAttributeView view = Files.getFileAttributeView(file.toPath(), UserDefinedFileAttributeView.class);
-                //might want to give unique prefix to tag keys to avoid collision with system metadata
-                view.write(key, Charset.defaultCharset().encode(value));
-            } catch(IOException e) { e.printStackTrace(); }
-        } else if(OSDetection.OSType == OSDetection.OS.MAC) {
-            String option = "";
-            if(file.isDirectory()) {
-                option = "-r";
-            }
-            String cmd = "xattr -w " + option + " " + key + " " + value + " " + file.getAbsolutePath();
-            try {
-                String output = command.run(cmd);
-            } catch(IOException e) { e.printStackTrace(); }
-        }
-    }
-
-    public String getFileAttr(IronFile file, String key) {
-        if(OSDetection.OSType ==  OSDetection.OS.WINDOWS) {
-            try {
-                UserDefinedFileAttributeView view = Files.getFileAttributeView(file.toPath(), UserDefinedFileAttributeView.class);
-
-                ByteBuffer buf = ByteBuffer.allocate(view.size(key));
-                view.read(key, buf);
-                buf.flip();
-                return Charset.defaultCharset().decode(buf).toString();
-            } catch(IOException e) { e.printStackTrace(); }
-        } else if(OSDetection.OSType == OSDetection.OS.MAC) {
-            System.out.println("file path: " + file.getAbsolutePath());
-            String option = "";
-            if(file.isDirectory()) {
-                //option = "-r";
-            }
-            String cmd = "xattr -p " + option + " " + key + " " + file.getAbsolutePath(); //then append the attr command
-            try {
-                String output = command.run(cmd);
-            } catch(IOException e) { e.printStackTrace(); }
-        }
-        return null;
-    }
-    public String removeFileAttr(IronFile file, String key) {
-        if(OSDetection.OSType ==  OSDetection.OS.WINDOWS) {
-            try {
-                return (String) Files.getAttribute(file.toPath(), key);
-            } catch(IOException e) { e.printStackTrace(); }
-        } else if(OSDetection.OSType == OSDetection.OS.MAC) {
-            System.out.println("file path: " + file.getAbsolutePath());
-            String option = "";
-            if (file.isDirectory()) {
-                //option = "-r";
-            }
-            String cmd = "xattr -p " + option + " " + key + " " + file.getAbsolutePath(); //then append the attr command
-            try {
-                String output = command.run(cmd);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }*/
 }

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="launcher.Controller">
    <top>
       <MenuBar id="menubar-pane" fx:id="menubar" BorderPane.alignment="CENTER">
@@ -98,7 +100,7 @@
                               </HBox>
                            </top>
                            <center>
-                              <ListView fx:id="viewTags" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                              <ListView fx:id="searchTags" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
                            </center>
                            <bottom>
                               <Button fx:id="btnSearchRemoveTag" mnemonicParsing="false" onAction="#eventSearchRemoveTag" text="Remove" BorderPane.alignment="CENTER">

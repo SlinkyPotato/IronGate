@@ -30,11 +30,12 @@ public class Controller{
     @FXML private TabPane tabView;
     @FXML private TextField txtAddTag;
     @FXML private TextField txtSearchTag;
+    @FXML private Button btnSearchRemoveTag;
     @FXML private TextField txtNewFolderName;
     @FXML private TextField txtRenameFolder;
     @FXML private MenuBar menubar;
     @FXML private Label dragHereLabel;
-    @FXML private ListView<IronFile> viewTags;
+    @FXML private ListView<String> searchTags;
     @FXML private ListView<String> viewExistTags;
     @FXML private ListView<String> templateListView;
     @FXML private Button saveTemplateButton;
@@ -54,6 +55,16 @@ public class Controller{
             ObservableList<TreeItem<String>> selected = templateEditor.getSelected();
             if(selected.size() == 1 && selected.get(0).getValue() != null) { //fill in folder name if only one is selected
                 txtRenameFolder.setText(selected.get(0).getValue());
+            }
+        });
+
+        dirTree.setOnMouseClicked(args -> {
+            ObservableList<TreeItem<IronFile>> selected = manager.getSelected();
+            if(selected.size() == 1 && selected.get(0).getValue() != null) { //if we are selecting 1 valid file
+                System.out.println(selected.get(0).getValue().getTags());
+                ObservableList<String> tags = FXCollections.observableArrayList(selected.get(0).getValue().getTags());
+                System.out.println("# of tags: " + tags.size());
+                viewExistTags.setItems(tags);
             }
         });
 
@@ -88,12 +99,12 @@ public class Controller{
             boolean success = false;
             if(db.hasFiles()) {
                 IronFile[] roots = IronFile.convertFiles(db.getFiles()); // multi-folder drag and drop
-                manager.setRootDirectory(roots);
-                manager.checkTags(roots);
-                viewExistTags.setItems(FolderViewManager.availableTags);
+                manager.setRootDirectory(roots, null);
+                //manager.checkTags(roots);
+                //viewExistTags.setItems(FolderViewManager.availableTags);
                 success = true;
                 dragHereLabel.setText("");
-                dragHereLabel.setMaxWidth(0);
+                dragHereLabel.setMaxWidth(0); //get rid of prompt text once user has dragged in files
             }
             args.setDropCompleted(success);
         });
@@ -104,21 +115,15 @@ public class Controller{
      * Method name must match SimpleGUI.fxml assigned `on Action`
      * */
     @FXML private void eventAddTag() {
-        ObservableList<TreeItem<IronFile>> treeIronFileList = dirTree.getSelectionModel().getSelectedItems();
-        ObservableList<IronFile> selectedIronFiles = FXCollections.observableArrayList();
-        /* The following line converts ObservableList<TreeItem<IronFile> into ObservableList<IronFile> which is needed to display just the names.*/
-        selectedIronFiles.addAll(treeIronFileList.stream().map(TreeItem::getValue).collect(Collectors.toList()));
-        manager.setTags(selectedIronFiles, txtAddTag.getText());
-        ObservableList<String> tagsList = FXCollections.observableArrayList(txtAddTag.getText());
-        tagsList.addAll(viewExistTags.getItems());
-        viewExistTags.setItems(tagsList);
+        manager.setTags(dirTree.getSelectionModel().getSelectedItems(), txtAddTag.getText());
+        viewExistTags.getItems().add(txtAddTag.getText());
     }
     @FXML private void eventRemoveTag() {
         ObservableList<String> allTags = viewExistTags.getItems();
         ObservableList<String> selectedTagsList = viewExistTags.getSelectionModel().getSelectedItems();
-        ObservableList<String> cleanTagList = FXCollections.observableArrayList();
-        manager.deleteTags(selectedTagsList);
+        manager.deleteTags(dirTree.getSelectionModel().getSelectedItems(), selectedTagsList);
         /* Create list that does not contain removed tags */
+        ObservableList<String> cleanTagList = FXCollections.observableArrayList();
         cleanTagList.addAll(allTags.stream().filter(tag -> !selectedTagsList.contains(tag)).collect(Collectors.toList())); // checkout java 8 .stream() and .collect()
         viewExistTags.setItems(cleanTagList);
     }
@@ -126,12 +131,21 @@ public class Controller{
      * On Click event that will search and display files based on entered tag
      * */
     @FXML private void eventSearchTag() {
-        ObservableList<IronFile> taggedItems = manager.getTaggedItems(txtSearchTag.getText());
-        viewTags.setItems(taggedItems);
+        searchTags.getItems().add(txtSearchTag.getText());
+        ObservableList<String> tags = searchTags.getItems();
+        manager.filterTreeView(tags);
     }
 
     @FXML private void eventSearchRemoveTag() {
-//        ObservableList<TreeItem<IronFile>> treeIronFile
+        ObservableList<String> tags = searchTags.getSelectionModel().getSelectedItems();
+
+        if(tags != null && tags.size() > 0) {
+            ObservableList<String> cleanTagList = FXCollections.observableArrayList();
+            cleanTagList.addAll(tags.stream().filter(tag -> !tags.contains(tag)).collect(Collectors.toList())); // checkout java 8 .stream() and .collect()
+            searchTags.setItems(cleanTagList);
+        }
+
+        manager.filterTreeView(searchTags.getItems());
     }
 
     /**
@@ -154,7 +168,7 @@ public class Controller{
         templateEditor.deleteSelectedItems();
     }
 
-    @FXML private void onSetFolderNameClick(MouseEvent event) { //ironically this is giving problems
+    @FXML private void onSetFolderNameClick(MouseEvent event) {
         List<TreeItem<String>> selected = templateEditor.getSelected();
         if(!txtRenameFolder.getText().equals("")) {
             for(TreeItem<String> item : selected) {

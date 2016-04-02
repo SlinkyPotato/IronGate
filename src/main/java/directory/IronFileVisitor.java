@@ -21,7 +21,6 @@ public class IronFileVisitor extends SimpleFileVisitor<Path> {
 
     @Override
     public FileVisitResult visitFile(Path pathFile, BasicFileAttributes attrs) throws IOException {
-        addExistTag(pathFile);
         System.out.printf("Visiting file %s\n", pathFile);
         return FileVisitResult.CONTINUE;
     }
@@ -51,17 +50,17 @@ public class IronFileVisitor extends SimpleFileVisitor<Path> {
 
     @Override
     public FileVisitResult postVisitDirectory(Path pathFile, IOException e) throws IOException {
-        addExistTag(pathFile);
         return FileVisitResult.CONTINUE;
     }
 
-    private void addExistTag(Path pathFile) {
-        IronFile current = new IronFile(pathFile.toFile());
-        if (!current.getTag().isEmpty()) {
-            FolderViewManager.taggedItems.add(current);
-            FolderViewManager.availableTags.add(current.getTag());
-        }
-    }
+//    private void addExistTag(Path pathFile) {
+//        IronFile current = new IronFile(pathFile.toFile());
+//        System.out.println("visiting: " + current.getName());
+//        if (!current.getTags().isEmpty()) {
+//            FolderViewManager.taggedItems.add(current);
+//            FolderViewManager.availableTags.addAll(current.getTags());
+//        }
+//    }
 
     public TreeItem<IronFile> getRoot() {
         return root;
