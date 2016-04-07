@@ -33,6 +33,7 @@ public class FolderViewManager {
      * Folder View Manager constructor, initializes the view for the file browser
      */
     public FolderViewManager(TreeView<IronFile> dirTree) {
+        roots = null;
         view = dirTree;
         view.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // enable multi-select
     }
@@ -47,9 +48,7 @@ public class FolderViewManager {
         view.setRoot(rootItem);
     }
 
-    public boolean hasRoot() {
-        return (view.getRoot() != null);
-    }
+    public boolean hasRoot() { return (roots != null && roots.length > 0); }
 
     /**
      * Overloaded method that sets a collection of folders/files as file browser view.
@@ -86,26 +85,13 @@ public class FolderViewManager {
         }
     }
 
-    public void filterTreeView(ObservableList<String> tags) {
+    public void filterTreeView(ObservableList<String> tags) { //searches based on
         ObservableList<TreeItem<IronFile>> roots = view.getRoot().getChildren();
         IronFile[] fileRoots = new IronFile[view.getRoot().getChildren().size()];
         for(int i = 0; i < fileRoots.length; i++) { //convert to standard array
             fileRoots[i] = roots.get(i).getValue();
         }
         setRootDirectory(fileRoots, tags);
-    }
-
-    private void walkTreeView(TreeItem<IronFile> root, ObservableList<String> tags) {
-        for(TreeItem<IronFile> child : root.getChildren()) {
-            for(String tag : tags) {
-                if(!child.getValue().getTags().contains(tag)) { //if file does NOT contain a search tag
-                    root.getChildren().remove(child);
-                }
-            }
-            if(!child.isLeaf()) {
-                walkTreeView(child, tags);
-            }
-        }
     }
 
     /**

@@ -115,17 +115,21 @@ public class Controller{
      * Method name must match SimpleGUI.fxml assigned `on Action`
      * */
     @FXML private void eventAddTag() {
-        manager.setTags(dirTree.getSelectionModel().getSelectedItems(), txtAddTag.getText());
-        viewExistTags.getItems().add(txtAddTag.getText());
+        if(manager.hasRoot()) {
+            manager.setTags(dirTree.getSelectionModel().getSelectedItems(), txtAddTag.getText());
+            viewExistTags.getItems().add(txtAddTag.getText());
+        }
     }
     @FXML private void eventRemoveTag() {
-        ObservableList<String> allTags = viewExistTags.getItems();
-        ObservableList<String> selectedTagsList = viewExistTags.getSelectionModel().getSelectedItems();
-        manager.deleteTags(dirTree.getSelectionModel().getSelectedItems(), selectedTagsList);
+        if(manager.hasRoot()) {
+            ObservableList<String> allTags = viewExistTags.getItems();
+            ObservableList<String> selectedTagsList = viewExistTags.getSelectionModel().getSelectedItems();
+            manager.deleteTags(dirTree.getSelectionModel().getSelectedItems(), selectedTagsList);
         /* Create list that does not contain removed tags */
-        ObservableList<String> cleanTagList = FXCollections.observableArrayList();
-        cleanTagList.addAll(allTags.stream().filter(tag -> !selectedTagsList.contains(tag)).collect(Collectors.toList())); // checkout java 8 .stream() and .collect()
-        viewExistTags.setItems(cleanTagList);
+            ObservableList<String> cleanTagList = FXCollections.observableArrayList();
+            cleanTagList.addAll(allTags.stream().filter(tag -> !selectedTagsList.contains(tag)).collect(Collectors.toList())); // checkout java 8 .stream() and .collect()
+            viewExistTags.setItems(cleanTagList);
+        }
     }
     /**
      * On Click event that will search and display files based on entered tag
@@ -133,19 +137,27 @@ public class Controller{
     @FXML private void eventSearchTag() {
         searchTags.getItems().add(txtSearchTag.getText());
         ObservableList<String> tags = searchTags.getItems();
-        manager.filterTreeView(tags);
+
+        if(manager.hasRoot())
+            manager.filterTreeView(tags);
     }
 
     @FXML private void eventSearchRemoveTag() {
         ObservableList<String> tags = searchTags.getSelectionModel().getSelectedItems();
-
         if(tags != null && tags.size() > 0) {
             ObservableList<String> cleanTagList = FXCollections.observableArrayList();
-            cleanTagList.addAll(tags.stream().filter(tag -> !tags.contains(tag)).collect(Collectors.toList())); // checkout java 8 .stream() and .collect()
+            //cleanTagList.addAll(tags.stream().filter(tag ->  !searchTags.getItems().contains(tag)).collect(Collectors.toList())); // checkout java 8 .stream() and .collect()
+            //line above not working for some reason, expanded loop below works
+            for(String t : searchTags.getItems()) {
+                if(!tags.contains(t)) {
+                    cleanTagList.add(t);
+                }
+            }
             searchTags.setItems(cleanTagList);
-        }
 
-        manager.filterTreeView(searchTags.getItems());
+            if(manager.hasRoot())
+                manager.filterTreeView(searchTags.getItems());
+        }
     }
 
     /**
@@ -153,7 +165,6 @@ public class Controller{
      * */
 
     @FXML private void onAddFolderClick(MouseEvent event) {
-
         if(!txtNewFolderName.getText().equals("")) {
 
             TreeItem<String> folderItem = new TreeItem<>(txtNewFolderName.getText());
