@@ -127,6 +127,13 @@ public class Controller{
         cleanTagList.addAll(allTags.stream().filter(tag -> !selectedTagsList.contains(tag)).collect(Collectors.toList())); // checkout java 8 .stream() and .collect()
         viewExistTags.setItems(cleanTagList);
     }
+
+    @FXML private void onAutoTagClick() {
+        ObservableList<TreeItem<IronFile>> selected = dirTree.getSelectionModel().getSelectedItems();
+        if(selected.size() > 0) {
+            manager.autoTagSelected(selected);
+        }
+    }
     /**
      * On Click event that will search and display files based on entered tag
      * */

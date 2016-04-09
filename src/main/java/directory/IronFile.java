@@ -35,6 +35,7 @@ public class IronFile extends File implements Serializable {
     public IronFile(String pathname) {
         super(pathname);
         isRoot = (getParent() == null);
+        localTags = new ArrayList<>();
         filter = new IronFileFilter();
         fileAttributeView = Files.getFileAttributeView(this.toPath(), UserDefinedFileAttributeView.class);
         cmd = new CmdExecutor();
@@ -66,6 +67,19 @@ public class IronFile extends File implements Serializable {
     @Override
     public IronFile[] listFiles() {
         return convertFiles(super.listFiles());
+    }
+
+    public String getExtension() {
+        String path = getPath();
+        String ext = null;
+        int slashUnix = path.lastIndexOf("/");
+        int slashWin = path.lastIndexOf("\\");
+        int existingSlash = Math.max(slashUnix, slashWin);
+        if(existingSlash > -1) {
+            String fullName = path.substring(existingSlash, path.length());
+            ext = fullName.split("\\.")[1];
+        }
+        return ext;
     }
 
     /**
@@ -152,16 +166,17 @@ public class IronFile extends File implements Serializable {
     }
 
     public void setTag(String tag) {
-        System.out.println(tag);
-        try {
-            if(OsUtils.isCompatible()) {
-                setFileAttribute(tag);
-            } else {
-                setFileAttrMac(tag);
+        if(!localTags.contains(tag)) {
+            try {
+                if (OsUtils.isCompatible()) {
+                    setFileAttribute(tag);
+                } else {
+                    setFileAttrMac(tag);
+                }
+                localTags.add(tag);
+            } catch (IOException e) {
+                System.out.println("FAILED: tag could not be set.");
             }
-            localTags.add(tag);
-        } catch (IOException e) {
-            System.out.println("FAILED: tag could not be set.");
         }
     }
 

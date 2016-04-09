@@ -22,6 +22,7 @@ public class FileTreeItem extends TreeItem<IronFile> implements Serializable {
 
     public FileTreeItem(IronFile rootFile) {
         super(rootFile);
+        searchCriteria = FXCollections.emptyObservableList();
     }
     public FileTreeItem(IronFile rootFile, ObservableList<String> tags) {
         super(rootFile);

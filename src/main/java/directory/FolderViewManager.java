@@ -11,7 +11,9 @@ import utils.OsUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * This class handles manipulation of the Folder View. This includes
@@ -95,17 +97,69 @@ public class FolderViewManager {
         setRootDirectory(fileRoots, tags);
     }
 
-    private void walkTreeView(TreeItem<IronFile> root, ObservableList<String> tags) {
-        for(TreeItem<IronFile> child : root.getChildren()) {
-            for(String tag : tags) {
-                if(!child.getValue().getTags().contains(tag)) { //if file does NOT contain a search tag
-                    root.getChildren().remove(child);
+    /**
+     * Automatically tags selected folders and their descendants based on the names of their parents
+     * @param selectedItems collection of selected folders/files
+     */
+    public void autoTagSelected(ObservableList<TreeItem<IronFile>> selectedItems) {
+        IronTreeWalkAction autoTagAction = new IronTreeWalkAction() {
+            private Stack<String> tagStack = new Stack<>();
+
+            @Override
+            public void visitChild(TreeItem<IronFile> item) {
+                Iterator<String> tagIterator = tagStack.iterator();
+                IronFile file = item.getValue();
+                file.setTag(file.getName());
+                while (tagIterator.hasNext()) {
+                    file.setTag(tagIterator.next());
+                }
+
+                //use extension to get further related tags
+                if(item.isLeaf()) {
+                    String extension = file.getExtension();
+                    ExtensionMatcher matcher = new ExtensionMatcher();
+                    List<String> related = matcher.getRelated(extension);
+                    if(related != null && related.size() > 0) {
+                        for(String tag : related) {
+                            file.setTag(tag);
+                        }
+                    }
                 }
             }
+
+            @Override
+            public void preVisitDirectory(TreeItem<IronFile> folder) {
+                IronFile f = folder.getValue();
+                tagStack.push(f.getName());
+                f.setTag(f.getName());
+            }
+
+            @Override
+            public void postVisitDirectory(TreeItem<IronFile> folder) {
+                tagStack.pop();
+            }
+        };
+
+        for(TreeItem<IronFile> roots : selectedItems) {
+            walkTreeView(roots, autoTagAction);
+        }
+    }
+
+    /**
+     *
+     * @param root the folder/file to start the traversal from
+     * @param walkAction a class that provides actions during the tree traversal
+     */
+    private void walkTreeView(TreeItem<IronFile> root, IronTreeWalkAction walkAction) {
+        walkAction.preVisitDirectory(root);
+        for(TreeItem<IronFile> child : root.getChildren()) {
+            System.out.println(child.getValue().getName());
+            walkAction.visitChild(child);
             if(!child.isLeaf()) {
-                walkTreeView(child, tags);
+                walkTreeView(child, walkAction);
             }
         }
+        walkAction.postVisitDirectory(root);
     }
 
     /**

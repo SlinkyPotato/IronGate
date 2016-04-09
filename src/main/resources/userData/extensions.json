@@ -1,0 +1,11 @@
+{
+  "java" : [
+    "IntelliJ", "Eclipse", "Software", "Programming", "Code", "Oracle", "NetBeans", "Java"
+  ],
+  "txt" : [
+    "Notepad", "Notepad++", "Microsoft", "Word", "Sublime", "text", "TextEdit", "txt"
+  ],
+  "jpg" : [
+    "images", "pictures", "jpg", "photoshop", "preview", "adobe", "gimp"
+  ]
+}
