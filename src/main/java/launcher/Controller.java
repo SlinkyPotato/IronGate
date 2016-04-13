@@ -6,10 +6,14 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.stage.Popup;
+import javafx.stage.Window;
 
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -33,16 +37,22 @@ public class Controller{
     @FXML private Button btnSearchRemoveTag;
     @FXML private TextField txtNewFolderName;
     @FXML private TextField txtRenameFolder;
+    @FXML private TextField deleteFileTextField;
     @FXML private MenuBar menubar;
     @FXML private Label dragHereLabel;
+    @FXML private Label errorListLabel; //label for error when deleting files
     @FXML private ListView<String> searchTags;
     @FXML private ListView<String> viewExistTags;
     @FXML private ListView<String> templateListView;
+    @FXML private ListView<String> deleteFilesList;
+    @FXML private ListView<String> errorFileList;
     @FXML private Button saveTemplateButton;
+    @FXML private VBox autoOrganizePanel;
     private FolderViewManager manager;
     private EditorViewManager templateEditor;
 
     @FXML private void initialize() {
+
         dirTree.setCellFactory(FileViewTreeCell::new); //use custom tree cell for drag and drop
         editorView.setCellFactory(EditorTreeCell::new);
         templateListView.setCellFactory(TemplateListCell::new);
@@ -63,14 +73,17 @@ public class Controller{
             if(selected.size() == 1 && selected.get(0).getValue() != null) { //if we are selecting 1 valid file
                 System.out.println(selected.get(0).getValue().getTags());
                 ObservableList<String> tags = FXCollections.observableArrayList(selected.get(0).getValue().getTags());
-                System.out.println("# of tags: " + tags.size());
                 viewExistTags.setItems(tags);
             }
         });
 
-        //when Editor is closed, remove "save template" button, no need for it to be visible
+
+        errorListLabel.setVisible(false);
+        errorFileList.setVisible(false); //hide error message and list of deleted files
+
         saveTemplateButton.setVisible(false);
-        saveTemplateButton.setManaged(false);
+        saveTemplateButton.setManaged(false); //when Editor is closed, remove "save template" button, no need for it to be visible
+
         tabView.getSelectionModel().selectedItemProperty().addListener((ov, oldTab, newTab) -> {
 
             int index = tabView.getSelectionModel().getSelectedIndex();
@@ -108,6 +121,14 @@ public class Controller{
             }
             args.setDropCompleted(success);
         });
+
+        Popup popup = new Popup();
+        popup.setX(300);
+        popup.setY(200);
+        popup.setWidth(200);
+        popup.setHeight(50);
+        popup.getContent().addAll(new Circle(25, 25, 50, Color.AQUAMARINE));
+        popup.show(scene.getWindow());
     }
 
     /**
@@ -145,16 +166,45 @@ public class Controller{
 
     @FXML private void eventSearchRemoveTag() {
         ObservableList<String> tags = searchTags.getSelectionModel().getSelectedItems();
-
-        if(tags != null && tags.size() > 0) {
-            ObservableList<String> cleanTagList = FXCollections.observableArrayList();
-            cleanTagList.addAll(tags.stream().filter(tag -> !tags.contains(tag)).collect(Collectors.toList())); // checkout java 8 .stream() and .collect()
-            searchTags.setItems(cleanTagList);
+        ObservableList<String> cleanList = manager.getFilteredList(tags);
+        if(cleanList != null) {
+            searchTags.setItems(cleanList);
         }
 
         manager.filterTreeView(searchTags.getItems());
     }
 
+    /**
+     * Events for deleting files
+     * */
+
+    @FXML private void onDeleteFileListRemove(MouseEvent event) {
+        ObservableList<String> tags = deleteFilesList.getSelectionModel().getSelectedItems();
+        ObservableList<String> cleanList = manager.getFilteredList(tags);
+        if(cleanList != null) {
+            deleteFilesList.setItems(cleanList);
+        }
+    }
+
+    @FXML private void onDeleteFileWithTagAdd(KeyEvent event) {
+        String tag = deleteFileTextField.getText();
+        if(event.getCode() == KeyCode.ENTER && tag != null) {
+            if(!deleteFilesList.getItems().contains(tag)) {
+                deleteFilesList.getItems().add(tag);
+            }
+        }
+    }
+
+    @FXML private void onDeleteFiles(MouseEvent event) {
+        manager.deleteFiles(dirTree.getSelectionModel().getSelectedItems(), deleteFilesList.getItems(), errorFileList);
+        if(errorFileList.getItems().size() > 0) {
+            errorFileList.setVisible(true);
+            errorListLabel.setVisible(true);
+        } else {
+            errorFileList.setVisible(false);
+            errorListLabel.setVisible(false);
+        }
+    }
     /**
      * Events for creating templates
      * */
@@ -179,7 +229,6 @@ public class Controller{
         List<TreeItem<String>> selected = templateEditor.getSelected();
         if(!txtRenameFolder.getText().equals("")) {
             for(TreeItem<String> item : selected) {
-                System.out.println("renamed folder to " + txtRenameFolder.getText());
                 item.setValue(txtRenameFolder.getText());
 
             }
@@ -190,6 +239,14 @@ public class Controller{
         if(!templateEditor.isEmpty()) {
             templateEditor.saveToJSON();
         }
+    }
+
+    /**
+     * keyboard shortcuts
+     * */
+
+    @FXML private void onShortcutPressed(KeyEvent e) {
+
     }
 
 }

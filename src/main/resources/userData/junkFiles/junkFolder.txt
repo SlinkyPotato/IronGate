@@ -1,0 +1,8 @@
+*******THIS IS A JUNK FOLDER******
+
+All deleted files in the application go to this directory.
+
+***WARNING***
+
+Deleting this folder will delete all files within it. Be sure that there is nothing
+you want to keep in this folder.

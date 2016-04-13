@@ -77,7 +77,10 @@ public class IronFile extends File implements Serializable {
         int existingSlash = Math.max(slashUnix, slashWin);
         if(existingSlash > -1) {
             String fullName = path.substring(existingSlash, path.length());
-            ext = fullName.split("\\.")[1];
+            String[] split = fullName.split("\\.");
+            if(split.length > 1)
+                ext = split[1];
+
         }
         return ext;
     }
@@ -160,8 +163,6 @@ public class IronFile extends File implements Serializable {
 
             } catch(Exception e) { e.printStackTrace(); }
         }
-        System.out.println("local tags exist...");
-        System.out.println(localTags.isEmpty());
         return localTags;
     }
 
@@ -205,7 +206,6 @@ public class IronFile extends File implements Serializable {
     private String getFileAttrMac(String key) throws IOException {
         String command = "xattr -p '" + key +  "' '" + getAbsolutePath() + "'"; //then append the attr command
         String output = cmd.runCmd(command);
-        System.out.println("mac get attr output: " + output);
         return output;
     }
 
@@ -213,7 +213,6 @@ public class IronFile extends File implements Serializable {
         //String option = (isDirectory()) ? "-r" : ""; //make optional in GUI
         String command = "xattr -d '" + key +  "' '" + getAbsolutePath() + "'"; //then append the attr command
         String output = cmd.runCmd(command);
-        System.out.println("mac remove attr output: " + output);
         return output;
     }
 
@@ -230,9 +229,7 @@ public class IronFile extends File implements Serializable {
     private String[] getAllAttrMac() throws IOException {
         String command = "xattr '" + getAbsolutePath() + "'"; //then append the attr command
         String output = cmd.runCmd(command);
-        System.out.println("all tags: " + output);
         String[] tagArr = output.split(" ");
-        System.out.println(tagArr);
         return tagArr;
 
     }

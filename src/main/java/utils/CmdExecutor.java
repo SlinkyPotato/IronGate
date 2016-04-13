@@ -24,16 +24,14 @@ public class CmdExecutor {
 
         String line;
         String error = errorReader.readLine();
-
-        System.out.println("Below is command output: \n ");
         String result = "";
         while ((line = outputReader.readLine()) != null) {
-            System.out.println("cmd output: " + line);
+            //System.out.println("cmd output: " + line);
             result += " " + line;
         }
 
         while (error != null) {
-            System.out.println("error output: " + error);
+            //System.out.println("error output: " + error);
             error = errorReader.readLine();
         }
         outputReader.close();

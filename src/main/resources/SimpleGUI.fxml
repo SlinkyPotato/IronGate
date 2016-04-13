@@ -18,7 +18,7 @@
             <Menu mnemonicParsing="false" text="Edit">
                <items>
                   <MenuItem mnemonicParsing="false" text="Delete" />
-                  <MenuItem mnemonicParsing="false" text="Undo" />
+                  <MenuItem mnemonicParsing="false" onAction="#undo" text="Undo" />
                   <MenuItem mnemonicParsing="false" text="Redo" />
                </items>
             </Menu>
@@ -47,7 +47,7 @@
                <content>
                   <StackPane prefHeight="150.0" prefWidth="200.0">
                      <children>
-                        <TreeView id="folder-view-pane" fx:id="dirTree" prefHeight="200.0" prefWidth="200.0" />
+                        <TreeView id="folder-view-pane" fx:id="dirTree" onKeyPressed="#onShortcutPressed" prefHeight="200.0" prefWidth="200.0" />
                         <Label id="dragHereLabel" fx:id="dragHereLabel" alignment="CENTER" prefHeight="68.0" prefWidth="160.0" text="Drag files here" textAlignment="JUSTIFY">
                            <font>
                               <Font size="18.0" />
@@ -75,9 +75,9 @@
       </TabPane>
    </center>
    <left>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <BorderPane prefHeight="451.0" prefWidth="209.0" BorderPane.alignment="CENTER">
          <center>
-            <Accordion BorderPane.alignment="CENTER">
+            <Accordion prefHeight="418.0" prefWidth="203.0" BorderPane.alignment="CENTER">
                <panes>
                   <TitledPane animated="false" text="Search">
                      <content>
@@ -119,18 +119,17 @@
                      <content>
                         <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
                            <items>
-                              <VBox alignment="CENTER">
+                              <VBox fx:id="autoOrganizePanel" alignment="CENTER">
                                  <children>
                                     <BorderPane prefHeight="129.0" prefWidth="178.0">
                                        <center>
                                           <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="125.0" prefWidth="150.0" BorderPane.alignment="CENTER">
                                              <children>
-                                                <CheckBox alignment="CENTER" mnemonicParsing="false" prefHeight="26.0" prefWidth="99.0" text="Organize All" textAlignment="CENTER">
+                                                <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="75.0" prefWidth="164.0" text="Automatically organize everything within selected folder based on tags" textAlignment="CENTER" textFill="#6f6d6d" wrapText="true" />
+                                                <CheckBox fx:id="stashUnusedFiles" mnemonicParsing="false" prefHeight="18.0" prefWidth="147.0" text="Stash Unused Files">
                                                    <VBox.margin>
-                                                      <Insets bottom="5.0" />
-                                                   </VBox.margin>
-                                                </CheckBox>
-                                                <CheckBox mnemonicParsing="false" prefHeight="18.0" prefWidth="147.0" text="Stash Unused Files" />
+                                                      <Insets top="20.0" />
+                                                   </VBox.margin></CheckBox>
                                              </children>
                                              <BorderPane.margin>
                                                 <Insets top="5.0" />
@@ -138,7 +137,7 @@
                                           </VBox>
                                        </center>
                                        <bottom>
-                                          <Button mnemonicParsing="false" text="Organize" BorderPane.alignment="CENTER">
+                                          <Button fx:id="autoOrganizeButton" mnemonicParsing="false" text="Organize" BorderPane.alignment="CENTER">
                                              <BorderPane.margin>
                                                 <Insets bottom="10.0" top="25.0" />
                                              </BorderPane.margin>
@@ -168,13 +167,13 @@
                                           </Button>
                                        </bottom>
                                        <center>
-                                          <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="49.0" prefWidth="150.0" BorderPane.alignment="CENTER">
-                                             <children>
-                                                <HBox prefHeight="28.0" prefWidth="150.0" />
-                                             </children>
+                                          <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="49.0" prefWidth="150.0" BorderPane.alignment="CENTER">
                                              <BorderPane.margin>
                                                 <Insets top="5.0" />
                                              </BorderPane.margin>
+                                             <children>
+                                                <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="75.0" prefWidth="164.0" text="Automatically tag everything within selected folder" textAlignment="CENTER" textFill="#6f6d6d" wrapText="true" />
+                                             </children>
                                           </VBox>
                                        </center>
                                        <top>
@@ -208,7 +207,7 @@
                                           <Insets />
                                        </opaqueInsets>
                                        <children>
-                                          <TextField prefHeight="27.0" prefWidth="172.0" promptText="Search Tags...">
+                                          <TextField fx:id="deleteFileTextField" onKeyPressed="#onDeleteFileWithTagAdd" prefHeight="27.0" prefWidth="172.0" promptText="Delete files with tags...">
                                              <HBox.margin>
                                                 <Insets bottom="10.0" top="5.0" />
                                              </HBox.margin>
@@ -217,16 +216,31 @@
                                     </HBox>
                                  </top>
                                  <center>
-                                    <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                                    <ListView fx:id="deleteFilesList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
                                  </center>
                                  <bottom>
-                                    <Button mnemonicParsing="false" text="Delete Files" BorderPane.alignment="CENTER">
-                                       <BorderPane.margin>
-                                          <Insets top="10.0" />
-                                       </BorderPane.margin>
-                                    </Button>
+                                    <HBox alignment="CENTER" prefHeight="30.0" prefWidth="180.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <Button mnemonicParsing="false" onMouseClicked="#onDeleteFiles" prefHeight="27.0" prefWidth="100.0" text="Delete Files">
+                                             <HBox.margin>
+                                                <Insets right="5.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                          <Button mnemonicParsing="false" onMouseClicked="#onDeleteFileListRemove" prefHeight="27.0" prefWidth="100.0" text="Remove" />
+                                       </children>
+                                    </HBox>
                                  </bottom>
                               </BorderPane>
+                              <Label id="errorFileLabel" fx:id="errorListLabel" alignment="CENTER" prefHeight="17.0" prefWidth="187.0" text="Error deleting files" textAlignment="CENTER">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" top="15.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <ListView id="errorFileList" fx:id="errorFileList" prefHeight="200.0" prefWidth="200.0">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" />
+                                 </VBox.margin>
+                              </ListView>
                            </children>
                         </VBox>
                      </content>
@@ -367,7 +381,7 @@
                               <Font name="Droid Sans" size="12.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btnRemoveTag" mnemonicParsing="false" onAction="#eventRemoveTag" prefHeight="27.0" prefWidth="84.0" text="Remove">
+                        <Button fx:id="btnRemoveTag" mnemonicParsing="false" onAction="#eventRemoveTag" prefHeight="27.0" prefWidth="84.0" text="Delete">
                            <font>
                               <Font name="Droid Sans" size="12.0" />
                            </font></Button>
