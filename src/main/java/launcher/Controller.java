@@ -241,12 +241,20 @@ public class Controller{
         }
     }
 
+    @FXML private void undo(MouseEvent e) {
+
+    }
+
     /**
      * keyboard shortcuts
      * */
 
     @FXML private void onShortcutPressed(KeyEvent e) {
-
+        if(e.isShortcutDown()) {
+            if(e.getCode() == KeyCode.Z) { //shortcut for Undo
+                System.out.println("UNDO");
+            }
+        }
     }
 
 }

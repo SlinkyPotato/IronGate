@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="launcher.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onShortcutPressed" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="launcher.Controller">
    <top>
       <MenuBar id="menubar-pane" fx:id="menubar" BorderPane.alignment="CENTER">
          <menus>
@@ -47,7 +47,7 @@
                <content>
                   <StackPane prefHeight="150.0" prefWidth="200.0">
                      <children>
-                        <TreeView id="folder-view-pane" fx:id="dirTree" onKeyPressed="#onShortcutPressed" prefHeight="200.0" prefWidth="200.0" />
+                        <TreeView id="folder-view-pane" fx:id="dirTree" prefHeight="200.0" prefWidth="200.0" />
                         <Label id="dragHereLabel" fx:id="dragHereLabel" alignment="CENTER" prefHeight="68.0" prefWidth="160.0" text="Drag files here" textAlignment="JUSTIFY">
                            <font>
                               <Font size="18.0" />
