@@ -241,7 +241,6 @@ public class FolderViewManager {
             walkAction.visitChild(root);
         }
         walkAction.postVisitDirectory(root);
-
     }
 
 }
