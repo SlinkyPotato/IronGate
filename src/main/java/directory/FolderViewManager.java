@@ -15,10 +15,7 @@ import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileSystemUtils;
@@ -38,23 +35,22 @@ public class FolderViewManager {
     private TreeView<IronFile> view;
     private IronFile[] roots;
     public static List<TreeItem<IronFile>> draggedItems; //use this to store items being dragged, because ClipBoard is a pain in the ass
-
+    private HashSet<TreeItem<IronFile>> searchResults;
     /**
      * Folder View Manager constructor, initializes the view for the file browser
      */
     public FolderViewManager(TreeView<IronFile> dirTree) {
         view = dirTree;
         view.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // enable multi-select
+        searchResults = new HashSet<>();
     }
 
-    /**
-     * Sets the root directory of the file browser to the specified folder.
-     *
-     * @param file root folder/file to start browser view
-     **/
-    public void setRootDirectory(IronFile file) {
-        FileTreeItem rootItem = new FileTreeItem(file);
-        view.setRoot(rootItem);
+    public IronFile[] getRoots() { return roots; }
+
+    public void setRootDirectory(TreeItem<IronFile> itemRoot) {
+        TreeItem<IronFile> blankRoot = new FileTreeItem(new IronFile("")); // needs a blank file as root
+        blankRoot.getChildren().add(itemRoot);
+        view.setRoot(blankRoot);
     }
 
     public ObservableList<String> getFilteredList(ObservableList<String> list) {
@@ -71,11 +67,11 @@ public class FolderViewManager {
      *
      * @param roots a collection of root folders to being from root
      */
-    public void setRootDirectory(IronFile[] roots, ObservableList<String> tags) {
+    public void setRootDirectory(IronFile[] roots) {
         this.roots = roots;
         view.setRoot(new FileTreeItem(new IronFile(""))); // needs a blank file as root
         for (IronFile hdd : roots) {
-            FileTreeItem diskTreeItem = new FileTreeItem(hdd, tags);
+            FileTreeItem diskTreeItem = new FileTreeItem(hdd);
             diskTreeItem.setGraphic(new ImageView(hddIcon));
             view.getRoot().getChildren().add(diskTreeItem);
         }
@@ -100,14 +96,38 @@ public class FolderViewManager {
         }
     }
 
-    public void filterTreeViewOld(ObservableList<String> tags) {
+
+
+    public void getSearchResults(ObservableList<String> tags) {
+
         ObservableList<TreeItem<IronFile>> roots = view.getRoot().getChildren();
-        if(roots != null && roots.size() > 0) {
-            IronFile[] fileRoots = new IronFile[view.getRoot().getChildren().size()];
-            for(int i = 0; i < fileRoots.length; i++) { //convert to standard array
-                fileRoots[i] = roots.get(i).getValue();
+
+        if(roots != null && tags != null && tags.size() > 0) {
+            LinkedList<TreeItem<IronFile>> visitQueue = new LinkedList<>();
+            for(TreeItem<IronFile> root : roots) {
+                visitQueue.add(root);
             }
-            setRootDirectory(fileRoots, tags);
+            while(!visitQueue.isEmpty()) {
+                TreeItem<IronFile> parent = visitQueue.remove();
+                if(parent.getValue().meetsCriteria(tags)) {
+                    searchResults.add(parent);
+                } else {
+                    for(TreeItem<IronFile> child : parent.getChildren()) {
+                        visitQueue.add(child);
+                    }
+                }
+            }
+        }
+
+        displaySearchResults();
+    }
+
+    private void displaySearchResults() {
+        if(searchResults.size() > 0) {
+            FileTreeItem resultRoot = new FileTreeItem(new IronFile("Search Results"));
+            resultRoot.getChildren().addAll(searchResults);
+            setRootDirectory(resultRoot);
+
         }
     }
 
@@ -215,33 +235,23 @@ public class FolderViewManager {
             }
         };
 
+        IronFileFilter filter = new IronFileFilter();
         for(TreeItem<IronFile> roots : selectedItems) {
-            walkTreeView(roots, autoTagAction, new IronFileFilter());
+            walkTreeView(roots, autoTagAction, filter);
         }
 
         System.out.println("AUTO TAG TIME: " + ((System.currentTimeMillis() / 1000) - startTime) + " seconds");
     }
-
 
     /**
      *
      * @param root the folder/file to start the traversal from
      * @param walkAction a class that performs custom actions during the tree traversal
      */
-
-    private void inPlaceTreeWalk(TreeItem<IronFile> root, IronTreeWalkAction walkAction, IronFileFilter filter) {
-        Iterator<TreeItem<IronFile>> iterator = root.getChildren().iterator();
-        TreeItem<IronFile> item = iterator.next();
-        while(iterator.hasNext()) {
-            walkAction.visitChild(item);
-
-        }
-    }
-
     private void walkTreeView(TreeItem<IronFile> root, IronTreeWalkAction walkAction, IronFileFilter filter) {
         walkAction.preVisitDirectory(root);
         if(!root.isLeaf()) {
-            for(TreeItem<IronFile> child : root.getChildren()) {
+            for (TreeItem<IronFile> child : root.getChildren()) {
                 walkAction.visitChild(child);
                 if (!child.isLeaf() && filter.accept(child.getValue(), child.getValue().getName())) {
                     walkTreeView(child, walkAction, filter);
@@ -251,6 +261,7 @@ public class FolderViewManager {
             walkAction.visitChild(root);
         }
         walkAction.postVisitDirectory(root);
+
     }
 
 }

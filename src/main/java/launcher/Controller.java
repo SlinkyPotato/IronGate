@@ -112,7 +112,7 @@ public class Controller{
             boolean success = false;
             if(db.hasFiles()) {
                 IronFile[] roots = IronFile.convertFiles(db.getFiles()); // multi-folder drag and drop
-                manager.setRootDirectory(roots, null);
+                manager.setRootDirectory(roots);
                 //manager.checkTags(roots);
                 //viewExistTags.setItems(FolderViewManager.availableTags);
                 success = true;
@@ -161,8 +161,8 @@ public class Controller{
     @FXML private void eventSearchTag() {
         searchTags.getItems().add(txtSearchTag.getText().trim());
         ObservableList<String> tags = searchTags.getItems();
-        if(searchTags.getItems().size() > 0)
-            manager.filterTreeViewOld(tags);
+        manager.setRootDirectory(manager.getRoots());
+        manager.getSearchResults(tags);
     }
 
     @FXML private void eventSearchRemoveTag() {
@@ -170,7 +170,9 @@ public class Controller{
         for(String t : tags) {
             searchTags.getItems().remove(t);
         }
-        manager.filterTreeViewOld(searchTags.getItems());
+
+        manager.setRootDirectory(manager.getRoots());
+        manager.getSearchResults(searchTags.getItems());
     }
 
     /**

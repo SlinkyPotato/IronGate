@@ -38,6 +38,10 @@ public class ExtensionMatcher {
         try {
             JSONArray array = (JSONArray) json.get(ext);
             array.forEach(obj -> related.add((String) obj));
+            for(Object rlt : array) {
+                String rltTag = (String) rlt;
+                related.add(rltTag.toLowerCase());
+            }
         } catch(Exception e) { System.out.println("no matching extension for " + ext); }
         return related;
     }
