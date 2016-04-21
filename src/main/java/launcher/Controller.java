@@ -70,7 +70,7 @@ public class Controller{
 
         dirTree.setOnMouseClicked(args -> {
             ObservableList<TreeItem<IronFile>> selected = manager.getSelected();
-            if(selected.size() == 1 && selected.get(0).getValue() != null) { //if we are selecting 1 valid file
+            if(selected != null && selected.size() == 1 && selected.get(0).getValue() != null) { //if we are selecting 1 valid file
                 System.out.println(selected.get(0).getValue().getTags());
                 ObservableList<String> tags = FXCollections.observableArrayList(selected.get(0).getValue().getTags());
                 viewExistTags.setItems(tags);
@@ -112,7 +112,7 @@ public class Controller{
             boolean success = false;
             if(db.hasFiles()) {
                 IronFile[] roots = IronFile.convertFiles(db.getFiles()); // multi-folder drag and drop
-                manager.setRootDirectory(roots, null);
+                manager.setRootDirectory(roots);
                 //manager.checkTags(roots);
                 //viewExistTags.setItems(FolderViewManager.availableTags);
                 success = true;
@@ -161,7 +161,8 @@ public class Controller{
     @FXML private void eventSearchTag() {
         searchTags.getItems().add(txtSearchTag.getText());
         ObservableList<String> tags = searchTags.getItems();
-        manager.filterTreeView(tags);
+        manager.setRootDirectory(manager.getRoots());
+        manager.getSearchResults(tags);
     }
 
     @FXML private void eventSearchRemoveTag() {
@@ -171,7 +172,8 @@ public class Controller{
             searchTags.setItems(cleanList);
         }
 
-        manager.filterTreeView(searchTags.getItems());
+        manager.setRootDirectory(manager.getRoots());
+        manager.getSearchResults(searchTags.getItems());
     }
 
     /**

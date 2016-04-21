@@ -1,5 +1,6 @@
 package directory;
 
+import javafx.collections.ObservableList;
 import utils.CmdExecutor;
 import utils.IronFileFilter;
 import utils.OsUtils;
@@ -121,25 +122,14 @@ public class IronFile extends File implements Serializable {
         return (isRoot) ? this.getAbsolutePath() : this.getName();
     }
 
-    //check tags through the local list of tags instead of through the file system
-
-//    public String getTag(String tag) {
-//        try {
-//            if(OsUtils.isCompatible()) {
-//                return getFileAttribute(tag);
-//
-//            } else if(OsUtils.isMac()) {
-//                return getFileAttrMac(tag);
-//            }
-//
-//        } catch (IOException e) {
-//            System.out.println("FAILED: tag could not be retrieved.");
-//        }
-//        if(!tags.contains(tag))
-//            tags.add(tag);
-//
-//        return tag;
-//    }
+    public boolean meetsCriteria(ObservableList<String> tags) {
+        for(String t : tags) {
+            if(getTags().contains(t)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public ArrayList<String> getTags() {
         if(localTags.isEmpty()) {
@@ -170,9 +160,9 @@ public class IronFile extends File implements Serializable {
         if(!localTags.contains(tag)) {
             try {
                 if (OsUtils.isCompatible()) {
-                    setFileAttribute(tag);
+                    setFileAttribute(tag.toLowerCase());
                 } else {
-                    setFileAttrMac(tag);
+                    setFileAttrMac(tag.toLowerCase());
                 }
                 localTags.add(tag);
             } catch (IOException e) {
@@ -185,9 +175,9 @@ public class IronFile extends File implements Serializable {
         if(localTags.contains(tag)) {
             try {
                 if(OsUtils.isCompatible()) {
-                    removeFileAttribute(tag);
+                    removeFileAttribute(tag.toLowerCase());
                 } else {
-                    removeFileAttrMac(tag);
+                    removeFileAttrMac(tag.toLowerCase());
                 }
                 localTags.remove(tag);
             } catch (IOException e) {
