@@ -100,7 +100,7 @@ public class FolderViewManager {
         }
     }
 
-    public void filterTreeView(ObservableList<String> tags) {
+    public void filterTreeViewOld(ObservableList<String> tags) {
         ObservableList<TreeItem<IronFile>> roots = view.getRoot().getChildren();
         if(roots != null && roots.size() > 0) {
             IronFile[] fileRoots = new IronFile[view.getRoot().getChildren().size()];
@@ -215,23 +215,33 @@ public class FolderViewManager {
             }
         };
 
-        IronFileFilter filter = new IronFileFilter();
         for(TreeItem<IronFile> roots : selectedItems) {
-            walkTreeView(roots, autoTagAction, filter);
+            walkTreeView(roots, autoTagAction, new IronFileFilter());
         }
 
         System.out.println("AUTO TAG TIME: " + ((System.currentTimeMillis() / 1000) - startTime) + " seconds");
     }
+
 
     /**
      *
      * @param root the folder/file to start the traversal from
      * @param walkAction a class that performs custom actions during the tree traversal
      */
+
+    private void inPlaceTreeWalk(TreeItem<IronFile> root, IronTreeWalkAction walkAction, IronFileFilter filter) {
+        Iterator<TreeItem<IronFile>> iterator = root.getChildren().iterator();
+        TreeItem<IronFile> item = iterator.next();
+        while(iterator.hasNext()) {
+            walkAction.visitChild(item);
+
+        }
+    }
+
     private void walkTreeView(TreeItem<IronFile> root, IronTreeWalkAction walkAction, IronFileFilter filter) {
         walkAction.preVisitDirectory(root);
         if(!root.isLeaf()) {
-            for (TreeItem<IronFile> child : root.getChildren()) {
+            for(TreeItem<IronFile> child : root.getChildren()) {
                 walkAction.visitChild(child);
                 if (!child.isLeaf() && filter.accept(child.getValue(), child.getValue().getName())) {
                     walkTreeView(child, walkAction, filter);

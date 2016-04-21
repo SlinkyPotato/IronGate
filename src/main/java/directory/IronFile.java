@@ -1,5 +1,6 @@
 package directory;
 
+import javafx.collections.ObservableList;
 import utils.CmdExecutor;
 import utils.IronFileFilter;
 import utils.OsUtils;
@@ -26,6 +27,11 @@ public class IronFile extends File implements Serializable {
     private CmdExecutor cmd;
     final private String ATTR_TYPE = "tags.";
     private UserDefinedFileAttributeView fileAttributeView;
+    public enum FilterFlags { HIDE_FILE, SHOW_FILE }
+    private FilterFlags flags;
+
+    public FilterFlags getFlags() { return flags; }
+    public void setFlags(FilterFlags flag) { flags = flag; }
 
     /**
      * Construct an IronFile that extends File
@@ -39,7 +45,9 @@ public class IronFile extends File implements Serializable {
         filter = new IronFileFilter();
         fileAttributeView = Files.getFileAttributeView(this.toPath(), UserDefinedFileAttributeView.class);
         cmd = new CmdExecutor();
-
+        if(isDirectory()) {
+            flags = FilterFlags.HIDE_FILE;
+        } else { flags = FilterFlags.SHOW_FILE; }
     }
 
     /**
@@ -54,6 +62,9 @@ public class IronFile extends File implements Serializable {
         filter = new IronFileFilter();
         fileAttributeView = Files.getFileAttributeView(this.toPath(), UserDefinedFileAttributeView.class);
         cmd = new CmdExecutor();
+        if(isDirectory()) {
+            flags = FilterFlags.HIDE_FILE;
+        } else { flags = FilterFlags.SHOW_FILE; }
     }
 
     /**
@@ -141,6 +152,15 @@ public class IronFile extends File implements Serializable {
 //        return tag;
 //    }
 
+    public boolean meetsCriteria(ObservableList<String> tags) {
+        for(String criteria : tags) {
+            if(!getTags().contains(criteria)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public ArrayList<String> getTags() {
         if(localTags.isEmpty()) {
             try {
@@ -166,6 +186,11 @@ public class IronFile extends File implements Serializable {
         return localTags;
     }
 
+    /**
+     * EDIT THIS so tags entered with spaces have an underscored inserted. Otherwise tags
+     * with spaces are saved as two separate tags
+     * @param tag
+     */
     public void setTag(String tag) {
         if(!localTags.contains(tag)) {
             try {
@@ -231,7 +256,6 @@ public class IronFile extends File implements Serializable {
         String output = cmd.runCmd(command);
         String[] tagArr = output.split(" ");
         return tagArr;
-
     }
 
     private String[] getAllAttributes() throws IOException {

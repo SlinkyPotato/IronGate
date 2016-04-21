@@ -72,6 +72,7 @@ public class FileTreeItem extends TreeItem<IronFile> implements Serializable {
                 ObservableList<FileTreeItem> children = FXCollections.observableArrayList();
                 for (IronFile childFile : files) {
                     if(!searchCriteria.isEmpty()) {
+                        System.out.println(searchCriteria + " VERSUS " + childFile.getTags());
                         for(String tag : searchCriteria) {
                             if(childFile.getTags().contains(tag)) {
                                 children.add(new FileTreeItem(childFile));

@@ -159,19 +159,18 @@ public class Controller{
      * On Click event that will search and display files based on entered tag
      * */
     @FXML private void eventSearchTag() {
-        searchTags.getItems().add(txtSearchTag.getText());
+        searchTags.getItems().add(txtSearchTag.getText().trim());
         ObservableList<String> tags = searchTags.getItems();
-        manager.filterTreeView(tags);
+        if(searchTags.getItems().size() > 0)
+            manager.filterTreeViewOld(tags);
     }
 
     @FXML private void eventSearchRemoveTag() {
         ObservableList<String> tags = searchTags.getSelectionModel().getSelectedItems();
-        ObservableList<String> cleanList = manager.getFilteredList(tags);
-        if(cleanList != null) {
-            searchTags.setItems(cleanList);
+        for(String t : tags) {
+            searchTags.getItems().remove(t);
         }
-
-        manager.filterTreeView(searchTags.getItems());
+        manager.filterTreeViewOld(searchTags.getItems());
     }
 
     /**

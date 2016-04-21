@@ -62,7 +62,7 @@ public class EditorTreeCell extends TreeCell<String> { //only need the name of t
 
         setOnDragDropped(args -> {
             Dragboard db = args.getDragboard();
-            if (db.hasContent(dataFormat)) { //if content exists, then we are dragging a list item, not tree item
+            if (db.hasContent(dataFormat)) { //dropping folder within editor view
                 TreeItem<String> folder = getTreeItem();
                 ObservableList<TreeItem<String>> children = treeView.getRoot().getChildren();
                 for (TreeItem<String> f : EditorViewManager.draggedItems) {
