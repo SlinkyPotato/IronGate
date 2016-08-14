@@ -34,7 +34,7 @@ public final class OsUtils {
         if (isWindows() || isUnix()) {
             return true;
         } else {
-            System.out.println("macs..");
+            System.out.println("OS: MAC");
             return false;
         }
     }

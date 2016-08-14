@@ -14,14 +14,16 @@ public class IronFileFilter implements FilenameFilter, Serializable {
         boolean hidden = false;
         boolean isSymbolic = false;
         boolean isRegularFile = false;
+        boolean extraCriteria = false;
 
         try {
             hidden = Files.isHidden(file.toPath());
             isSymbolic = Files.isSymbolicLink(file.toPath());
             isRegularFile = Files.isRegularFile(file.toPath());
+            extraCriteria = name.startsWith(".");
         } catch (Exception e) {
             System.out.println(e);
         }
-        return !(hidden || isSymbolic || (!isRegularFile && !file.isDirectory()));
+        return !(hidden || isSymbolic || (!isRegularFile && !file.isDirectory()) || extraCriteria);
     }
 }

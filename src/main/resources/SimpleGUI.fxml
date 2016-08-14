@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="launcher.Controller">
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#onShortcutPressed" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="launcher.Controller">
    <top>
       <MenuBar id="menubar-pane" fx:id="menubar" BorderPane.alignment="CENTER">
          <menus>
@@ -16,7 +18,7 @@
             <Menu mnemonicParsing="false" text="Edit">
                <items>
                   <MenuItem mnemonicParsing="false" text="Delete" />
-                  <MenuItem mnemonicParsing="false" text="Undo" />
+                  <MenuItem mnemonicParsing="false" onAction="#undo" text="Undo" />
                   <MenuItem mnemonicParsing="false" text="Redo" />
                </items>
             </Menu>
@@ -73,9 +75,9 @@
       </TabPane>
    </center>
    <left>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <BorderPane prefHeight="451.0" prefWidth="209.0" BorderPane.alignment="CENTER">
          <center>
-            <Accordion BorderPane.alignment="CENTER">
+            <Accordion prefHeight="418.0" prefWidth="203.0" BorderPane.alignment="CENTER">
                <panes>
                   <TitledPane animated="false" text="Search">
                      <content>
@@ -98,7 +100,7 @@
                               </HBox>
                            </top>
                            <center>
-                              <ListView fx:id="viewTags" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                              <ListView fx:id="searchTags" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
                            </center>
                            <bottom>
                               <Button fx:id="btnSearchRemoveTag" mnemonicParsing="false" onAction="#eventSearchRemoveTag" text="Remove" BorderPane.alignment="CENTER">
@@ -117,18 +119,17 @@
                      <content>
                         <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
                            <items>
-                              <VBox alignment="CENTER">
+                              <VBox fx:id="autoOrganizePanel" alignment="CENTER">
                                  <children>
                                     <BorderPane prefHeight="129.0" prefWidth="178.0">
                                        <center>
                                           <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="125.0" prefWidth="150.0" BorderPane.alignment="CENTER">
                                              <children>
-                                                <CheckBox alignment="CENTER" mnemonicParsing="false" prefHeight="26.0" prefWidth="99.0" text="Organize All" textAlignment="CENTER">
+                                                <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="75.0" prefWidth="164.0" text="Automatically organize everything within selected folder based on tags" textAlignment="CENTER" textFill="#6f6d6d" wrapText="true" />
+                                                <CheckBox fx:id="stashUnusedFiles" mnemonicParsing="false" prefHeight="18.0" prefWidth="147.0" text="Stash Unused Files">
                                                    <VBox.margin>
-                                                      <Insets bottom="5.0" />
-                                                   </VBox.margin>
-                                                </CheckBox>
-                                                <CheckBox mnemonicParsing="false" prefHeight="18.0" prefWidth="147.0" text="Stash Unused Files" />
+                                                      <Insets top="20.0" />
+                                                   </VBox.margin></CheckBox>
                                              </children>
                                              <BorderPane.margin>
                                                 <Insets top="5.0" />
@@ -136,7 +137,7 @@
                                           </VBox>
                                        </center>
                                        <bottom>
-                                          <Button mnemonicParsing="false" text="Organize" BorderPane.alignment="CENTER">
+                                          <Button fx:id="autoOrganizeButton" mnemonicParsing="false" text="Organize" BorderPane.alignment="CENTER">
                                              <BorderPane.margin>
                                                 <Insets bottom="10.0" top="25.0" />
                                              </BorderPane.margin>
@@ -159,30 +160,20 @@
                                  <children>
                                     <BorderPane prefHeight="129.0" prefWidth="178.0">
                                        <bottom>
-                                          <Button mnemonicParsing="false" text="Auto Tag" BorderPane.alignment="CENTER">
+                                          <Button mnemonicParsing="false" onMouseClicked="#onAutoTagClick" text="Auto Tag" BorderPane.alignment="CENTER">
                                              <BorderPane.margin>
                                                 <Insets bottom="10.0" top="25.0" />
                                              </BorderPane.margin>
                                           </Button>
                                        </bottom>
                                        <center>
-                                          <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="49.0" prefWidth="150.0" BorderPane.alignment="CENTER">
-                                             <children>
-                                                <CheckBox alignment="CENTER" mnemonicParsing="false" prefHeight="26.0" prefWidth="75.0" text="Tag All" textAlignment="CENTER" />
-                                                <HBox prefHeight="28.0" prefWidth="150.0">
-                                                   <children>
-                                                      <CheckBox alignment="CENTER" mnemonicParsing="false" prefHeight="26.0" prefWidth="116.0" text="Ignore Parent" textAlignment="CENTER" />
-                                                      <Label fx:id="ignoreParentHelp" alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="14.0" text="?" textAlignment="RIGHT" textFill="#6f6d6d">
-                                                         <HBox.margin>
-                                                            <Insets left="25.0" />
-                                                         </HBox.margin>
-                                                      </Label>
-                                                   </children>
-                                                </HBox>
-                                             </children>
+                                          <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="49.0" prefWidth="150.0" BorderPane.alignment="CENTER">
                                              <BorderPane.margin>
                                                 <Insets top="5.0" />
                                              </BorderPane.margin>
+                                             <children>
+                                                <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="75.0" prefWidth="164.0" text="Automatically tag everything within selected folder" textAlignment="CENTER" textFill="#6f6d6d" wrapText="true" />
+                                             </children>
                                           </VBox>
                                        </center>
                                        <top>
@@ -216,7 +207,7 @@
                                           <Insets />
                                        </opaqueInsets>
                                        <children>
-                                          <TextField prefHeight="27.0" prefWidth="172.0" promptText="Search Tags...">
+                                          <TextField fx:id="deleteFileTextField" onKeyPressed="#onDeleteFileWithTagAdd" prefHeight="27.0" prefWidth="172.0" promptText="Delete files with tags...">
                                              <HBox.margin>
                                                 <Insets bottom="10.0" top="5.0" />
                                              </HBox.margin>
@@ -225,16 +216,31 @@
                                     </HBox>
                                  </top>
                                  <center>
-                                    <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                                    <ListView fx:id="deleteFilesList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
                                  </center>
                                  <bottom>
-                                    <Button mnemonicParsing="false" text="Delete Files" BorderPane.alignment="CENTER">
-                                       <BorderPane.margin>
-                                          <Insets top="10.0" />
-                                       </BorderPane.margin>
-                                    </Button>
+                                    <HBox alignment="CENTER" prefHeight="30.0" prefWidth="180.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <Button mnemonicParsing="false" onMouseClicked="#onDeleteFiles" prefHeight="27.0" prefWidth="100.0" text="Delete Files">
+                                             <HBox.margin>
+                                                <Insets right="5.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                          <Button mnemonicParsing="false" onMouseClicked="#onDeleteFileListRemove" prefHeight="27.0" prefWidth="100.0" text="Remove" />
+                                       </children>
+                                    </HBox>
                                  </bottom>
                               </BorderPane>
+                              <Label id="errorFileLabel" fx:id="errorListLabel" alignment="CENTER" prefHeight="17.0" prefWidth="187.0" text="Error deleting files" textAlignment="CENTER">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" top="15.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <ListView id="errorFileList" fx:id="errorFileList" prefHeight="200.0" prefWidth="200.0">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" />
+                                 </VBox.margin>
+                              </ListView>
                            </children>
                         </VBox>
                      </content>
@@ -375,7 +381,7 @@
                               <Font name="Droid Sans" size="12.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btnRemoveTag" mnemonicParsing="false" onAction="#eventRemoveTag" prefHeight="27.0" prefWidth="84.0" text="Remove">
+                        <Button fx:id="btnRemoveTag" mnemonicParsing="false" onAction="#eventRemoveTag" prefHeight="27.0" prefWidth="84.0" text="Delete">
                            <font>
                               <Font name="Droid Sans" size="12.0" />
                            </font></Button>

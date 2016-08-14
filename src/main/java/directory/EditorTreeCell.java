@@ -1,6 +1,7 @@
 package directory;
 
 import javafx.collections.ObservableList;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -23,7 +24,6 @@ public class EditorTreeCell extends TreeCell<String> { //only need the name of t
 
         //drop folder into new parent
         setOnDragDetected(args -> {
-
             if (getTreeItem() != null && !getTreeItem().getValue().equals(treeView.getRoot().getValue())) {
                 //sends drag event to all nodes under cursor
                 ClipboardContent content = new ClipboardContent();
@@ -62,7 +62,7 @@ public class EditorTreeCell extends TreeCell<String> { //only need the name of t
 
         setOnDragDropped(args -> {
             Dragboard db = args.getDragboard();
-            if (db.hasContent(dataFormat)) { //if content exists, then we are dragging a list item, not tree item
+            if (db.hasContent(dataFormat)) { //dropping folder within editor view
                 TreeItem<String> folder = getTreeItem();
                 ObservableList<TreeItem<String>> children = treeView.getRoot().getChildren();
                 for (TreeItem<String> f : EditorViewManager.draggedItems) {
@@ -117,7 +117,6 @@ public class EditorTreeCell extends TreeCell<String> { //only need the name of t
 
     @Override
     protected void updateItem(String item, boolean empty) {
-
         if (item != null && item.equals(getItem())) return;
 
         super.updateItem(item, empty);

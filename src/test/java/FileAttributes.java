@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.UserDefinedFileAttributeView;
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -34,6 +35,6 @@ public class FileAttributes {
 
     @Test
     public void testGetTags() {
-        String tags = linuxFile.getTag();
+        ArrayList<String> tags = linuxFile.getTags();
     }
 }

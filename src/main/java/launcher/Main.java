@@ -4,7 +4,10 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
+import java.net.URL;
 
 public class Main extends Application {
 
@@ -14,7 +17,8 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader();
         Parent root = loader.load(getClass().getResource("/SimpleGUI.fxml").openStream());
         Controller controller = loader.getController();
-        primaryStage.setTitle("Iron-gate!");
+        primaryStage.setTitle("Iron Gate Project");
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/appIcon.png")));
         Scene scene = new Scene(root, 990, 700);
         primaryStage.setScene(scene);
 //        System.out.println(scene);

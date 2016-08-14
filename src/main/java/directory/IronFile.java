@@ -1,6 +1,9 @@
 package directory;
 
+import javafx.collections.ObservableList;
+import utils.CmdExecutor;
 import utils.IronFileFilter;
+import utils.OsUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +12,10 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.attribute.UserDefinedFileAttributeView;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This class extends the java File class and returns the filename for toString()
@@ -17,9 +23,15 @@ import java.util.List;
 public class IronFile extends File implements Serializable {
     private boolean isRoot = true;
     public IronFileFilter filter;
-    private String tag;
-    final private String ATTR_TYPE = "tags";
+    private ArrayList<String> localTags;
+    private CmdExecutor cmd;
+    final private String ATTR_TYPE = "tags.";
     private UserDefinedFileAttributeView fileAttributeView;
+    public enum FilterFlags { HIDE_FILE, SHOW_FILE }
+    private FilterFlags flags;
+
+    public FilterFlags getFlags() { return flags; }
+    public void setFlags(FilterFlags flag) { flags = flag; }
 
     /**
      * Construct an IronFile that extends File
@@ -29,8 +41,13 @@ public class IronFile extends File implements Serializable {
     public IronFile(String pathname) {
         super(pathname);
         isRoot = (getParent() == null);
+        localTags = new ArrayList<>();
         filter = new IronFileFilter();
         fileAttributeView = Files.getFileAttributeView(this.toPath(), UserDefinedFileAttributeView.class);
+        cmd = new CmdExecutor();
+        if(isDirectory()) {
+            flags = FilterFlags.HIDE_FILE;
+        } else { flags = FilterFlags.SHOW_FILE; }
     }
 
     /**
@@ -41,13 +58,42 @@ public class IronFile extends File implements Serializable {
     public IronFile(File file) {
         super(file.getPath());
         isRoot = (getParent() == null);
+        localTags = new ArrayList<>();
         filter = new IronFileFilter();
         fileAttributeView = Files.getFileAttributeView(this.toPath(), UserDefinedFileAttributeView.class);
+        cmd = new CmdExecutor();
+        if(isDirectory()) {
+            flags = FilterFlags.HIDE_FILE;
+        } else { flags = FilterFlags.SHOW_FILE; }
     }
+
+    /**
+     * FileVisitor can't get the instance of IronFile with the correct tags, so there's no simple
+     * way to cache all the tags at once. Instead, when user clicks on file we load the tags exactly
+     * once and then use the cached list there after
+     *
+     * @return
+     */
 
     @Override
     public IronFile[] listFiles() {
         return convertFiles(super.listFiles());
+    }
+
+    public String getExtension() {
+        String path = getPath();
+        String ext = null;
+        int slashUnix = path.lastIndexOf("/");
+        int slashWin = path.lastIndexOf("\\");
+        int existingSlash = Math.max(slashUnix, slashWin);
+        if(existingSlash > -1) {
+            String fullName = path.substring(existingSlash, path.length());
+            String[] split = fullName.split("\\.");
+            if(split.length > 1)
+                ext = split[1];
+
+        }
+        return ext;
     }
 
     /**
@@ -86,44 +132,121 @@ public class IronFile extends File implements Serializable {
         return (isRoot) ? this.getAbsolutePath() : this.getName();
     }
 
-    public String getTag() {
-        try {
-            tag = getFileAttribute();
-        } catch (IOException e) {
-            setTag(""); // set empty tag if none exist
+    public boolean meetsCriteria(ObservableList<String> tags) {
+        for(String t : tags) {
+            if(getTags().contains(t)) {
+                return true;
+            }
         }
-        return tag;
+        return false;
     }
 
-    public void setTag(String tag) {
-        System.out.println(tag);
-        this.tag = tag;
-        try {
-            setFileAttribute(tag);
-        } catch (IOException e) {
+    public ArrayList<String> getTags() {
+        if(localTags.isEmpty()) {
             try {
-                setFileAttribute(tag, "user." + ATTR_TYPE);
-            } catch (IOException insideError) {
-                System.out.println("File System does not support extended attributes");
-//                insideError.printStackTrace();
+                String[] output = null;
+                ArrayList<String> tags = new ArrayList<>();
+                if(OsUtils.isCompatible()) {
+                    output = getAllAttributes();
+                } else {
+                    output = getAllAttrMac();
+                }
+                if(output != null) {
+                    for(String t : output) {
+                        if(!t.isEmpty()) {
+                            tags.add(t);
+                            localTags.add(t);
+                        }
+                    }
+                }
+                return tags;
+
+            } catch(Exception e) { e.printStackTrace(); }
+        }
+        return localTags;
+    }
+
+    /**
+     * EDIT THIS so tags entered with spaces have an underscored inserted. Otherwise tags
+     * with spaces are saved as two separate tags
+     * @param tag
+     */
+    public void setTag(String tag) {
+        if(!localTags.contains(tag)) {
+            try {
+                if (OsUtils.isCompatible()) {
+                    setFileAttribute(tag.toLowerCase());
+                } else {
+                    setFileAttrMac(tag.toLowerCase());
+                }
+                localTags.add(tag);
+            } catch (IOException e) {
+                System.out.println("FAILED: tag could not be set.");
             }
         }
     }
 
-    private void setFileAttribute(String tag) throws IOException {
-        ByteBuffer tagByteBuffer = Charset.defaultCharset().encode(tag);
-        fileAttributeView.write(ATTR_TYPE, tagByteBuffer); // Set file tag attributes
+    public void removeTag(String tag) {
+        if(localTags.contains(tag)) {
+            try {
+                if(OsUtils.isCompatible()) {
+                    removeFileAttribute(tag.toLowerCase());
+                } else {
+                    removeFileAttrMac(tag.toLowerCase());
+                }
+                localTags.remove(tag);
+            } catch (IOException e) {
+                System.out.println("FAILED: tag could not be removed.");
+            }
+        } else { System.out.println("file doesn't contain tag.."); }
     }
 
-    private void setFileAttribute(String tag, String attributeType) throws IOException {
-        ByteBuffer tagByteBuffer = Charset.defaultCharset().encode(tag);
-        fileAttributeView.write(attributeType, tagByteBuffer); // Set file tag attributes
+    private String setFileAttrMac(String key) throws IOException {
+        String option = (isDirectory()) ? "-r" : "";
+        String command = "xattr -w " + option + " '"+ key + "' 'file_tag' '" + getAbsolutePath() + "'";
+        cmd.runCmd(command);
+        return key;
     }
 
-    private String getFileAttribute() throws IOException {
-        int capacity = fileAttributeView.size(ATTR_TYPE);
+    private String getFileAttrMac(String key) throws IOException {
+        String command = "xattr -p '" + key +  "' '" + getAbsolutePath() + "'"; //then append the attr command
+        String output = cmd.runCmd(command);
+        return output;
+    }
+
+    private String removeFileAttrMac(String key) throws IOException {
+        //String option = (isDirectory()) ? "-r" : ""; //make optional in GUI
+        String command = "xattr -d '" + key +  "' '" + getAbsolutePath() + "'"; //then append the attr command
+        String output = cmd.runCmd(command);
+        return output;
+    }
+
+    private String setFileAttribute(String tag) throws IOException {
+        ByteBuffer tagByteBuffer = Charset.defaultCharset().encode(tag);
+        fileAttributeView.write(ATTR_TYPE + tag, tagByteBuffer); // Set file tag attributes
+        return tag;
+    }
+
+    private void removeFileAttribute(String tag) throws IOException {
+        fileAttributeView.delete(tag);
+    }
+
+    private String[] getAllAttrMac() throws IOException {
+        String command = "xattr '" + getAbsolutePath() + "'"; //then append the attr command
+        String output = cmd.runCmd(command);
+        String[] tagArr = output.split(" ");
+        return tagArr;
+    }
+
+    private String[] getAllAttributes() throws IOException {
+        return (String[]) fileAttributeView.list().toArray();
+    }
+
+    private String getFileAttribute(String attrName) throws IOException {
+        String fullName = ATTR_TYPE + attrName;
+        int capacity = fileAttributeView.size(fullName); //why is it not the size of the tag
         ByteBuffer buf = ByteBuffer.allocate(capacity);
-        fileAttributeView.read(ATTR_TYPE, buf);
+        fileAttributeView.read(fullName , buf);
         buf.flip();
         return Charset.defaultCharset().decode(buf).toString();
     }

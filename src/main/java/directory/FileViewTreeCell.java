@@ -1,5 +1,6 @@
 package directory;
 
+import javafx.collections.ObservableList;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -10,7 +11,7 @@ import org.json.JSONObject;
 import java.util.Set;
 
 /**
- * @author kristopherguzman
+ * Created by kristopherguzman on 3/10/16.
  */
 public class FileViewTreeCell extends TreeCell<IronFile> {
 
@@ -67,7 +68,6 @@ public class FileViewTreeCell extends TreeCell<IronFile> {
 
     @Override
     protected void updateItem(IronFile item, boolean empty) {
-
         if (item != null && item.equals(getItem())) return;
 
         super.updateItem(item, empty);
